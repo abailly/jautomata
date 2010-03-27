@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.w3.org/2005/07/scxml"
+ xmlns="http://www.w3.org/2005/07/scxml">
+ <xsd:annotation>
+  <xsd:documentation>State Chart XML Schema (20060118)</xsd:documentation>
+	</xsd:annotation>
+ <xsd:annotation>
+  <xsd:documentation>
+   Copyright 1998-2006 W3C (MIT, ERCIM, Keio), All Rights Reserved. Permission to
+   use, copy, modify and distribute the VoiceXML schema and its accompanying
+   documentation for any purpose and without fee is hereby granted in perpetuity,
+   provided that the above copyright notice and this paragraph appear in all
+   copies.  The copyright holders make no representation about the suitability of
+   the schema for any purpose. It is provided "as is" without expressed or
+   implied warranty.
+  </xsd:documentation>
+ </xsd:annotation>
+ <xsd:element name="scxml">
+  <xsd:complexType>
+   <xsd:sequence>
+    <xsd:element ref="datamodel" minOccurs="0" maxOccurs="1" />
+    <xsd:element ref="state" minOccurs="1" maxOccurs="unbounded" />
+   </xsd:sequence>
+   <xsd:attribute name="version" type="xsd:string" fixed="1.0" />
+   <xsd:attribute name="initialstate" type="xsd:IDREF" use="required" />
+  </xsd:complexType>
+ </xsd:element>
+ <xsd:element name="datamodel">
+  <xsd:complexType>
+   <xsd:sequence>
+    <xsd:element ref="data" minOccurs="0" maxOccurs="unbounded" />
+   </xsd:sequence>
+  </xsd:complexType>
+ </xsd:element>
+ <xsd:element name="data">
+  <xsd:complexType>
+   <xsd:sequence>
+    <xsd:any processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+   </xsd:sequence>
+   <xsd:attribute name="src" type="xsd:anyURI" />
+   <xsd:attribute name="expr" type="xsd:string" />
+   <xsd:attribute name="name" type="xsd:NMTOKEN" use="required" />
+  </xsd:complexType>
+ </xsd:element>
+ <xsd:element name="state">
+  <xsd:complexType>
+   <xsd:choice minOccurs="0" maxOccurs="unbounded">
+    <xsd:element ref="onentry" minOccurs="0" maxOccurs="1" />
+    <xsd:element ref="invoke" minOccurs="0" maxOccurs="1" />
+    <xsd:element ref="transition" minOccurs="0" />
+    <xsd:element ref="initial" minOccurs="0" maxOccurs="1" />
+    <xsd:element ref="state" minOccurs="0" />
+    <xsd:element ref="history" minOccurs="0" />
+    <xsd:element ref="parallel" minOccurs="0" maxOccurs="1" />
+    <xsd:element ref="onexit" minOccurs="0" maxOccurs="1" />
+    <xsd:element ref="datamodel" minOccurs="0" maxOccurs="1" />
+    <xsd:element ref="join" minOccurs="0"/>
+   </xsd:choice>
+   <xsd:attribute name="id" type="xsd:ID" use="optional" />
+   <xsd:attribute name="src" type="xsd:anyURI" />
+   <xsd:attribute name="final" type="xsd:boolean" />
+   <xsd:attribute name="task" type="xsd:boolean" />
+  </xsd:complexType>
+ </xsd:element>
+ <xsd:element name="initial">
+  <xsd:complexType>
+   <xsd:sequence>
+				<xsd:element ref="transition" minOccurs="1" />
+			</xsd:sequence>
+			<xsd:attribute name="id" type="xsd:ID" use="optional" />
+			<xsd:attribute name="src" type="xsd:anyURI" />
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="onentry">
+		<xsd:complexType>
+			<xsd:group ref="executablecontent" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="onexit">
+		<xsd:complexType>
+			<xsd:group ref="executablecontent" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="transition">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:group ref="executablecontent" minOccurs="0" maxOccurs="unbounded" />
+			</xsd:sequence>
+			<xsd:attribute name="event" type="xsd:string" />
+			<xsd:attribute name="cond" type="xsd:string" />
+			<xsd:attribute name="target" type="xsd:IDREF" />
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="target">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="state" minOccurs="1" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="invoke">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="param" minOccurs="0" maxOccurs="unbounded" />
+				<xsd:element ref="finalize" minOccurs="0" maxOccurs="1" />
+			</xsd:sequence>
+			<xsd:attribute name="src" type="xsd:anyURI" />
+			<xsd:attribute name="srcexpr" type="xsd:string" />
+			<xsd:attribute name="targettype" type="targettype" use="required" />
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="finalize">
+		<xsd:complexType>
+			<xsd:group ref="executablecontent" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="parallel">
+		<xsd:complexType>
+			<xsd:choice minOccurs="0" maxOccurs="unbounded">
+				<xsd:element ref="onentry" minOccurs="0" maxOccurs="1" />
+				<xsd:element ref="onexit" minOccurs="0" maxOccurs="1" />
+				<xsd:element ref="state" minOccurs="0" maxOccurs="1" />
+				<xsd:element ref="datamodel" minOccurs="0" maxOccurs="1" />
+				<xsd:element ref="join" minOccurs="0" />
+			</xsd:choice>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+			<xsd:attribute name="src" type="xsd:anyURI" />
+			<xsd:attribute name="task" type="xsd:boolean" />
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="history">
+		<xsd:complexType>
+			<xsd:sequence minOccurs="1" maxOccurs="1">
+				<xsd:element ref="transition" />
+			</xsd:sequence>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+			<xsd:attribute name="src" type="xsd:anyURI" />
+			<xsd:attribute name="type" type="historytype" />
+			<xsd:attribute name="snapshot" type="xsd:string" />
+		</xsd:complexType>
+	</xsd:element> <!-- possible values for the 'type' attribute of the 'history' element -->
+	<xsd:simpleType name="historytype">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="shallow" />
+			<xsd:enumeration value="deep" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:element name="param">
+		<xsd:complexType>
+			<xsd:attribute name="name" type="xsd:Name" use="required" />
+			<xsd:attribute name="expr" type="xsd:string" />
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="join">
+		<xsd:complexType>
+			<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+				<xsd:element ref="transition" />
+			</xsd:sequence>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+		</xsd:complexType>
+	</xsd:element> <!-- all declarations for executable content go in this group --> <!-- those elements are declared after this group -->
+	<xsd:group name="executablecontent">
+		<xsd:choice>
+			<xsd:element ref="var" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element ref="assign" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element ref="send" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element ref="if" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element ref="log" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element ref="script" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:choice>
+	</xsd:group>
+	<xsd:element name="var">
+		<xsd:complexType>
+			<xsd:attribute name="name" type="xsd:Name" use="required" />
+			<xsd:attribute name="expr" type="xsd:string" />
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="assign">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:any processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+			</xsd:sequence>
+			<xsd:attribute name="location" type="xsd:Name" use="required" />
+			<xsd:attribute name="src" type="xsd:anyURI" />
+			<xsd:attribute name="expr" type="xsd:string" />
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="send">
+		<xsd:complexType>
+			<xsd:attribute name="event" type="xsd:string" />
+			<xsd:attribute name="target" type="xsd:anyURI" />
+			<xsd:attribute name="targettype" type="targettype" default="scxml" />
+			<xsd:attribute name="sendid" type="xsd:string" /> <!-- attention: "xsd:string" is not the proper type for the following attribute,
+				            rather a string in CSS2 format is required -->
+			<xsd:attribute name="delay" type="xsd:string" default="'0s'" />
+			<xsd:attribute name="namelist" type="xsd:string" />
+			<xsd:attribute name="hints" type="xsd:string" />
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="cancel">
+		<xsd:complexType>
+			<xsd:attribute name="sendid" type="xsd:string" use="required" />
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="if">
+		<xsd:complexType>
+			<xsd:choice minOccurs="0" maxOccurs="unbounded">
+				<xsd:element ref="elseif" />
+				<xsd:element ref="else" />
+				<xsd:group ref="executablecontent" />
+			</xsd:choice>
+			<xsd:attribute name="cond" type="xsd:string" use="required" />
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="elseif">
+		<xsd:complexType>
+			<xsd:choice>
+				<xsd:group ref="executablecontent" />
+			</xsd:choice>
+			<xsd:attribute name="cond" type="xsd:string" use="required" />
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="else">
+		<xsd:complexType>
+			<xsd:choice>
+				<xsd:group ref="executablecontent" />
+			</xsd:choice>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="log">
+		<xsd:complexType>
+			<xsd:attribute name="label" type="xsd:string" />
+			<xsd:attribute name="expr" type="xsd:string" use="required" />
+			<xsd:attribute name="level" type="loglevel" />
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="script">
+		<xsd:complexType mixed="true"></xsd:complexType>
+	</xsd:element>
+	<xsd:simpleType name="targettype">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="scxml" />
+			<xsd:enumeration value="webservice" />
+		</xsd:restriction>
+	</xsd:simpleType> <!-- log levels are TBD; values below are taken from Java Commons Logging -->
+	<xsd:simpleType name="loglevel">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="trace" />
+			<xsd:enumeration value="debug" />
+			<xsd:enumeration value="info" />
+			<xsd:enumeration value="warn" />
+			<xsd:enumeration value="error" />
+			<xsd:enumeration value="fatal" />
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>

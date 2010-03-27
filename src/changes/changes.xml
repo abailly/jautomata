@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+ <properties>
+  <title>Changes</title>
+  <author email="bailly AT lifl POINT fr">Arnaud BAILLY</author>
+ </properties>
+
+ <body>
+
+  <release version="1.6.2" date="2006/03/28">
+   <action dev="bailly" type="add">
+added partial support for SCXML input/output
+</action>   
+  </release>
+  <release version="1.6.1" date="2005/06/14">
+   <action dev="bailly" type="update">
+changed visual factory to group transitions on visual edges
+</action>
+   <action dev="bailly" type="add">
+added JAuto application for parsing RE and outputting .auto file
+</action>
+   <action dev="bailly" type="add">
+added scripts (Unix) for launching applications
+</action>
+   <action dev="bailly" type="fix">
+corrected transformation to RE : bug for single transition automaton
+</action>
+
+   <action dev="bailly" type="add">
+added method for computing transition set between two states
+</action>
+   <action dev="bailly" type="fix">
+fixed getConnectedSet() method and 
+fixed clone method,
+changed hashcode for Key class
+fixed toArray method
+</action>
+   <action dev="bailly" type="add">
+added interface method for computing transition set between two states
+</action>
+   <action dev="bailly" type="fix">
+fixed computation of PrefixClosure : bug with state factory 
+</action>
+   <action dev="bailly" type="add">
+added some test for single transition automaton
+added tests for geodesic and distances calculations
+</action>
+   <action dev="bailly" type="update">
+created package for distance
+</action>
+   <action dev="bailly" type="add">
+added class for computation of geodesic decomposition
+</action>
+   <action dev="bailly" type="add">
+added class RadialGraph for displaying arbitrary vectors on a radial map
+</action>
+   <action dev="bailly" type="add">
+added simple enumeration method in automaton
+</action>
+   <action dev="bailly" type="add">
+added application Morph for computing image of an Automaton by a Morphism
+added Morphism transformation
+</action>
+   <action dev="bailly" type="update">
+moved CompletedTraceEquivalence as TraceEquivalence
+</action>
+   <action dev="bailly" type="add">
+added equivalence() on set of states for proper handling of NFA
+added error trace collection to retrieve a trace when equivalence fails
+</action>
+   <action dev="bailly" type="add">
+added AlphaBetaTester implementing test using alpha-beta search algorithm
+</action>
+   <action dev="bailly" type="add">
+added package for general algebraic computations on semirings
+</action>
+   <action dev="bailly" type="add">
+added matrix computation on automata
+</action>
+   <action dev="bailly" type="add">
+added rational expression classes as semiring instances
+split Distance class to allow implementing various metrics
+</action>
+   <action dev="bailly" type="add">
+added implementation classes for L1 and L2 metrics
+</action>
+   <action dev="bailly" type="add">
+added Codec for converting Automaton to dot format
+removed System.err traces
+corrected word enumeration 
+corrected W set computation 
+fixed Mix algorithm for using Synchronization interface
+removed Synchronize transformation
+</action>
+   <action dev="bailly" type="add">
+added and corrected more tests
+</action>
+   <action dev="bailly" type="fix">
+fixed imports
+</action>
+   <action dev="bailly" type="update">
+removed Synchronize
+</action>
+   <action dev="bailly" type="add">
+added test for AlphaBetaTester
+</action>
+   <action dev="bailly" type="add">
+added constructor for making IOAutomaton from Automaton with a map of alphabets 
+</action>
+   <action dev="bailly" type="update">
+made IOLetter class non final to allow subclassing (eg. FIDL Message)
+</action>
+   <action dev="bailly" type="add">
+added tester implementation with alpha-beta algorithm and some evaluator
+</action>
+   <action dev="bailly" type="fix">
+corrected failure trace to contain expected  messages if it fails
+</action>
+   <action dev="bailly" type="update">
+made Shuffle use Mix with empty synchronisation alphabet
+   </action>
+   <action dev="bailly" type="add">
+added and corrected unit tests
+   </action>
+  </release>
+
+  <release version="1.6.0" date="2005/04/20">
+   <action dev="bailly" type="add">
+Added programs Show and Transform as command-line utilities for manipulating automata.
+	</action>
+
+   <action dev="bailly" type="add">
+   Added new package and classes for IOAutomaton testing. Contains partial 
+   implementations of Pyhala's, Kervinen's. Plan to add TorX and TGV testers.
+	</action>
+	
+   <action dev="bailly" type="add">
+	Added StateMachine interface to rationals.ioautomata for greater flexibility of 
+	testers and to implementations of this interface based on an underlying IOAutomaton:
+	one synchronous and the other asynchronous.
+	</action>
+	
+	   <action dev="bailly" type="add">
+   	Added new transformations and properties: Mirror for ioautomaton, ModelCheck, IsDeterministic
+   	and Identity.
+   </action>
+	
+	   <action dev="bailly" type="update">
+ Completed work on state factories and state sets. State sets should now be obtained through
+ the state factory object in Automaton. The default implementation is based on 
+ bit sets which is hopefully more efficient in storage and computational power consumption.
+ The various transformations algorithms were changed accordingly.
+ 	</action>
+	
+	   <action dev="bailly" type="add">
+	Added a special transformation Distance for computing trace distance of words in an Automaton.
+</action>
+
+	   <action dev="bailly" type="add">
+	Lots of new test cases and update of old ones. 
+	</action>
+
+	</release>
+  <release version="1.5.4" date="2005/04/08">
+   <action dev="bailly" type="add">
+Added documentations for transformations classes and created package level 
+documentation for trasnformations and properties.
+   </action>
+   <action dev="bailly" type="update">
+Start working on StateFactory objects so that they can be more
+efficient for handling very large automata. 
+   </action>
+   <action dev="bailly" type="add">
+Created TransducerTester which can tests transducers against specifications
+with a set of test cases. Added some tests for these.
+   </action>
+   <action dev="bailly" type="add">
+    Added Complement transformation and interface StateMachine.
+   </action>
+   <action dev="bailly" type="update">
+corrected test suite generation classes so that they return
+array of Objects instead of Lists. Changed the names of testers 
+to testGenerators.
+   </action>
+   <action dev="bailly" type="fix">
+corrected Mix algorithm
+   </action>
+   <action dev="bailly" type="fix">
+corrected Synchronize algorithm. It now supersedes Intersection with 
+greater flexibility.
+   </action>
+   <action dev="bailly" type="fix">
+corrected Synchronization interface and implementations so that 
+they work on labels instead of transitions.
+   </action>
+   <action dev="bailly" type="add">
+    added static method for EPS output of automaton to a file
+   </action>
+   <action dev="bailly" type="remove">
+    removed rationals.tests package
+   </action>
+   <action dev="bailly" type="remove">
+    removed rationals.transformations.Intersection which is superseded by
+Synchronize.
+   </action>
+   <action  dev="bailly" type="add">
+   added Synchronization interface for customizing synch product,  Synchronization implementations for 
+automaton and ioautomaton and  Synchronize algorithm whichh looks like Mix but uses Synchronization interface.
+   </action>
+   <action  dev="bailly" type="update">
+    modified TransducerTransition and IOTransition to encpsulate labels
+   </action>
+   <action  dev="bailly" type="update">
+moved Main from default package to rationals package
+   </action>
+   <action  dev="bailly" type="add">
+    added test for IOAutomaton that computes synchronized product as in TGV
+   </action>
+   <action  dev="bailly" type="add">
+    added test suites
+   </action>
+   <action  dev="bailly" type="update">
+    modified painting of states so that final states are marked with a white circle embedded in the node
+and the state's  number is painted in white on the dot.
+   </action>
+  </release>
+
+  <release version="1.5.3" date="2005/03/31">
+   <action dev="bailly" type="add">
+    package rationals.transductions.testing for FSM testing methods
+   </action>
+   <action dev="bailly" type="add">
+    deterministic transducer implementation and various set extraction methods
+   </action>
+   <action dev="bailly" type="add">
+    start work on RandomAutomaton for generating random auto
+   </action>
+   <action dev="bailly" type="add">
+    added more tests
+   </action>
+   <action dev="bailly" type="add">
+    added Codecs API for load/save of automata (without layout). Currently
+    handles JAuto txt format
+   </action>
+   <action dev="bailly" type="add">
+    added package rationals.ioautomata for special class of AUtomaton
+    with I/O behavior
+   </action>
+   <action dev="bailly" type="add">
+    started work on isomorphims testing - TBC
+   </action>
+  </release> 
+  <release version="1.5.2" date="2005/03/28">
+   <action dev="bailly" type="add">
+    Added TraceEquivalence and test case.
+   </action>
+   <action dev="bailly" type="update">
+    Changed Mix algorithm and added test cases for Mix.
+   </action>
+   <action dev="bailly" type="update">
+    Reintroduced Graph interface for Automaton.
+      </action>
+  </release>
+  <release version="1.5.1" date="2005/03/25">
+   <action dev="bailly" type="add">
+    Refactored lexical and syntactic analysis of RE to allow more freedom in labels
+   </action>
+  </release>
+  <release version="1.5" date="2005/03/23">
+   <action dev="bailly" type="update">
+    Corrected EpsilonTransitionRemover
+   </action>
+   <action dev="bailly" type="add">
+    Added package transductions. Allows creation of rational transductions through
+    Transducer class and computation of image of a word.
+   </action>
+  </release>
+  
+  <release version="1.4" date="unknown">
+  </release>
+
+    <release version="1.3" date="unknown">
+    </release>
+
+    <release version="1.2" date="unknown">
+    </release>
+
+    <release version="1.1" date="unknown">
+    </release>
+
+    <release version="1.0" date="unknown">
+    </release>
+
+  </body>
+</document>

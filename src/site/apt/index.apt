@@ -1,0 +1,150 @@
+ -----
+ JAuto: An automata library in Java
+ ----- 
+ Arnaud Bailly
+ -----
+ 22 November 2005
+ -----
+ 
+Introduction 
+
+  <<JAuto>> is a library for creating, manipulating and displaying
+  finite-state automata within the Java platform. Such objects can 
+  be used for various purposes: 
+
+   * learning automata-theoretic concepts, structures and operators, 
+
+   * modeling and simulating processes, 
+
+   * recognizing regular sets, 
+
+   * applying rational transductions on <words>, 
+
+   * ...
+
+ This library is based on classical concepts and more or less
+ classical algorithms from the theory of formal languages. Some
+ of the references used are:
+
+  * "Transducers and context-free languages", J.Berstel, Teubner, 1978
+
+  * "Eléments de théorie des automates", J. Sakarovitch, Masson,2003
+
+Overview 
+
+* The automata 
+
+  At present time, the library is composed of several packages which
+group various operations and structures. The main class of interest is
+the <<<rationals.Automaton>>> class whose instances and subclasses'
+instances encode various kind of finite-state automata: regular FSA,
+I/O automata, rational transducers (aka. FSM). These classes are organized
+into four {{{modules.html} modules}}.
+
+  The transitions in an automaton can be any subclass of
+  <<<java.lang.Object>>> with the convention that a <<<null>>> value
+  represents an <epsilon> transition. Note that it is important that the
+  <<<equals()>>> and <<<hashcode()>>> methods from Object be properly
+  implemented by letters as they are used intensively to compare transitions.
+
+* Input/output
+
+  Automata can be created  programmatically using the API provided
+by the <<<Automaton>>> class or through operators provided in the 
+<<<rationals.transformations>>> package. Alternatively, an automaton
+can be converted to/from an external source using various
+encoding from the package <<<rationals.converter>>> package. This
+package provide a codec for <dot> format as used by the famous
+graphviz and friends utilities from AT&T, a internal format named
+<jauto>, an incomplete implementation for SCXML format (see below), a Swing
+displayer and a crude PostScript generator. The OpenJGraph library
+which is used by JAuto to display FSA as graphs may also be used to
+output images of automata in various formats, including EPS. 
+
+  Furthermore, the package <<<rationals.converters.analyzers>>> contains
+a lexical and syntactic analyzers for converting automata to/from
+rational expressions. The default lexer allows reading expressions
+made from single alphabetical letter alphabets but the lexer used by
+the parser may be customized so allowing one to parse rational
+expressions with complex alphabets.
+
+* Operations
+
+** Transformations 
+
+  As already said, the package <<<rationals.transformations>>> provide a
+  zoo of unary and binary operators over finite-state automata
+  objects. These operators contain: 
+
+   * standard operations from textbooks: concatenation, union,
+     intersection, complementation, Kleene-star, 
+
+   * epsilon-transitions removal,
+
+   * normalization, determinization and minimalization of automata,
+
+   * automatic completion of automata over some alphabet, either using a
+     sink state or local loop, 
+
+   * pruning of non accessible and non-coaccessible states, 
+
+   * projection over some alphabet (finite set),
+
+   * general morphisms provided by maps, 
+
+   * shuffle product,
+
+   * parametric mix product aka. synchronization product.
+
+** Properties 
+
+  The package <<<rationals.properties>>> provide unary and binary
+  predicates over automata. Provided unary tests are: 
+
+   * epsilon language testing,
+
+   * emptiness testing,
+
+   * normalization testing,
+
+   * determinization testing.
+
+  Binary tests allow testing of various <relations> between automata
+  through the interface <<<rationals.properties.Relation>>> and the
+  class <<<rationals.properties.AreEquivalent>>>. Among the implemented
+  relations are the <simulation>, the strong and weak <bisimulation>,
+  the <trace equivalence>.
+
+
+Links
+
+  The exists a lot of libraries for manipulating FSA but most of these
+  are provided in C/C++. Here is a hotch-potch collection of links about
+  automata (and graphs):
+
+  * {{{http://odur.let.rug.nl/alfa/fsa_stuff/#GenInM} Finite-state automata and directed acyclic graphs}}
+
+  * {{{http://www.graphdrawing.org/data/format/} graphdrawing format}}
+
+  * {{{http://networkviz.sourceforge.net/} Network Analysis And Visualization}}
+
+  * {{{http://www.montefiore.ulg.ac.be/~boigelot/research/lash/} The LASH Toolset}}
+
+  * {{{http://www.nilsson.tv/} Marcus Nilsson (regular model-checking)}}
+
+  * {{{http://www.csd.uwo.ca/research/grail/grail.html} The Grail+ Project}}
+
+  * {{{http://www.liafa.jussieu.fr/~lombardy/Vaucanson-G/} Vaucanson-G}} 
+
+  * {{{http://www.elude.ca/ragel/} Ragel}}
+ 
+  * {{{http://www.jflap.org/} JFLAP}}
+
+  * {{{http://smc.sourceforge.net/} State-Machine Compiler}}
+
+  * {{{http://jakarta.apache.org/commons/scxml} SCXML}} A library implementing draft specification
+    for statecharts modeling in XML. There are provisions in the SCXML specification for executing code
+    triggering events, ... JAutomata has limited support for reading and writing SCXML statecharts 
+    using this library.
+
+

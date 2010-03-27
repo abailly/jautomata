@@ -1,0 +1,82 @@
+ -----
+ Getting started
+ ----- 
+ Arnaud Bailly
+ -----
+ 13 August 2006
+ -----
+
+Downloading
+
+  The <jautomata> library can be downloaded in various forms: 
+  
+   [[1]] as a set of java libraries (ie. JAR files). The simplest way to download theses libraries is to
+     use {{{http://maven.apache.org} maven}} as build system and to add the jautomata repository to
+     the set of repositories used. The following configuration fragment does this, adding the information that 
+     the repository handles both releases and snapshots. Current version to use is <<2.0-SNAPSHOT>>.
+
++----------------
+<project>
+ ...
+ <repositories>
+  ...
+  <repository>
+   <id>oqube.com</id>
+   <name>OQube</name>
+   <url>http://www.oqube.com/maven2</url>
+   <releases>
+     <enabled>true</enabled>
+   </releases>
+   <snapshots>
+     <enabled>true</enabled>
+     <updatePolicy>daily</updatePolicy>
+   </snapshots>
+  </repository>
+  ...
+ </repositories>
+ ...
+</project>
++----------------
+
+  [[2]] as a precompiled <assembly> containing all needed jars plus shell scripts 
+       to launch applications. <<To be available soon !>>
+
+  [[3]] as a source package. The latest source distribution can be found on the sourceforge
+    {{{http://sf.net/projects/jautomata} project's page}}. The following section gives some 
+    instructions on how to build the library.
+
+
+Building
+
+  <JAutomata> uses {{{http://maven.apache.org} maven 2}} as its build system. This means that if 
+you want to build the library from sources, the easiest way is to have maven installed: current
+version is 2.0.4 and can be downloaded {{{http://maven.apache.org/download.html} here}}. By the way, 
+if you are a dedicated Java developer and are not yet using maven, consider adopting it as it 
+is definitely a very useful tool.
+
+  Then, follows these steps:
+ 
+  [[1]] unpack the archived distribution into some directory:
+
+------
+$> tar xzf ../jautomata-2.0-alpha-1.tar.gz 
+-------
+
+  [[2]] build and install the libraries into the local repository
+
+-----
+$> cd jautomata-2.0-alpha-1
+$> mvn install
+-----
+  
+  [[3]] optionally, build the site and documentation with:
+
+-----
+$> mvn site
+-----
+
+[].
+  
+   If you are not using maven, you are on your own ! Java source files are placed in directories
+named <<<src/main/java>>> in the various subprojects, JUnit test source files are in <<<src/test/java>>>.
+

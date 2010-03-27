@@ -1,0 +1,44 @@
+ -----
+ JAutomata modules
+ ----- 
+ Arnaud Bailly
+ -----
+ 13 August 2006
+ -----
+
+Modules
+
+  The JAutomata library is organized into various modules that allow users to depend
+on as small a set of libraries as possible according to their requirements: You have what
+you are paying for.
+
+   # Base API and classe like <<<State>>> or <<<Automaton>>>, properties, transformations
+     and primitive string I/O are grouped in the {{{jautomata-core/index.html} jautomata-core}} 
+     module. This module has no dependencies outside JAutomata.
+
+   # Module <<<jautomata-graph>>> provides interface with {{{http://www.achilleus.net/openjgraph}} OpenJGraph}}
+     API, allowing representation of any automaton as a <directed graph> and use of layout,
+     image and various standard graph algorithms in this library. Apart from OpenJGraph, this module depends
+     on {{{http://www.achilleus.net/parsing/}} Parsing}}, a small library of utilities.
+   
+   # Input/output classes are grouped into the <<<jautomata-io>>> module, with
+     the notable exception of basic I/O with <<<toAscii>>>, <<<ToRExpression>>> and <<<Expression>>> classes 
+     and interfaces. Module <<<jautomata-io>>> also contains console-based applications for manipulating
+     external representation of automata in various forms (textual and graphic) and applying
+     transformations, properties checking and morphisms outside of Java environment.
+     THis module depends on <<<jautomata-graph>>> for displaying automaton and on {{{http://jakarta.apache.org/commons/scxml} SCXML 0.5}}
+     for I/O operation on this format.
+
+   # Module <<<jautomata-ext>>> contains two extensions to standard automata: <<I/O automata>> and
+     <<transducers>>, with some associated transformations and
+     algorithms. I/O automata are standard automata the alphabet of
+     which is partitionned in two sets: the <input> letters and the
+     <output> letters, plus a distinguished letter often named <tau>
+     (the greek letter) denoting <internal> actions. This kind of automata
+     is most often found in telco protocols verification and
+     modeling. Transducers are a formal language theory construction
+     representing <regular relations>: Relations between two (or more)
+     sets that have a regular structure (ie. the structure of an
+     automaton). Transitions are labelled with input-output couples and the
+     image of a rational language (ie. an automaton) can be computed to
+     give another automaton.

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="Maven FuncTest Plugin">
+ <title>FuncTest Plugin</title>
+ <body>
+  <links>
+   <item name="Maven"  href="http://maven.apache.org/" />
+  </links>
+  <menu name="JAuto">
+   <item name="Distributions" href="/download.html" />   
+  </menu>
+  <menu name="Documentation">
+  </menu>
+ </body>
+</project>

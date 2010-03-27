@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>Jauto downloads</title>
+    <author email="abailly.AT.lifl.DOT.fr">Arnaud Bailly</author>
+  </properties>
+  <meta name="keyword" content="jauto download"/>
+
+  <body>
+  <section name="Downloading JAuto">
+   <table>
+    <tr>
+     <th>Name</th><th>Description</th>
+    </tr>
+    <tr>
+     <td><a href="http://www.lifl.fr/~bailly/secure/soft/distributions/nono/distributions/jauto-1.6.1-src.tar.gz">JAuto Sources v1.5.4</a></td>
+    </tr>
+    <tr>
+     <td><a href="http://www.lifl.fr/~bailly/secure/soft/distributions/nono/distributions/jauto-1.6.1.tar.gz">JAuto Binaries v1.5.4</a></td>
+    </tr>
+   </table>
+    </section>
+    <section name="Support libraries">
+   <table>
+    <tr>
+     <th>Name</th><th>Description</th>
+    </tr>
+    <tr>
+     <td><a href="">OpenJGraph 0.9.6</a></td><td>Graph manipulation and drawing library. Used in JAuto for displaying automata.</td>
+    </tr>
+    <tr>
+     <td><a href="">Parsing 1.0</a></td><td>Utility library containing various support classes and API.</td>
+    </tr>
+   </table>
+    </section>
+  </body>
+</document>

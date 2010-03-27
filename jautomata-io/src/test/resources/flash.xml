@@ -1,0 +1,134 @@
+<?xml version="1.1" encoding="UTF-8" ?>
+<scxml xmlns="http://www.w3.org/2005/07/scxml" 
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ initialstate="init" >
+
+ <!-- point d'entree -->
+ <state id="init">
+  <transition target="ValiderVenteFlash" event="execute" />
+ </state>
+
+ <state id="fini" isFinal="true" />
+
+ <state id="ValiderVenteFlash">
+  <transition target="ValiderIdClient" cond="OK" event="execute" />
+  <transition target="MessageAbort" cond="KO" event="ProcessException" />
+ </state>
+ 
+ <state id="ValiderIdClient">
+  <transition target="AfficherRecap"    cond="OK" event="execute" />
+  <transition target="AfficherClientInconnu" cond="KO" event="ProcessException" />
+ </state>
+ 
+ <state id="AfficherRecap" >
+  <transition target="ValiderCommande"   event="valider" />
+  <transition target="fini"              event="sortie" />
+  <transition target="AfficherChoixModePaiement" event="modifierPaiement" />
+  <transition target="AfficherChoixModeLivraison" event="modifierLivraison" />
+ </state>
+
+ <state id="ValiderCommande">
+  <transition target="MessageAbort"   cond="KO" event="ProcessException" />
+  <transition target="MessageConfirm" cond="OK" event="execute" />
+ </state>
+
+ <state id="MessageAbort">
+  <transition target="fini" event="sortie" />
+ </state>
+ 
+ <state id="MessageConfirm">
+  <transition target="fini" event="sortie" />
+ </state>
+ 
+ <state id="AfficherChoixModePaiement">
+  <transition target="AfficherRecap"   event="retour" />
+  <transition target="AfficherSaisieInfosCB"  cond="choix='CB'" event="execute" />
+  <transition target="ValiderPaiementCRT"  cond="choix='CRT'" event="execute" />
+ </state>
+ 
+ <state id="ValiderPaiementCRT">
+  <transition target="AfficherRecap"  cond="OK" event="execute" />
+  <transition target="MessageAbort"   cond="KO" event="ProcessException" />
+ </state>
+
+ <state id="AfficherSaisieInfosCB">
+  <transition target="AfficherRecap"  event="retour" />
+  <transition target="ValiderInfosCB" event="infosCB" />
+ </state>
+
+ <state id="ValiderInfosCB">
+  <transition target="MessageErreurCB" cond="KO" event="ProcessException" />
+  <transition target="AfficherRecap"   cond="OK" event="execute" />
+ </state>
+
+ <state id="MessageErreurCB">
+  <transition target="AfficherChoixModePaiement" event="valider" />
+ </state>
+ 
+ 
+ <state id="AfficherChoixModeLivraison">
+  <transition target="AfficherRecap"   event="retour" />
+  <transition target="LivraisonProvisoire" cond="choix='provisoire'" event="execute" />
+  <transition target="LivraisonDomicile"   cond="choix='domicile'"   event="execute" />
+ </state>
+ 
+ <state id="LivraisonProvisoire">
+  <transition target="MessageErreurLivraison" cond="KO" event="ProcessException" />
+  <transition target="AfficherRecap"   cond="OK" event="execute" />
+ </state>
+
+ <state id="MessageErreurLivraison">
+  <transition target="AfficherRecap" event="valider" />
+ </state>
+
+ <state id="LivraisonDomicile">
+  <transition target="MessageErreurLivraison" cond="KO" event="ProcessException" />
+  <transition target="AfficherRecap"   cond="OK" event="execute" />
+ </state>
+
+ <state id="AfficherClientInconnu">
+  <transition target="fini"              event="sortie" />
+  <transition target="AfficherSaisieClient" event="nouveauClient" />
+  <transition target="AfficherSaisieId"     event="dejaClient" />
+ </state>
+
+ <state id="AfficherSaisieId">
+  <transition target="AfficherClientInconnu" event="retour" />
+  <transition target="ValiderIdClient"       event="execute" />
+ </state>
+
+ <state id="AfficherSaisieClient">
+  <transition target="AfficherClientInconnu" event="retour" />
+  <transition target="VerifierProspect"      event="saisieProspect" />
+ </state>
+
+ <state id="VerifierProspect">
+  <transition target="MessageAbort"          event="MobileVoleException" />
+  <transition target="MessageErreurProspect" event="ProcessException" />
+  <transition target="AfficherRecapSimple" event="execute" />  
+ </state>
+ 
+ <state id="MessageErreurProspect">
+  <transition target="AfficherClientInconnu" event="valider" />
+ </state>
+
+ <state id="AfficherRecapSimple">
+  <transition target="fini"               event="sortie" />
+  <transition target="ValiderPreCommande" event="valider" />
+ </state>
+
+ <state id="ValiderPreCommande">
+  <transition target="MessageErreurPreco"  event="ProcessException" />
+  <transition target="MessageConfirmPreco" event="execute" />
+ </state>
+
+ <state id="MessageErreurPreco">
+  <transition target="fini" event="valider" />
+ </state>
+
+ <state id="MessageConfirmPreco">
+  <transition target="fini" event="valider" />
+ </state>
+
+
+</scxml>
