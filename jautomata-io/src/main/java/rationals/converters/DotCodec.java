@@ -59,22 +59,20 @@ public class DotCodec implements StreamEncoder, StreamDecoder {
         String name = a.getId() == null ? "jauto" : a.getId().toString();
         pw.println("digraph "+ name+" {");
         /* output states */
-        pw.println("node [shape=circle, color=black, fontcolor=white, fixedsize= \"true\", width=\"1\"];");
         Set initials = a.labelledInitials();
+
+        pw.println("node [shape=circle, color=black, fontcolor=black, fixedsize= \"true\", width=\"1\"];");
         
         for(Iterator i = initials.iterator();i.hasNext();) {
-            pw.print(stateLabel(i.next()));
-            pw.println(";");
+            pw.print(stateLabel(i.next()) + " [shape=circle, style=\"filled\", fillcolor=black, fontcolor=white];");
         }
         
-        pw.println("node [shape=doublecircle,color=black, fontcolor=black];");
         Set terminals = a.labelledTerminals();
         terminals.removeAll(initials);
         for(Iterator i = terminals.iterator();i.hasNext();) {
-            pw.print(stateLabel(i.next()));
-            pw.println(";");
+            pw.print(stateLabel(i.next()) + " [shape=doublecircle,style=\"filled\", fillcolor=black, fontcolor=white];");
         }
-        pw.println("node [shape=circle,color=black, fontcolor=black];");
+        
         Set states = a.labelledStates();
         states.removeAll(initials);
         states.removeAll(terminals);
