@@ -1,187 +1,187 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
- xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
- <modelVersion>4.0.0</modelVersion>
- <groupId>oqube</groupId>
- <artifactId>jautomata</artifactId>
- <packaging>pom</packaging>
- <version>2.0-SNAPSHOT</version>
- <name>JAutomata Library</name>
- <url>http://www.achilleus.net/jauto/</url>
- <description>
-  JAuto is a library for manipulating rational languages and various kind of automata.
- </description>
- 
- <inceptionYear>2002</inceptionYear>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>oqube</groupId>
+  <artifactId>jautomata</artifactId>
+  <packaging>pom</packaging>
+  <version>2.0-SNAPSHOT</version>
+  <name>JAutomata Library</name>
+  <url>http://www.achilleus.net/jauto/</url>
+  <description>
+    JAuto is a library for manipulating rational languages and various kind of automata.
+  </description>
 
- <scm>
-  <connection>scm:svn:https://svn.sourceforge.net/svnroot/jautomata/tags/2.0-SNAPSHOT</connection>
- </scm>
+  <inceptionYear>2002</inceptionYear>
 
- <issueManagement>
-   <url>http://sourceforge.net/tracker/?group_id=170468&amp;atid=854324</url>
-  <system>sourceforge</system>
- </issueManagement>
+  <scm>
+    <connection>scm:svn:https://svn.sourceforge.net/svnroot/jautomata/tags/2.0-SNAPSHOT</connection>
+  </scm>
 
- <licenses>
-  <license>
-   <name>GNU LGPL 2.1</name>
-   <url>http://www.gnu.org/licenses/lgpl.txt</url>
-   <distribution>repo</distribution>
-  </license>
- </licenses> 
+  <issueManagement>
+    <url>http://sourceforge.net/tracker/?group_id=170468&amp;atid=854324</url>
+    <system>sourceforge</system>
+  </issueManagement>
 
- <modules>
-  <module>jautomata-core</module>
-  <module>jautomata-graph</module>
-  <module>jautomata-ext</module>
-  <module>jautomata-io</module>
- </modules>
- 
- <developers>
- 
-  <developer>
-   <name>Arnaud Bailly </name>
-   <id>bailly</id>
-    <email>bailly AT lifl POINT fr</email>
-    <organization> LIFL/Norsys</organization>
-    <roles>
-     <role>Developper</role>
-    </roles>
-  </developer>
-  
-  <developer>
-   <name>Yves Roos</name>
-   <id>yroos</id>
-    <email/>
-    <organization> LIFL</organization>
-    <roles>
-     <role>Original developper</role>
-    </roles>
-  </developer>
- </developers>
+  <licenses>
+    <license>
+      <name>GNU LGPL 2.1</name>
+      <url>http://www.gnu.org/licenses/lgpl.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
 
- <dependencies>
+  <modules>
+    <module>jautomata-core</module>
+    <module>jautomata-graph</module>
+    <module>jautomata-ext</module>
+    <module>jautomata-io</module>
+  </modules>
 
-  <dependency>
-   <groupId>junit</groupId>
-   <artifactId>junit</artifactId>
-   <version>3.8.1</version>
-   <scope>test</scope>
-  </dependency>
+  <developers>
 
- </dependencies>
- 
- <distributionManagement>
-  
-  <site>
-   <id>sf.net</id>
-   <url>
-    scp://oqube@shell.sourceforge.net/home/groups/j/ja/jautomata/htdocs
-   </url>
-  </site>
+    <developer>
+      <name>Arnaud Bailly</name>
+      <id>bailly</id>
+      <email>bailly AT lifl POINT fr</email>
+      <organization>LIFL/Norsys</organization>
+      <roles>
+        <role>Developper</role>
+      </roles>
+    </developer>
 
-  <repository>
-   <id>oqube.com</id>
-   <name>OQube</name>
-   <url>ftp://perso.nerim.net/oqube/maven2</url>
-  </repository>
+    <developer>
+      <name>Yves Roos</name>
+      <id>yroos</id>
+      <email/>
+      <organization>LIFL</organization>
+      <roles>
+        <role>Original developper</role>
+      </roles>
+    </developer>
+  </developers>
 
- </distributionManagement>
+  <dependencies>
 
- <repositories>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
 
-  <repository>
-   <id>repo.oqube.com</id>
-   <name>OQube</name>
-   <url>http://www.oqube.com/maven2</url>
-   <releases>
-     <enabled>true</enabled>
-   </releases>
-   <snapshots>
-     <enabled>true</enabled>
-     <updatePolicy>daily</updatePolicy>
-   </snapshots>
-  </repository>
+  </dependencies>
 
-</repositories>
+  <distributionManagement>
 
- <dependencyManagement>
- <dependencies>
-     <dependency>
-       <groupId>org.apache.maven.wagon</groupId>
-       <artifactId>wagon-ssh</artifactId>
-       <version>1.0-alpha-7</version>
-     </dependency>
-     <dependency>
-       <groupId>org.apache.maven.wagon</groupId>
-       <artifactId>wagon-ssh-external</artifactId>
-       <version>1.0-alpha-6</version>
-     </dependency>
-   </dependencies>
-</dependencyManagement>  
+    <site>
+      <id>sf.net</id>
+      <url>
+        scp://oqube@shell.sourceforge.net/home/groups/j/ja/jautomata/htdocs
+      </url>
+    </site>
 
- <build>
+    <repository>
+      <id>oqube.com</id>
+      <name>OQube</name>
+      <url>ftp://perso.nerim.net/oqube/maven2</url>
+    </repository>
 
-  <extensions>
-   <extension>
-    <groupId>org.apache.maven.wagon</groupId>
-    <artifactId>wagon-ftp</artifactId>
-    <version>1.0-alpha-6</version>
-   </extension>
-  </extensions>
- 
-   <plugins>
+  </distributionManagement>
 
-    <!-- build 1.5 binaries -->
-    <plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-compiler-plugin</artifactId>
-    <configuration>	
-      <source>1.5</source>
-<target>1.5</target>
-     <fork>true</fork>
-     </configuration>
-    </plugin>
+  <repositories>
 
-   <plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-site-plugin</artifactId>
-     <configuration>   
-     <locales>en</locales>
-    </configuration>
-   </plugin>   
-   
-  </plugins>
- </build>
+    <repository>
+      <id>repo.oqube.com</id>
+      <name>OQube</name>
+      <url>http://www.oqube.com/maven2</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>daily</updatePolicy>
+      </snapshots>
+    </repository>
 
- <reporting>
-  <plugins>
-   <plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-project-info-reports-plugin</artifactId>
-   </plugin>
+  </repositories>
 
-   <plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-javadoc-plugin</artifactId>
-   </plugin>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-ssh</artifactId>
+        <version>1.0-alpha-7</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-ssh-external</artifactId>
+        <version>1.0-alpha-6</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
-   <plugin>
-     <groupId>org.codehaus.mojo</groupId>
-    <artifactId>surefire-report-maven-plugin</artifactId>
-   </plugin>
+  <build>
 
-   <plugin>
-    <groupId>org.codehaus.mojo</groupId>
-    <artifactId>jxr-maven-plugin</artifactId>
-   </plugin>
-   
-   <plugin>
-    <groupId>org.codehaus.mojo</groupId>
-    <artifactId>changes-maven-plugin</artifactId> 
-   </plugin>
-  </plugins>
- </reporting>
- 
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-ftp</artifactId>
+        <version>1.0-alpha-6</version>
+      </extension>
+    </extensions>
+
+    <plugins>
+
+      <!-- build 1.5 binaries -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+          <fork>true</fork>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <configuration>
+          <locales>en</locales>
+        </configuration>
+      </plugin>
+
+    </plugins>
+  </build>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>surefire-report-maven-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>jxr-maven-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>changes-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </reporting>
+
 </project>

@@ -1,15 +1,8 @@
 package rationals;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import rationals.transformations.TransformationsToolBox;
+
+import java.util.*;
 
 /**
  * A class defining Automaton objects
@@ -92,8 +85,8 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 	// bonte
 	private StateFactory stateFactory = new DefaultStateFactory(this);
 
-	private Map<Object, State> labels = new HashMap<Object, State>();
-
+    private StateLabels stateLabels = new StateLabels();
+    
 	/**
 	 * @return
 	 */
@@ -618,7 +611,31 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 		return b;
 	}
 
-	private class Key {
+    /**
+     * 
+     * @return the set of labels matching initial states.
+     */
+    public Set<Object> labelledInitials() {
+        return stateLabels.labels(initials());
+    }
+
+    /**
+     * 
+     * @return the set of labels for terminal states.
+     */
+    public Set<Object> labelledTerminals() {
+        return stateLabels.labels(terminals());
+    }
+
+    /**
+     * 
+     * @return labels for states of this automaton.
+     */
+    public Set<Object> labelledStates() {
+        return stateLabels.labels(states);
+    }
+
+    private class Key {
 		private State s;
 
 		private Object l;
@@ -953,11 +970,11 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 	 * @return the newly created state.
 	 */
 	public State state(Object label) {
-		State s = labels.get(label);
+		State s = stateLabels.state(label);
 		if (s == null) {
-			s = stateFactory.create(false, false);
+			s = stateFactory.create(false, false, label);
 			states.add(s);
-			labels.put(label, s);
+			stateLabels.bind(s, label);
 		}
 		return s;
 	}

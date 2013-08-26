@@ -35,16 +35,12 @@
  */
 package rationals.converters;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.util.Iterator;
-
 import rationals.Automaton;
-import rationals.State;
 import rationals.Transition;
+
+import java.io.*;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Input/output an automaton in DOT format.
@@ -63,34 +59,42 @@ public class DotCodec implements StreamEncoder, StreamDecoder {
         String name = a.getId() == null ? "jauto" : a.getId().toString();
         pw.println("digraph "+ name+" {");
         /* output states */
-        pw.println("node [shape=circle, color=black, fontcolor=white];");
-        for(Iterator i = a.initials().iterator();i.hasNext();) {
-            State st = (State)i.next();
-            pw.println("s"+st+";");
+        pw.println("node [shape=circle, color=black, fontcolor=white, fixedsize= \"true\", width=\"1\"];");
+        Set initials = a.labelledInitials();
+        
+        for(Iterator i = initials.iterator();i.hasNext();) {
+            pw.print(stateLabel(i.next()));
+            pw.println(";");
         }
         
-        pw.println("node [shape=doublecircle,color=white, fontcolor=black];");
-        for(Iterator i = a.terminals().iterator();i.hasNext();) {
-            State st = (State)i.next();
-            if(st.isInitial())
-                continue;
-            pw.println("s"+st+";");
+        pw.println("node [shape=doublecircle,color=black, fontcolor=black];");
+        Set terminals = a.labelledTerminals();
+        terminals.removeAll(initials);
+        for(Iterator i = terminals.iterator();i.hasNext();) {
+            pw.print(stateLabel(i.next()));
+            pw.println(";");
         }
-        pw.println("node [shape=circle,color=white, fontcolor=black];");
-        for(Iterator i = a.initials().iterator();i.hasNext();) {
-            State st = (State)i.next();
-            if(st.isInitial() || st.isTerminal())
-                continue;
-            pw.println("s"+st+";");
+        pw.println("node [shape=circle,color=black, fontcolor=black];");
+        Set states = a.labelledStates();
+        states.removeAll(initials);
+        states.removeAll(terminals);
+        for(Iterator i = states.iterator();i.hasNext();) {
+            pw.print(stateLabel(i.next()));
+            pw.println(";");
         }
         /* edges */
         for(Iterator i = a.delta().iterator();i.hasNext();) {
             Transition tr =(Transition)i.next();
-            pw.println("s"+tr.start()+" -> "+ "s"+tr.end() +" [ label=\""+tr.label()+"\" ];");            
+            pw.println(stateLabel(tr.start())+" -> "+ stateLabel(tr.end()) +" [ label=\""+tr.label()+"\" ];");            
         }
         pw.println("}");
         pw.flush();
         pw.close();
+    }
+
+    private String stateLabel(Object st) {
+        String rawLabel = st.toString();
+        return (Character.isDigit(rawLabel.charAt(0)) ? "s"+rawLabel : rawLabel);
     }
 
     /* (non-Javadoc)

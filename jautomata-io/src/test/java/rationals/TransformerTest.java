@@ -35,23 +35,12 @@
  */
 package rationals;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
+import junit.framework.TestCase;
+import rationals.converters.*;
+
+import java.io.*;
 import java.util.Arrays;
 import java.util.List;
-
-import junit.framework.TestCase;
-import rationals.converters.Codecs;
-import rationals.converters.ConverterException;
-import rationals.converters.Expression;
-import rationals.converters.StreamDecoder;
-import rationals.converters.StreamEncoder;
 
 /**
  * @author nono
@@ -61,28 +50,34 @@ public class TransformerTest extends TestCase {
 
     private Automaton aut;
 
+    private static final File tmp = new File(System.getProperty("java.io.tmpdir"));
+    private File test1;
+    private File test2;
+    private File out;
+
     /*
      * @see TestCase#setUp()
      */
     protected void setUp() throws Exception {
         super.setUp();
         /* output into file */
+        test1 = new File(tmp, "test1.auto");
+        test2 = new File(tmp, "test2.auto");
+        out = new File(tmp, "test.auto");
+        
         aut = new Expression().fromString("ab*");
         StreamEncoder enc= Codecs.encoder("auto");
-        enc.output(aut,new FileOutputStream("/tmp/test1.auto"));
+        enc.output(aut,new FileOutputStream(test1));
         Automaton a = new Expression().fromString("ac*");
-        enc.output(a,new FileOutputStream("/tmp/test2.auto"));
+        enc.output(a,new FileOutputStream(test2));
      }
 
     
     protected void tearDown() throws Exception {
         super.tearDown();
         /* delete files */
-        File in1 = new File("/tmp/test1.auto");
-        File in2 = new File("/tmp/test2.auto");
-        File out = new File("/tmp/test.auto");
-        in1.delete();
-        in2.delete();
+        test1.delete();
+        test2.delete();
         out.delete();
     }
     
@@ -95,7 +90,7 @@ public class TransformerTest extends TestCase {
     }
 
     public void testUnary() throws ConverterException, IOException {
-        String[] args = new String[]{"Reducer","/tmp/test1.auto"};
+        String[] args = new String[]{"Reducer",test1.getAbsolutePath()};
         /* collect output */
         ByteArrayOutputStream bos;
         PrintStream ps = new PrintStream(bos = new ByteArrayOutputStream());
@@ -109,41 +104,41 @@ public class TransformerTest extends TestCase {
     }
 
     public void testUnaryFilout() throws ConverterException, IOException {
-        String[] args = new String[]{"Reducer","-o","/tmp/test.auto","/tmp/test1.auto"};
+        String[] args = new String[]{"Reducer","-o",out.getAbsolutePath(),test1.getAbsolutePath()};
         /* collect output */
         ByteArrayOutputStream bos;
         Transform.main(args);
         /* decode output */
         StreamDecoder dec = Codecs.decoder("auto");
-        assertTrue(new File("/tmp/test.auto").exists());
-        Automaton a = dec.input(new FileInputStream("/tmp/test.auto"));
+        assertTrue(out.exists());
+        Automaton a = dec.input(new FileInputStream(out));
         List word = Arrays.asList(new String[]{"a","b","b"});
         assertTrue(a.accept(word));
     }
 
     public void testUnaryStdin() throws ConverterException, IOException {
-        String[] args = new String[]{"Reducer","-o","/tmp/test.auto"};
-        System.setIn(new FileInputStream("/tmp/test1.auto"));
+        String[] args = new String[]{"Reducer","-o",out.getAbsolutePath()};
+        System.setIn(new FileInputStream(test1));
         /* collect output */
         ByteArrayOutputStream bos;
         Transform.main(args);
         /* decode output */
         StreamDecoder dec = Codecs.decoder("auto");
-        assertTrue(new File("/tmp/test.auto").exists());
-        Automaton a = dec.input(new FileInputStream("/tmp/test.auto"));
+        assertTrue(out.exists());
+        Automaton a = dec.input(new FileInputStream(out));
         List word = Arrays.asList(new String[]{"a","b","b"});
         assertTrue(a.accept(word));
     }
     
     public void testBinary() throws FileNotFoundException, IOException {
-        String[] args = new String[]{"Mix","-o","/tmp/test.auto","/tmp/test1.auto","/tmp/test2.auto"};
+        String[] args = new String[]{"Mix","-o",out.getAbsolutePath(),test1.getAbsolutePath(),test2.getAbsolutePath()};
         /* collect output */
         ByteArrayOutputStream bos;
         Transform.main(args);
         /* decode output */
         StreamDecoder dec = Codecs.decoder("auto");
-        assertTrue(new File("/tmp/test.auto").exists());
-        Automaton a = dec.input(new FileInputStream("/tmp/test.auto"));
+        assertTrue(out.exists());
+        Automaton a = dec.input(new FileInputStream(out));
         List word = Arrays.asList(new String[]{"a","b","b"});
         List word2 = Arrays.asList(new String[]{"a","c","c"});
         assertTrue(a.accept(word)&&a.accept(word2));        

@@ -66,13 +66,6 @@ public abstract class Codecs {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        try{        
-            Class xmlf =Class.forName("rationals.converters.SCXMLCodec");
-            registerEncoder("scxml",xmlf);
-            registerDecoder("scxml",xmlf);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
         try {
             autof = Class.forName("rationals.converters.DotCodec");
             registerEncoder("dot" +
@@ -106,7 +99,7 @@ public abstract class Codecs {
      * 
      * @param format
      *            the format to register decoder with.
-     * @param enc
+     * @param dec
      *            the decoder Class instance for this format.
      * @throws IllegalArgumentException
      *             if <code>enc</code> does not implements StreamEncoder

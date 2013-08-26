@@ -32,9 +32,8 @@
  */
 package rationals.ioautomata.testing;
 
-import org.hamcrest.Matchers;
-
 import junit.framework.TestCase;
+import org.hamcrest.CoreMatchers;
 import rationals.State;
 import rationals.ioautomata.IOAlphabetType;
 import rationals.ioautomata.IOAutomaton;
@@ -61,13 +60,13 @@ public class SynchIOAutomatonSMAdapterTest extends TestCase {
     impl = new IOAutomaton();
     State s1 = impl.addState(true, true);
     State s2 = impl.addState(false, false);
-    impl.addTransition(new IOTransition(s1, Matchers.equalTo("a"), s2, IOAlphabetType.INPUT));
+    impl.addTransition(new IOTransition(s1, CoreMatchers.equalTo("a"), s2, IOAlphabetType.INPUT));
     impl.addTransition(new IOTransition(s2, "b", s1, IOAlphabetType.OUTPUT));
 
     ndet = new IOAutomaton();
     s1 = ndet.addState(true, true);
     s2 = ndet.addState(false, false);
-    ndet.addTransition(new IOTransition(s1, Matchers.equalTo("a"), s2,
+    ndet.addTransition(new IOTransition(s1, CoreMatchers.equalTo("a"), s2,
         IOAlphabetType.INPUT));
     ndet.addTransition(new IOTransition(s2, "b", s1, IOAlphabetType.OUTPUT));
     ndet.addTransition(new IOTransition(s2, "c", s1, IOAlphabetType.OUTPUT));
