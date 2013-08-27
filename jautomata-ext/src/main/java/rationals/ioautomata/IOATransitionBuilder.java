@@ -24,8 +24,12 @@ import rationals.State;
 /** Builds transitions containing explicit information about send and/or receive messages. */
 public class IOATransitionBuilder implements Builder<IOTransition, IOATransitionBuilder> {
 
+  /* unique id, used for completing messages sources/destination */
   private final String id;
 
+  /*
+   * counter is used for creating new unique states within this automaton context.
+   */
   private int counter = 0;
 
   private State currentState;
@@ -57,6 +61,16 @@ public class IOATransitionBuilder implements Builder<IOTransition, IOATransition
   }
 
   @Override
+  /**
+   * Starts creating a new {@link IOAlphabetType#INTERNAL} transition from the current state.
+   * <p>
+   *     If a transition was in progress, through previous calls to {@link #send(Object)} or {@link #receive(Object)}
+   *     then this closes the transition to a new "anonymous" state which becomes the <em>current state</em>.
+   * </p>
+   *
+   * @param message the message which is .
+   * @return this  builder for chaining purpose.
+   */
   public IOATransitionBuilder on(Object label) {
     Object message = label;
     if (label instanceof String) {
@@ -67,14 +81,13 @@ public class IOATransitionBuilder implements Builder<IOTransition, IOATransition
   }
 
   @Override
+  /**
+   * This method <strong>does not</strong> change the <em>current state</em> which implies using it after a succession
+   * of {@link #send(Object)} or {@link #receive(Object)} calls will leave the builder in an intermediary state. Use
+   * {@link #to(Object)} to explicitly change the current state.
+   */
   public IOATransitionBuilder go(Object o) {
-    State s = automaton.state(o);
-    try {
-      automaton.addTransition(new IOTransition(currentState, currentLabel, s));
-    } catch (NoSuchStateException e) {
-      assert false;
-    }
-    currentLabel = null;
+    transitionTo(automaton.state(o));
     return this;
   }
 
@@ -106,6 +119,16 @@ public class IOATransitionBuilder implements Builder<IOTransition, IOATransition
     this.automaton = a;
   }
 
+  /**
+   * Starts creating a new {@link IOAlphabetType#INPUT} transition from the current state.
+   *
+   * <p>If a transition was in progress, through previous calls to {@link #send(Object)} or this method
+   * then this closes the transition to a new "anonymous" state which becomes the <em>current state</em>.</p>
+   *
+   * @param  message the message which is input.
+   *
+   * @return this builder for chaining purpose.
+   */
   public IOATransitionBuilder receive(Object message) {
     Object label = message;
     if (message instanceof String) {
@@ -115,6 +138,16 @@ public class IOATransitionBuilder implements Builder<IOTransition, IOATransition
     return this;
   }
 
+  /**
+   * Starts creating a new {@link IOAlphabetType#OUTPUT} transition from the current state.
+   *
+   * <p>If a transition was in progress, through previous calls to this method or {@link #receive(Object)}
+   * then this closes the transition to a new "anonymous" state which becomes the <em>current state</em>.</p>
+   *
+   * @param  message the message which is output.
+   *
+   * @return this builder for chaining purpose.
+   */
   public IOATransitionBuilder send(Object message) {
     Object label = message;
     if (message instanceof String) {
@@ -139,26 +172,30 @@ public class IOATransitionBuilder implements Builder<IOTransition, IOATransition
   }
 
   /**
-   * Changes the current state to {@code end}.
+   * Changes the current state to {@code state} and optionally closes the current transition.
    *
-   * <p>This also closes the current transition if a label as been set with {@link #send(Object)} or {@link
-   * #receive(Object)}.</p>
+   * <p>This closes the current transition if called after a label has been set with {@link #send(Object)} or {@link
+   * #receive(Object)}. Otherwise, it has the same effect than {@link #from(Object)}.</p>
    *
    * @param  state end state of transition to close.
    *
    * @return this object for chaining.
    */
-  public IOATransitionBuilder end(Object state) {
+  public IOATransitionBuilder to(Object state) {
     State s = automaton.state(state);
     if (currentLabel != null) {
-      try {
-        automaton.addTransition(new IOTransition(currentState, currentLabel, s));
-      } catch (NoSuchStateException e) {
-        throw new IllegalStateException("no state " + s + " or " + currentState);
-      }
-      currentLabel = null;
+      transitionTo(s);
     }
     currentState = s;
     return this;
+  }
+
+  private void transitionTo(State s) {
+    try {
+      automaton.addTransition(new IOTransition(currentState, currentLabel, s));
+    } catch (NoSuchStateException e) {
+      throw new IllegalStateException("no state (" + s + " or " + currentState + ") to build transition");
+    }
+    currentLabel = null;
   }
 }

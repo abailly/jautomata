@@ -62,7 +62,7 @@ public class IOATransitionBuilderTest {
 
   @Test
   public void changeCurrentStateOnEnd() throws Exception {
-    ioa.from("init").send("a.m").go("fini").end("init")
+    ioa.from("init").send("a.m").go("fini").to("init")
             .receive("a.m'").go("fini");
 
     assertThat(ioa.states()).hasSize(2);

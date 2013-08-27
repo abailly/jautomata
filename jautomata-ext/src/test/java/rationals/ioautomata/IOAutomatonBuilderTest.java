@@ -59,13 +59,13 @@ public class IOAutomatonBuilderTest extends TestCase {
         };
 
         AsynchIOAutomatonSMAdapter sm = new AsynchIOAutomatonSMAdapter(a, new LinkedBlockingQueue(), new LinkedBlockingQueue());
-        a.from("init").receive(1).go("rcv").from("rcv").on(fun).go("ret").from("ret").receive("toto").go("rcv").receive(CoreMatchers.instanceOf(Exception.class)).go("end").from("end").send(sm.lastInput).go("end");
+        a.from("init").receive(1).go("rcv").from("rcv").on(fun).go("ret").from("ret").receive("toto").go("rcv").receive(CoreMatchers.instanceOf(Exception.class)).go("to").from("to").send(sm.lastInput).go("to");
         a.state("init").setInitial(true);
         System.err.println(a);
         sm.setInternalHandler(fun);
         new Thread(sm).start();
         sm.input(1);
-        Object out = null;
+        Object out;
         do {
             try {
                 synchronized (this) {
