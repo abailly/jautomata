@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata modelVersion="1.1.0">
+  <groupId>fr.lifl</groupId>
+  <artifactId>parsing</artifactId>
+  <version>1.4-SNAPSHOT</version>
+  <versioning>
+    <snapshot>
+      <localCopy>true</localCopy>
+    </snapshot>
+    <lastUpdated>20130827201535</lastUpdated>
+    <snapshotVersions>
+      <snapshotVersion>
+        <extension>jar</extension>
+        <value>1.4-SNAPSHOT</value>
+        <updated>20130827201535</updated>
+      </snapshotVersion>
+    </snapshotVersions>
+  </versioning>
+</metadata>
