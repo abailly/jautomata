@@ -1,16 +1,17 @@
 package rationals.ioautomata;
 
+import junit.framework.TestCase;
+import rationals.Automaton;
+import rationals.ioautomata.IOTransition.IOLetter;
+import rationals.properties.Bisimilar;
+import rationals.transformations.Mix;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import rationals.Automaton;
-import rationals.ioautomata.IOTransition.IOLetter;
-import rationals.properties.Bisimilar;
-import rationals.transformations.Mix;
 import static rationals.ioautomata.IOAlphabetType.*;
-import junit.framework.TestCase;
 
 public class IOSynchronizationTest extends TestCase {
 
@@ -57,9 +58,9 @@ public class IOSynchronizationTest extends TestCase {
 	}
 
 	public void testCanComputeMixProductOfTwoIOAutomata() throws Exception {
-		IOAutomaton<IOTransitionBuilder> a = new IOAutomaton<IOTransitionBuilder>(
+		IOAutomaton<IOTransition, IOTransitionBuilder> a = new IOAutomaton<IOTransition, IOTransitionBuilder>(
 				new IOTransitionBuilder());
-		IOAutomaton<IOTransitionBuilder> b = new IOAutomaton<IOTransitionBuilder>(
+		IOAutomaton<IOTransition, IOTransitionBuilder> b = new IOAutomaton<IOTransition, IOTransitionBuilder>(
 				new IOTransitionBuilder());
 		a.from("q0").receive("a").go("q1").from("q1").send("b").go("q2");
 		a.state("q0").setInitial(true);
@@ -67,7 +68,7 @@ public class IOSynchronizationTest extends TestCase {
 		b.state("q0").setInitial(true);
 		Mix mix = new Mix(new IOSynchronization());
 		Automaton transform = mix.transform(a, b);
-		IOAutomaton<IOTransitionBuilder> c = new IOAutomaton<IOTransitionBuilder>(
+		IOAutomaton<IOTransition, IOTransitionBuilder> c = new IOAutomaton<IOTransition, IOTransitionBuilder>(
 				new IOTransitionBuilder());
 		c.from("q0").on("a").go("q1").from("q1").on("b").go("q2");
 		c.state("q0").setInitial(true);

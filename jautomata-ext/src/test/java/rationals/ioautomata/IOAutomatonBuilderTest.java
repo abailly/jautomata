@@ -24,7 +24,7 @@ public class IOAutomatonBuilderTest extends TestCase {
     //~ ----------------------------------------------------------------------------------------------------------------
 
     public void testInputAndOutputLabels() {
-        IOAutomaton<IOTransitionBuilder> a = new IOAutomaton<IOTransitionBuilder>(new IOTransitionBuilder());
+        IOAutomaton<IOTransition, IOTransitionBuilder> a = new IOAutomaton<IOTransition, IOTransitionBuilder>(new IOTransitionBuilder());
         a.from("init").receive("req").go("rcv").from("rcv").send("rep").go("init");
         a.state("init").setInitial(true);
         System.err.println(a);
@@ -35,7 +35,7 @@ public class IOAutomatonBuilderTest extends TestCase {
     }
 
     public void testInputMatcher() {
-        IOAutomaton<IOTransitionBuilder> a = new IOAutomaton<IOTransitionBuilder>();
+        IOAutomaton<IOTransition, IOTransitionBuilder> a = new IOAutomaton<IOTransition, IOTransitionBuilder>();
         a.setBuilder(new IOTransitionBuilder());
         a.from("init").receive(equalToIgnoringCase("Toto")).go("rcv").from("rcv").send("rep").go("init");
         a.state("init").setInitial(true);
@@ -47,7 +47,7 @@ public class IOAutomatonBuilderTest extends TestCase {
     }
 
     public void testCallsOnInternalTransitions() {
-        IOAutomaton<IOTransitionBuilder> a = new IOAutomaton<IOTransitionBuilder>();
+        IOAutomaton<IOTransition, IOTransitionBuilder> a = new IOAutomaton<IOTransition, IOTransitionBuilder>();
         final Exception e = new Exception("e");
         a.setBuilder(new IOTransitionBuilder());
         Function<Object, String> fun = new Function<Object, String>() {

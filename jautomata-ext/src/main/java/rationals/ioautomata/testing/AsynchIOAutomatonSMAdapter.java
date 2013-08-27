@@ -32,27 +32,12 @@
  */
 package rationals.ioautomata.testing;
 
-import java.util.Iterator;
-import java.util.Queue;
-import java.util.Random;
-import java.util.Set;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Callable;
-import java.util.concurrent.LinkedBlockingQueue;
-
-import org.hamcrest.Matcher;
-
-import rationals.State;
-import rationals.Transition;
-import rationals.ioautomata.IOAlphabetType;
 import rationals.ioautomata.IOAutomaton;
 import rationals.ioautomata.IOAutomatonSMAdapter;
-import rationals.ioautomata.IOStateMachine;
-import rationals.ioautomata.IOSynchronization;
 import rationals.ioautomata.IOTransition;
 import rationals.ioautomata.IOTransitionBuilder;
-import rationals.ioautomata.Function;
-import fr.lifl.utils.MsgQueue;
+
+import java.util.concurrent.BlockingQueue;
 
 /**
  * An asynchronous implementation of StateMachine backed up by an IOAutomaton.
@@ -73,12 +58,12 @@ public class AsynchIOAutomatonSMAdapter extends IOAutomatonSMAdapter {
 
   private boolean error;
 
-  public AsynchIOAutomatonSMAdapter(IOAutomaton<IOTransitionBuilder> auto) {
+  public AsynchIOAutomatonSMAdapter(IOAutomaton<IOTransition,IOTransitionBuilder> auto) {
     super(auto);
     setInputEnabled(true);
   }
 
-  public AsynchIOAutomatonSMAdapter(IOAutomaton<IOTransitionBuilder> a,
+  public AsynchIOAutomatonSMAdapter(IOAutomaton<IOTransition,IOTransitionBuilder> a,
       BlockingQueue queue, BlockingQueue queue2) {
     this(a);
     this.inQueue = queue;

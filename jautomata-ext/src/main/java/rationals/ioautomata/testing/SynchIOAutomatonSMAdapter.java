@@ -32,25 +32,15 @@
  */
 package rationals.ioautomata.testing;
 
+import fr.lifl.utils.Barrier;
+import rationals.State;
+import rationals.Transition;
+import rationals.ioautomata.*;
+import rationals.ioautomata.IOTransition.IOLetter;
+
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Set;
-import java.util.concurrent.Callable;
-
-import org.hamcrest.Matcher;
-
-import fr.lifl.utils.Barrier;
-
-import rationals.State;
-import rationals.Transition;
-import rationals.ioautomata.IOAlphabetType;
-import rationals.ioautomata.IOAutomaton;
-import rationals.ioautomata.IOStateMachine;
-import rationals.ioautomata.IOSynchronization;
-import rationals.ioautomata.IOTransition;
-import rationals.ioautomata.IOTransitionBuilder;
-import rationals.ioautomata.Function;
-import rationals.ioautomata.IOTransition.IOLetter;
 
 /**
  * Provide an implementation of IOStateMachine which is controlled by an
@@ -81,7 +71,7 @@ import rationals.ioautomata.IOTransition.IOLetter;
 public class SynchIOAutomatonSMAdapter implements IOStateMachine, Runnable {
 
 	/* the automaton which is run */
-	private IOAutomaton<IOTransitionBuilder> auto;
+	private IOAutomaton<IOTransition,IOTransitionBuilder> auto;
 
 	/* the synchronization test */
 	private IOSynchronization synch = new IOSynchronization();
@@ -120,7 +110,7 @@ public class SynchIOAutomatonSMAdapter implements IOStateMachine, Runnable {
 	 * @param auto
 	 *            a non-null IOAutomaton instance.
 	 */
-	public SynchIOAutomatonSMAdapter(IOAutomaton<IOTransitionBuilder> auto) {
+	public SynchIOAutomatonSMAdapter(IOAutomaton<IOTransition,IOTransitionBuilder> auto) {
 		this.auto = auto;
 		this.auto.setBuilder(new IOTransitionBuilder());
 		this.state = auto.getStateFactory().stateSet(auto.initials());

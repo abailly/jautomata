@@ -40,7 +40,7 @@ public class IOTransitionBuilder implements
 	private Object label;
 
 	public IOTransitionBuilder(State state,
-			IOAutomaton<IOTransitionBuilder> automaton) {
+			IOAutomaton<IOTransition, IOTransitionBuilder> automaton) {
 		this.from = state;
 		this.automaton = automaton;
 	}

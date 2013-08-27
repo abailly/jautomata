@@ -49,6 +49,19 @@
    <version>${parent.version}</version>
   </dependency>
 
+
+   <dependency>
+     <groupId>junit</groupId>
+     <artifactId>junit</artifactId>
+     <version>4.11</version>
+   </dependency>
+
+   <dependency>
+     <groupId>org.easytesting</groupId>
+     <artifactId>fest-assert</artifactId>
+     <version>1.4</version>
+   </dependency>
+
  </dependencies>
  
  <reporting>

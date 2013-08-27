@@ -18,18 +18,14 @@
  */
 package rationals.ioautomata;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import org.hamcrest.Matcher;
-
 import rationals.State;
 import rationals.Transition;
 import rationals.ioautomata.IOTransition.IOLetter;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 /**
  * A basic implementation of an IOStateMachine that wraps an IOAutomaton. This
@@ -53,7 +49,7 @@ import rationals.ioautomata.IOTransition.IOLetter;
  */
 public class IOAutomatonSMAdapter implements IOStateMachine {
 
-	protected IOAutomaton<IOTransitionBuilder> automaton;
+	protected IOAutomaton<IOTransition,IOTransitionBuilder> automaton;
 
 	protected Set<State> state;
 
@@ -65,9 +61,9 @@ public class IOAutomatonSMAdapter implements IOStateMachine {
 
 	protected Object savedInput;
 
-	public final Function<IOAutomaton<IOTransitionBuilder>, Object> lastInput = new Function<IOAutomaton<IOTransitionBuilder>, Object>() {
+	public final Function<IOAutomaton<IOTransition,IOTransitionBuilder>, Object> lastInput = new Function<IOAutomaton<IOTransition,IOTransitionBuilder>, Object>() {
 
-		public Object apply(IOAutomaton<IOTransitionBuilder> message)
+		public Object apply(IOAutomaton<IOTransition,IOTransitionBuilder> message)
 				throws Exception {
 			assert message == automaton;
 			return savedInput;
@@ -78,7 +74,7 @@ public class IOAutomatonSMAdapter implements IOStateMachine {
 		}
 	};
 
-	public IOAutomatonSMAdapter(IOAutomaton<IOTransitionBuilder> a) {
+	public IOAutomatonSMAdapter(IOAutomaton<IOTransition,IOTransitionBuilder> a) {
 		this.automaton = a;
 		this.state = a.initials();
 		this.selectOutput = new TransitionSelector(IOAlphabetType.OUTPUT);

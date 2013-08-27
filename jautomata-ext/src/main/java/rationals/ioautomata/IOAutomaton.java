@@ -32,19 +32,9 @@
  */
 package rationals.ioautomata;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import rationals.*;
 
-import rationals.Automaton;
-import rationals.Builder;
-import rationals.NoSuchStateException;
-import rationals.Rational;
-import rationals.State;
-import rationals.Transition;
-import rationals.TransitionBuilder;
+import java.util.*;
 
 /**
  * An IO Automata is a special kind of Automaton where the alphabet is
@@ -57,8 +47,8 @@ import rationals.TransitionBuilder;
  * @author nono
  * @version $Id: IOAutomaton.java 13 2007-06-01 16:11:03Z oqube $
  */
-public class IOAutomaton<T extends Builder<IOTransition, T>> extends
-		Automaton<IOTransition, T> {
+public class IOAutomaton<I extends IOTransition, T extends Builder<I, T>> extends
+		Automaton<I, T> {
 
 	private Set input = new HashSet();
 

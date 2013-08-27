@@ -18,14 +18,14 @@
  */
 package rationals.ioautomata;
 
+import rationals.State;
+import rationals.Transition;
+import rationals.ioautomata.IOTransition.IOLetter;
+
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Set;
-
-import rationals.State;
-import rationals.Transition;
-import rationals.ioautomata.IOTransition.IOLetter;
 
 /**
  * Selects an arbitrary transition of a given type for an automaton.
@@ -43,7 +43,7 @@ public class TransitionSelector {
     this.type = output;
   }
 
-  public IOLetter selectFrom(IOAutomaton<IOTransitionBuilder> automaton,
+  public IOLetter selectFrom(IOAutomaton<IOTransition,IOTransitionBuilder> automaton,
       Set<State> state) {
     Set<Transition> trs = automaton.delta(state);
     for (Iterator i = trs.iterator(); i.hasNext();)
@@ -65,7 +65,7 @@ public class TransitionSelector {
    * @param state
    * @return
    */
-  public Set<IOLetter> selectAllFrom(IOAutomaton<IOTransitionBuilder> automaton,
+  public Set<IOLetter> selectAllFrom(IOAutomaton<IOTransition,IOTransitionBuilder> automaton,
       Set<State> state) {
     Set<Transition> trs = automaton.delta(state);
     Set<IOTransition.IOLetter> letters = new HashSet<IOLetter>();

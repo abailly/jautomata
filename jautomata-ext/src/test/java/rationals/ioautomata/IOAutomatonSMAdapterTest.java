@@ -1,20 +1,18 @@
 package rationals.ioautomata;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-
 import junit.framework.TestCase;
+
+import java.util.Collections;
 
 public class IOAutomatonSMAdapterTest extends TestCase {
 
   private IOAutomatonSMAdapter sm;
 
-  private IOAutomaton<IOTransitionBuilder> a;
+  private IOAutomaton<IOTransition,IOTransitionBuilder> a;
 
   protected void setUp() {
 
-    a = new IOAutomaton<IOTransitionBuilder>(new IOTransitionBuilder());
+    a = new IOAutomaton<IOTransition,IOTransitionBuilder>(new IOTransitionBuilder());
     a.state("s1").setInitial(true);
     a.from("s1").receive(1).go("s2").from("s2").send(2).go("s3").send(3).go(
         "s4");
@@ -133,9 +131,9 @@ public class IOAutomatonSMAdapterTest extends TestCase {
   }
 
   public void testOutputLetterAsFunctionIsCalledWithThis() {
-    Function<IOAutomaton<IOTransitionBuilder>, Object> fun = new Function<IOAutomaton<IOTransitionBuilder>, Object>() {
+    Function<IOAutomaton<IOTransition,IOTransitionBuilder>, Object> fun = new Function<IOAutomaton<IOTransition,IOTransitionBuilder>, Object>() {
 
-      public Object apply(IOAutomaton<IOTransitionBuilder> message)
+      public Object apply(IOAutomaton<IOTransition,IOTransitionBuilder> message)
           throws Exception {
         return message.getId();
       }
