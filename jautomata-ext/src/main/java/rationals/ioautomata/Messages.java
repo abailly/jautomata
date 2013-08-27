@@ -22,6 +22,7 @@ import java.util.regex.Pattern;
 public class Messages {
 
   private static final Pattern messagesPattern = Pattern.compile("(?:\\s*(\\w+)\\s*(->|<-)|\\^)\\s*(\\w+)\\.(\\S+)\\s*");
+  private static final Pattern lettersPattern = Pattern.compile("(\\?|!|\\^)(\\s*(\\w+)\\s*(->|<-))?\\s*(\\w+)\\.(\\S+)\\s*");
 
   /**
    * Builds a {@link Message} object from a string description.
@@ -47,22 +48,76 @@ public class Messages {
     return new IllegalArgumentException(message + " does not match expected pattern " + messagesPattern);
   }
 
+  private static IllegalArgumentException rejectLetter(String message) {
+    return new IllegalArgumentException(message + " does not match expected pattern for a letter " + lettersPattern);
+  }
+
   public static IOTransition.IOLetter letter(String message) {
     Matcher matcher = messagesPattern.matcher(message);
     if (matcher.matches()) {
       Message built = new Message(matcher);
 
-      if (matcher.group(2) == null) {
+      if (matcher.group(1).equals("^")) {
         return new IOTransition.IOLetter(built, IOAlphabetType.INTERNAL);
       }
 
-      if (matcher.group(2).equals("->")) {
+      if (matcher.group(3).equals("->")) {
+
         return new IOTransition.IOLetter(built, IOAlphabetType.OUTPUT);
       } else {
         return new IOTransition.IOLetter(built, IOAlphabetType.INPUT);
       }
     }
     throw rejectMessage(message);
+  }
+
+  /**
+   * Builds a full {@link rationals.ioautomata.IOTransition.IOLetter} from its textual description.
+   *
+   * @param  message textual description of the letter to build. Can be one of:
+   *
+   *                 <ol>
+   *                   <li>a caret (<tt>^</tt>) denoting an internal message followed by a message "call" <code>
+   *                     b.m</code>,</li>
+   *                   <li>a send or receive signal, resp. (<tt>!</tt>) and (<tt>?</tt>), denoting an output, resp.
+   *                     input, message, followed by send/receiver/content triple in the form <code>a -> b.m</code>.
+   *                     Note that the direction the arrow is pointing at is taken into account to distinguish sender
+   *                     and emitter of the message.</li>
+   *                 </ol>
+   *
+   * @return a full {@link rationals.ioautomata.IOTransition.IOLetter} with a {@link Message} as label.
+   */
+  public static IOTransition.IOLetter fullLetter(String message) {
+    Matcher matcher = lettersPattern.matcher(message);
+    if (matcher.matches()) {
+
+      if (matcher.group(1).equals("^")) {
+        if (matcher.group(2) == null) {
+          return new IOTransition.IOLetter(new Message(matcher.group(5), matcher.group(5), matcher.group(6)), IOAlphabetType.INTERNAL);
+        } else {
+          if (matcher.group(4).equals("->")) {
+            return new IOTransition.IOLetter(new Message(matcher.group(3), matcher.group(5), matcher.group(6)), IOAlphabetType.INTERNAL);
+          } else {
+            return new IOTransition.IOLetter(new Message(matcher.group(5), matcher.group(3), matcher.group(6)), IOAlphabetType.INTERNAL);
+          }
+        }
+      }
+
+      if (matcher.group(1).equals("!")) {
+        if (matcher.group(4).equals("->")) {
+          return new IOTransition.IOLetter(new Message(matcher.group(3), matcher.group(5), matcher.group(6)), IOAlphabetType.OUTPUT);
+        } else {
+          return new IOTransition.IOLetter(new Message(matcher.group(5), matcher.group(3), matcher.group(6)), IOAlphabetType.OUTPUT);
+        }
+      } else {
+        if (matcher.group(4).equals("->")) {
+          return new IOTransition.IOLetter(new Message(matcher.group(3), matcher.group(5), matcher.group(6)), IOAlphabetType.INPUT);
+        } else {
+          return new IOTransition.IOLetter(new Message(matcher.group(5), matcher.group(3), matcher.group(6)), IOAlphabetType.INPUT);
+        }
+      }
+    }
+    throw rejectLetter(message);
   }
 
   public static class Message {
@@ -94,18 +149,6 @@ public class Messages {
       this.content = content;
     }
 
-    public String getFrom() {
-      return from;
-    }
-
-    public String getTo() {
-      return to;
-    }
-
-    public String getContent() {
-      return content;
-    }
-
     @Override
     public boolean equals(Object o) {
       if (this == o)
@@ -119,10 +162,8 @@ public class Messages {
         return false;
       if (!from.equals(message.from))
         return false;
-      if (!to.equals(message.to))
-        return false;
+      return to.equals(message.to);
 
-      return true;
     }
 
     @Override
