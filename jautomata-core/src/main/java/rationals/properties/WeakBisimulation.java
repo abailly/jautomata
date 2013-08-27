@@ -30,17 +30,17 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * Created on 20 févr. 2005
+ * Created on 20 fevr. 2005
  *
  */
 package rationals.properties;
 
-import java.util.List;
-import java.util.Set;
-
 import rationals.Automaton;
 import rationals.State;
 import rationals.transformations.EpsilonTransitionRemover;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * This method computes the weak bisimulation relation between two states.

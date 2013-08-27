@@ -36,18 +36,14 @@
  */
 package rationals.converters;
 
+import rationals.*;
+import rationals.properties.isNormalized;
+import rationals.transformations.Normalizer;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-
-import rationals.Automaton;
-import rationals.Couple;
-import rationals.NoSuchStateException;
-import rationals.State;
-import rationals.Transition;
-import rationals.properties.isNormalized;
-import rationals.transformations.Normalizer;
 
 /**
  * This Converter takes an Automaton and generates an equivalent Regular
@@ -55,7 +51,7 @@ import rationals.transformations.Normalizer;
  * <p>
  * This conversion applies classical conversion algorithm based on state
  * removal. 
- * cf. Algorithm BMC (Brozowski et  al.) from J.sakarovitch "Eléments de théorie
+ * cf. Algorithm BMC (Brozowski et  al.) from J.sakarovitch "El&eacute;ments de th&eacute;orie
  * des automates", sec. 2
  * 
  * @author nono

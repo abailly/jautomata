@@ -30,25 +30,18 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * Created on 20 févr. 2005
+ * Created on 20 fevr. 2005
  *
  */
 package rationals.properties;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Stack;
 
 import rationals.Automaton;
 import rationals.State;
 import rationals.Transition;
 import rationals.transformations.StatesCouple;
 import rationals.transformations.TransformationsToolBox;
+
+import java.util.*;
 
 /**
  * A class that compute trace equivalence relation between two states. This
