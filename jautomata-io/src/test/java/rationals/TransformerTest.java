@@ -50,7 +50,8 @@ public class TransformerTest extends TestCase {
 
     private Automaton aut;
 
-    private static final File tmp = new File(System.getProperty("java.io.tmpdir"));
+    private static final File tmp = new File(TransformerTest.class.getProtectionDomain().getCodeSource().getLocation().getFile());
+
     private File test1;
     private File test2;
     private File out;
