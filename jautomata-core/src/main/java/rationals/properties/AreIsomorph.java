@@ -35,10 +35,10 @@
  */
 package rationals.properties;
 
+import rationals.Automaton;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import rationals.Automaton;
 
 /**
  * Test if two automaton are isomorphic.
@@ -59,7 +59,7 @@ public class AreIsomorph implements BinaryTest {
         if(a.states().size() != b.states().size() || a.initials().size() != b.initials().size() || a.terminals().size() != b.terminals().size())
             return false;
         Map /* < State , State > */ atob = new HashMap();
-        
+        // TODO        
         return false;
     }
 

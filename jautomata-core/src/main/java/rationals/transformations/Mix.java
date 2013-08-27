@@ -1,23 +1,8 @@
 package rationals.transformations;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import rationals.*;
 
-import com.sun.org.apache.bcel.internal.generic.RET;
-
-import rationals.Automaton;
-import rationals.Builder;
-import rationals.DefaultSynchronization;
-import rationals.NoSuchStateException;
-import rationals.State;
-import rationals.Synchronization;
-import rationals.Transition;
-import rationals.TransitionBuilder;
+import java.util.*;
 
 /**
  * This class implements the mix - ie: synchronization product - operator
@@ -80,7 +65,7 @@ public class Mix implements BinaryTransformation {
 	 * @param a
 	 * @param b
 	 * @param ret
-	 * @return the automaton {@link ret} containing the result of the
+	 * @return the automaton {@code ret} containing the result of the
 	 *         transformation.
 	 */
 	public Automaton transformTo(Automaton a, Automaton b, Automaton ret) {
@@ -138,7 +123,7 @@ public class Mix implements BinaryTransformation {
 				}
 			}
 			/*
-			 * there remains in tam and tbm only possibly synchronizable
+			 * there remains in tam and tbm only possibly synchronizing
 			 * transitions
 			 */
 			for (Iterator i = tam.entrySet().iterator(); i.hasNext();) {

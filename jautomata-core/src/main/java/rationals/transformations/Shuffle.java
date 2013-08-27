@@ -1,12 +1,12 @@
 package rationals.transformations;
 
-import java.util.Collection;
-import java.util.Set;
-
 import rationals.Automaton;
 import rationals.Synchronization;
+
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * This class implements the shuffle operator between two automatas.
@@ -23,7 +23,7 @@ import java.util.HashSet;
  * 
  * @author Arnaud Bailly
  * @version $Id: Shuffle.java 2 2006-08-24 14:41:48Z oqube $
- * @see rationals.transformation.Mix
+ * @see Mix
  */
 public class Shuffle implements BinaryTransformation {
 
@@ -38,7 +38,7 @@ public class Shuffle implements BinaryTransformation {
                 return Collections.unmodifiableSet(new HashSet());
             }
 
-            public Set synchronizable(Collection alphl) {
+            public Set synchronizing(Collection alphabets) {
                 // TODO Auto-generated method stub
                 return null;
             }

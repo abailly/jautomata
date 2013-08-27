@@ -35,15 +35,15 @@
  */
 package rationals.ioautomata;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.hamcrest.Matcher;
-
 import rationals.Synchronization;
 import rationals.ioautomata.IOTransition.IOLetter;
-import rationals.ioautomata.testing.SynchIOAutomatonSMAdapter;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
 import static rationals.ioautomata.IOAlphabetType.*;
 
 /**
@@ -95,7 +95,7 @@ public class IOSynchronization implements Synchronization {
 	/*
 	 * TODO
 	 * 
-	 * @see rationals.Synchronization#synchronizable(java.util.Set,
+	 * @see rationals.Synchronization#synchronizing(java.util.Set,
 	 * java.util.Set)
 	 */
 	public Set<?> synchronizable(Set a, Set b) {
@@ -113,12 +113,24 @@ public class IOSynchronization implements Synchronization {
 		return result;
 	}
 
-	public Set synchronizable(Collection alphl) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Set synchronizing(Collection alphabets) {
+        Set niou = new HashSet();
+        /*
+         * synchronization set is the union of pairwise 
+         * intersection of the sets in alphl
+         */
+        for(Iterator i = alphabets.iterator();i.hasNext();) {
+            Set s = (Set)i.next();
+            for(Iterator j = alphabets.iterator();j.hasNext();) {
+                Set b = (Set)j.next();
+                niou.addAll(synchronizable(s,b));
+            }
+        }
+        return niou;
+    }
 
-	public boolean synchronizeWith(Object object, Set alph) {
+    public boolean synchronizeWith(Object object, Set alph) {
 		boolean result = false;
 		for (Object o : alph) {
 			result |= (synchronize(object, o) != null);

@@ -35,15 +35,15 @@
  */
 package rationals.properties;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 import rationals.Automaton;
 import rationals.Couple;
 import rationals.State;
 import rationals.Transition;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 /**
  * This class implements (strong) simulation equivalence between 
@@ -58,7 +58,7 @@ import rationals.Transition;
  * </ul>
  * B is a simulation of A iff <code>q0b ~ q0a</code>.
  * <p />
- * Note that in general, a simulation is not symetric. A symetric 
+ * Note that in general, a simulation is not symetric. A symmetric 
  * simulation is of course a bisimulation.
  * 
  * @author nono
@@ -75,7 +75,7 @@ public class Simulation implements Relation {
 
     /**
      * Constructor with two automataon.
-     * This constructor effectively calls {@link setAutomata(Automaton,Automaton)}.
+     * This constructor effectively calls {@link #setAutomata(Automaton,Automaton)}.
      * 
      * @param automaton
      * @param automaton2

@@ -99,7 +99,7 @@ public class MixPlay implements AutomatonRunner {
             alphl.add(alph);
         }
         /* make synalph */
-        this.syncAlphabet = sync.synchronizable(alphl);
+        this.syncAlphabet = sync.synchronizing(alphl);
         this.current = new StatesTuple(states);
     }
 
@@ -162,6 +162,7 @@ public class MixPlay implements AutomatonRunner {
     private void doPlay(List word, List tuples, StatesTuple states)
             throws MixException {
         /* set current states*/
+        System.err.println("in states "+ states);
         current = states;
         if (!word.isEmpty() && word.get(word.size() - 1).equals(target))
             throw new MixException(word, tuples);
@@ -180,6 +181,7 @@ public class MixPlay implements AutomatonRunner {
             int k = random.nextInt(ln);
             for (int j = 0; j < ln; j++) {
                 Transition tr = trs[(k + j) % ln];
+                System.err.println("trying random transition "+ tr);
                 if (s.contains(tr))
                     continue;
                 s.add(tr);
@@ -194,9 +196,9 @@ public class MixPlay implements AutomatonRunner {
                 /* recurse - an exception is thrown if a match is found */
                 word.add(tr.label());
                 tuples.add(states);
-//                System.err.println("Trying " + word);
+                System.err.println("Trying " + word);
                 doPlay(word, tuples, tup);
-//                System.err.println("No way for " + word);
+                System.err.println("No way for " + word);
                 word.remove(word.size() - 1);
                 tuples.remove(tuples.size() - 1);
             }
@@ -218,7 +220,7 @@ public class MixPlay implements AutomatonRunner {
             if (!sync.synchronizeWith(object, auto.alphabet()))
                 continue;
             /*
-             * compute synchronizable transitions
+             * compute synchronizing transitions
              */
             Set s = auto.delta(states.sets[i]);
             Set adv = auto.getStateFactory().stateSet();
@@ -256,7 +258,7 @@ public class MixPlay implements AutomatonRunner {
         for (int i = 0; i < states.sets.length; i++) {
             Automaton auto = (Automaton) autos.get(i);
             /*
-             * compute synchronizable transitions
+             * compute synchronizing transitions
              */
             Set s = auto.delta(states.sets[i]);
             Set adv = auto.getStateFactory().stateSet();

@@ -61,7 +61,7 @@ public class DefaultSynchronization implements Synchronization {
     }
 
     /* (non-Javadoc)
-     * @see rationals.Synchronization#synchronizable(java.util.Set, java.util.Set)
+     * @see rationals.Synchronization#synchronizing(java.util.Set, java.util.Set)
      */
     public Set synchronizable(Set a, Set b) {
         Set r = new HashSet(a);
@@ -71,17 +71,17 @@ public class DefaultSynchronization implements Synchronization {
 
     /*
      * TO VERIFY (non-Javadoc)
-     * @see rationals.Synchronization#synchronizable(java.util.Collection)
+     * @see rationals.Synchronization#synchronizing(java.util.Collection)
      */
-    public Set synchronizable(Collection alphl) {
+    public Set synchronizing(Collection alphabets) {
         Set niou = new HashSet();
         /*
          * synchronization set is the union of pairwise 
          * intersection of the sets in alphl
          */
-        for(Iterator i = alphl.iterator();i.hasNext();) {
+        for(Iterator i = alphabets.iterator();i.hasNext();) {
             Set s = (Set)i.next();
-            for(Iterator j = alphl.iterator();j.hasNext();) {
+            for(Iterator j = alphabets.iterator();j.hasNext();) {
                 Set b = (Set)j.next();
                 niou.addAll(synchronizable(s,b));
             }
