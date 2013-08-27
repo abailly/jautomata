@@ -57,12 +57,11 @@ public class Messages {
     if (matcher.matches()) {
       Message built = new Message(matcher);
 
-      if (matcher.group(1).equals("^")) {
+      if (matcher.group(2) == null) {
         return new IOTransition.IOLetter(built, IOAlphabetType.INTERNAL);
       }
 
-      if (matcher.group(3).equals("->")) {
-
+      if (matcher.group(2).equals("->")) {
         return new IOTransition.IOLetter(built, IOAlphabetType.OUTPUT);
       } else {
         return new IOTransition.IOLetter(built, IOAlphabetType.INPUT);
