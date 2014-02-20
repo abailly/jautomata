@@ -1,5 +1,5 @@
 /*
- * (C) Copyright $YEAR Arnaud Bailly (arnaud.oqube@gmail.com),
+ * (C) Copyright 2002 Arnaud Bailly (arnaud.oqube@gmail.com),
  *     Yves Roos (yroos@lifl.fr) and others.
  *
  * Licensed under the Apache License, Version 2.0 (the License);
@@ -16,41 +16,14 @@
  */
 package rationals.graph;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import rationals.Automaton;
 import rationals.State;
-
-import salvo.jesus.graph.DirectedEdge;
-import salvo.jesus.graph.DirectedGraph;
-import salvo.jesus.graph.DirectedGraphImplFactory;
-import salvo.jesus.graph.Edge;
-import salvo.jesus.graph.Graph;
-import salvo.jesus.graph.GraphAddEdgeEvent;
-import salvo.jesus.graph.GraphAddEdgeListener;
-import salvo.jesus.graph.GraphAddVertexEvent;
-import salvo.jesus.graph.GraphAddVertexListener;
-import salvo.jesus.graph.GraphException;
-import salvo.jesus.graph.GraphFactory;
-import salvo.jesus.graph.GraphImpl;
-import salvo.jesus.graph.GraphModificationException;
-import salvo.jesus.graph.GraphRemoveEdgeListener;
-import salvo.jesus.graph.GraphRemoveVertexListener;
-import salvo.jesus.graph.StopAtVisitor;
+import rationals.Transition;
+import salvo.jesus.graph.*;
 import salvo.jesus.graph.algorithm.DepthFirstGraphTraversal;
 import salvo.jesus.graph.algorithm.GraphTraversal;
-import salvo.jesus.graph.DirectedEdgeImpl;
-import rationals.Transition;
+
+import java.util.*;
 
 /**
  * An adapter class for encapsulating Automata objects as DirectedGraph

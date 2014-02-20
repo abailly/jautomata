@@ -1,5 +1,5 @@
 /*
- * (C) Copyright $YEAR Arnaud Bailly (arnaud.oqube@gmail.com),
+ * (C) Copyright 2002 Arnaud Bailly (arnaud.oqube@gmail.com),
  *     Yves Roos (yroos@lifl.fr) and others.
  *
  * Licensed under the Apache License, Version 2.0 (the License);
@@ -16,11 +16,11 @@
  */
 package rationals.converters.algorithms;
 
-import java.util.Iterator;
-
 import rationals.Automaton;
 import rationals.State;
 import rationals.converters.ConverterException;
+
+import java.util.Iterator;
 
 /**
  * This layout algorithm basically performs nothing.

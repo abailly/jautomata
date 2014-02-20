@@ -1,5 +1,5 @@
 /*
- * (C) Copyright $YEAR Arnaud Bailly (arnaud.oqube@gmail.com),
+ * (C) Copyright 2005 Arnaud Bailly (arnaud.oqube@gmail.com),
  *     Yves Roos (yroos@lifl.fr) and others.
  *
  * Licensed under the Apache License, Version 2.0 (the License);
@@ -15,20 +15,16 @@
  * limitations under the License.
  */
 package rationals;
-import java.io.OutputStream;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.StringTokenizer;
-
-import rationals.converters.ConverterException;
-import rationals.converters.Displayer;
-import rationals.converters.Expression;
-import rationals.converters.PSDisplayer;
-import rationals.converters.StreamDisplayer;
+import rationals.converters.*;
 import rationals.converters.algorithms.LayoutAlgorithm;
 import rationals.converters.algorithms.TypeHelper;
 import rationals.transformations.BinaryTransformation;
 import rationals.transformations.UnaryTransformation;
+
+import java.io.OutputStream;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 public class Main {
 

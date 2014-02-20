@@ -1,5 +1,5 @@
 /*
- * (C) Copyright $YEAR Arnaud Bailly (arnaud.oqube@gmail.com),
+ * (C) Copyright 2001 Arnaud Bailly (arnaud.oqube@gmail.com),
  *     Yves Roos (yroos@lifl.fr) and others.
  *
  * Licensed under the Apache License, Version 2.0 (the License);
@@ -16,16 +16,11 @@
  */
 package rationals.transformations;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import rationals.Automaton;
 import rationals.State;
 import rationals.Transition;
+
+import java.util.*;
 
 /**
  * A set of utility methods used in transformations of automaton.

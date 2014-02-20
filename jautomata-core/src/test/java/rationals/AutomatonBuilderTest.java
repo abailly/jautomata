@@ -1,5 +1,5 @@
 /*
- * (C) Copyright $YEAR Arnaud Bailly (arnaud.oqube@gmail.com),
+ * (C) Copyright 2005 Arnaud Bailly (arnaud.oqube@gmail.com),
  *     Yves Roos (yroos@lifl.fr) and others.
  *
  * Licensed under the Apache License, Version 2.0 (the License);
@@ -16,10 +16,10 @@
  */
 package rationals;
 
+import junit.framework.TestCase;
+
 import java.util.Arrays;
 import java.util.Collections;
-
-import junit.framework.TestCase;
 
 public class AutomatonBuilderTest extends TestCase {
 

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright $YEAR Arnaud Bailly (arnaud.oqube@gmail.com),
+ * (C) Copyright 2001 Arnaud Bailly (arnaud.oqube@gmail.com),
  *     Yves Roos (yroos@lifl.fr) and others.
  *
  * Licensed under the Apache License, Version 2.0 (the License);
@@ -16,12 +16,12 @@
  */
 package rationals.properties;
 
-import java.util.Iterator;
-import java.util.Set;
-
 import rationals.Automaton;
 import rationals.State;
 import rationals.transformations.TransformationsToolBox;
+
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Checks whether an automaton recognizes the empty word. This test assumes that

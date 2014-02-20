@@ -1,5 +1,5 @@
 /*
- * (C) Copyright $YEAR Arnaud Bailly (arnaud.oqube@gmail.com),
+ * (C) Copyright 2005 Arnaud Bailly (arnaud.oqube@gmail.com),
  *     Yves Roos (yroos@lifl.fr) and others.
  *
  * Licensed under the Apache License, Version 2.0 (the License);
@@ -16,13 +16,13 @@
  */
 package rationals.transformations;
 
-import java.util.Iterator;
-import java.util.Set;
-
 import rationals.Automaton;
 import rationals.NoSuchStateException;
 import rationals.State;
 import rationals.Transition;
+
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Complete an Automaton by adding a sink state and needed transitions.

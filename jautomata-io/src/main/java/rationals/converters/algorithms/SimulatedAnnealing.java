@@ -1,5 +1,5 @@
 /*
- * (C) Copyright $YEAR Arnaud Bailly (arnaud.oqube@gmail.com),
+ * (C) Copyright 2002 Arnaud Bailly (arnaud.oqube@gmail.com),
  *     Yves Roos (yroos@lifl.fr) and others.
  *
  * Licensed under the Apache License, Version 2.0 (the License);
@@ -16,13 +16,13 @@
  */
 package rationals.converters.algorithms;
 
+import rationals.State;
+import rationals.Transition;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-
-import rationals.State;
-import rationals.Transition;
 
 /**
  * Implementation of simulated annealing for graph drawing<p>

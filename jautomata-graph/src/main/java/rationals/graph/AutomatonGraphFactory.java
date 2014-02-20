@@ -1,5 +1,5 @@
 /*
- * (C) Copyright $YEAR Arnaud Bailly (arnaud.oqube@gmail.com),
+ * (C) Copyright 2002 Arnaud Bailly (arnaud.oqube@gmail.com),
  *     Yves Roos (yroos@lifl.fr) and others.
  *
  * Licensed under the Apache License, Version 2.0 (the License);
@@ -16,11 +16,6 @@
  */
 package rationals.graph;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
 import rationals.Automaton;
 import rationals.State;
 import rationals.Transition;
@@ -28,6 +23,11 @@ import salvo.jesus.graph.DirectedEdgeImpl;
 import salvo.jesus.graph.DirectedGraph;
 import salvo.jesus.graph.DirectedGraphImpl;
 import salvo.jesus.graph.Graph;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A factory class to link automaton objects to Graph objects

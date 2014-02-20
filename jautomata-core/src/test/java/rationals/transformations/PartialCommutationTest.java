@@ -1,5 +1,5 @@
 /*
- * (C) Copyright $YEAR Arnaud Bailly (arnaud.oqube@gmail.com),
+ * (C) Copyright 2013 Arnaud Bailly (arnaud.oqube@gmail.com),
  *     Yves Roos (yroos@lifl.fr) and others.
  *
  * Licensed under the Apache License, Version 2.0 (the License);
@@ -28,9 +28,6 @@ import static java.util.Arrays.asList;
 
 class PartialCommutationTes extends TestCase {
 
-    //~ ----------------------------------------------------------------------------------------------------------------
-    //~ Methods 
-    //~ ----------------------------------------------------------------------------------------------------------------
 
     public void _ignored_test_two_letters_commute_when_they_are_adjacent() throws Exception {
         Automaton a = new Expression().fromString("abcd");

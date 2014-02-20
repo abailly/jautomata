@@ -1,5 +1,5 @@
 /*
- * (C) Copyright $YEAR Arnaud Bailly (arnaud.oqube@gmail.com),
+ * (C) Copyright 2002 Arnaud Bailly (arnaud.oqube@gmail.com),
  *     Yves Roos (yroos@lifl.fr) and others.
  *
  * Licensed under the Apache License, Version 2.0 (the License);
@@ -16,14 +16,12 @@
  */
 package rationals.graph;
 
-import java.awt.Point;
-import java.awt.Polygon;
-import java.awt.Shape;
+import salvo.jesus.graph.visual.Arrowhead;
+
+import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.io.Serializable;
-
-import salvo.jesus.graph.visual.Arrowhead;
 
 /**
  * An implementation of Arrowhead for Automaton

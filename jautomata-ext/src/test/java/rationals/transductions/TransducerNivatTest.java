@@ -1,5 +1,5 @@
 /*
- * (C) Copyright $YEAR Arnaud Bailly (arnaud.oqube@gmail.com),
+ * (C) Copyright 2005 Arnaud Bailly (arnaud.oqube@gmail.com),
  *     Yves Roos (yroos@lifl.fr) and others.
  *
  * Licensed under the Apache License, Version 2.0 (the License);
@@ -16,12 +16,6 @@
  */
 package rationals.transductions;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import junit.framework.TestCase;
 import rationals.Automaton;
 import rationals.NoSuchStateException;
@@ -31,6 +25,12 @@ import rationals.converters.ConverterException;
 import rationals.converters.Expression;
 import rationals.converters.ToRExpression;
 import rationals.transformations.Reducer;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class TransducerNivatTest extends TestCase {
 
