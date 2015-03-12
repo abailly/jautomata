@@ -89,23 +89,6 @@
 
   </distributionManagement>
 
-  <repositories>
-
-    <repository>
-      <id>repo.oqube.com</id>
-      <name>OQube</name>
-      <url>http://www.oqube.com/maven2</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-        <updatePolicy>daily</updatePolicy>
-      </snapshots>
-    </repository>
-
-  </repositories>
-
   <dependencyManagement>
     <dependencies>
       <dependency>
