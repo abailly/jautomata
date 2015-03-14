@@ -611,16 +611,16 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 	 * @return a copy of this automaton with new instances of states and
 	 *         transitions.
 	 */
-	public Object clone() {
-		Automaton b;
-		b = new Automaton();
+	@Override
+	public Automaton<Tr, T> clone() {
+		Automaton<Tr, T> b;
+		b = new Automaton<Tr, T>();
 		Map<State, State> map = new HashMap<State, State>();
 		for (State e : states)
 			map.put(e, b.addState(e.isInitial(), e.isTerminal()));
 		for (Transition t : delta()) {
 			try {
-				b.addTransition(new Transition((State) map.get(t.start()), t
-						.label(), (State) map.get(t.end())));
+				b.addTransition(new Transition(map.get(t.start()), t.label(), map.get(t.end())));
 			} catch (NoSuchStateException x) {
 			}
 		}
