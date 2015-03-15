@@ -613,8 +613,7 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 	 */
 	@Override
 	public Automaton<Tr, T> clone() {
-		Automaton<Tr, T> b;
-		b = new Automaton<Tr, T>();
+		Automaton<Tr, T> b = new Automaton<Tr, T>();
 		Map<State, State> map = new HashMap<State, State>();
 		for (State e : states)
 			map.put(e, b.addState(e.isInitial(), e.isTerminal()));
