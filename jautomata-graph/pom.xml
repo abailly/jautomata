@@ -10,7 +10,7 @@
 
  <groupId>oqube</groupId>
  <artifactId>jautomata-graph</artifactId>
- <version>${parent.version}</version>
+
  <packaging>jar</packaging>
  <name>JAutomata Graph interface</name>
  <description>

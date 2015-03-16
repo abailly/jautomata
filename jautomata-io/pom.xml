@@ -10,7 +10,7 @@
 
  <groupId>oqube</groupId>
  <artifactId>jautomata-io</artifactId>
- <version>${parent.version}</version>
+
  <packaging>jar</packaging>
  <name>JAutomata I/O</name>
  <description>
@@ -22,7 +22,7 @@
   <dependency>
    <groupId>oqube</groupId>
    <artifactId>jautomata-graph</artifactId>
-   <version>${parent.version}</version>
+   <version>${project.parent.version}</version>
   </dependency>
 
  </dependencies>

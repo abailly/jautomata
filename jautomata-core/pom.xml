@@ -10,7 +10,7 @@
 
   <groupId>oqube</groupId>
   <artifactId>jautomata-core</artifactId>
-  <version>${parent.version}</version>
+
   <packaging>jar</packaging>
   <name>JAutomata Core</name>
   <description>
