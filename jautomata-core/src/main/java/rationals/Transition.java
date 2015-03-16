@@ -29,13 +29,13 @@ package rationals;
  * @version 1.0
  * @see Automaton
  */
-public class Transition {
+public class Transition<E> {
 
   private int hash = Integer.MIN_VALUE;
 
   private State start;
 
-  private Object label;
+  private E label;
 
   private State end;
 
@@ -49,7 +49,7 @@ public class Transition {
    * @param end
    *          the state <em>q'</em> for this transition <em>(q , l , q')</em>.
    */
-  public Transition(State start, Object label, State end) {
+  public Transition(State start, E label, State end) {
     this.start = start;
     this.label = label;
     this.end = end;
@@ -82,7 +82,7 @@ public class Transition {
    * @return the label state of this transition, that is the object <em>l</em>
    *         for this transition <em>(q , l , q')</em>.
    */
-  public Object label() {
+  public E label() {
     return label;
   }
 
@@ -170,7 +170,7 @@ public class Transition {
    * 
    * @param msg
    */
-  void setLabel(Object obj) {
+  void setLabel(E obj) {
     this.label = obj;
   }
 
