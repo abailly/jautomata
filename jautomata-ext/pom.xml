@@ -10,7 +10,7 @@
 
   <groupId>oqube</groupId>
   <artifactId>jautomata-ext</artifactId>
-  <version>${parent.version}</version>
+
   <packaging>jar</packaging>
   <name>JAutomata extensions</name>
   <description>
@@ -46,7 +46,7 @@
     <dependency>
       <groupId>oqube</groupId>
       <artifactId>jautomata-core</artifactId>
-      <version>${parent.version}</version>
+      <version>${project.parent.version}</version>
     </dependency>
 
 
