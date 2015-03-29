@@ -18,12 +18,14 @@ package rationals.transformations;
 
 
 import rationals.Automaton;
+import rationals.Builder;
+import rationals.Transition;
 
-public class ToCanonicalRFSA implements UnaryTransformation {
+public class ToCanonicalRFSA<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> implements UnaryTransformation<L, Tr, T> {
 
-  public Automaton transform(Automaton a) {
-    Reverser r = new Reverser() ;
-    ToC c = new ToC() ;
+  public Automaton<L, Tr, T> transform(Automaton<L, Tr, T> a) {
+    Reverser<L, Tr, T> r = new Reverser<>();
+    ToC<L, Tr, T> c = new ToC<>() ;
     return c.transform(r.transform(c.transform(r.transform(a)))) ;
   }
 }

@@ -49,12 +49,12 @@ import java.util.*;
  * @version $Id: Automaton.java 10 2007-05-30 17:25:00Z oqube $
  * @see Transition State
  */
-public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
-		implements Acceptor, StateMachine, Rational, Cloneable {
+public class Automaton<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>>
+		implements Acceptor<L>, StateMachine<L>, Rational<L>, Cloneable {
 	/* the identification of this automaton */
 	private Object id;
 
-	protected T builder;
+	protected Builder<L, Tr, T> builder;
 
 	/**
 	 * @return Returns the id.
@@ -73,7 +73,7 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 
 	// The set of all objects which are labels of
 	// transitions of this automaton.
-	protected Set<Object> alphabet;
+	protected Set<L> alphabet;
 
 	// The set of all states of this automaton.
 	private Set<State> states;
@@ -81,22 +81,22 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 	// the set of initial states
 	private Set<State> initials;
 
-	// the set of terminale states
+	// the set of terminal states
 	private Set<State> terminals;
 
-	// Allows acces to transitions of this automaton
+	// Allows access to transitions of this automaton
 	// starting from a given state and labelled by
 	// a given object. The keys of this map are instances
 	// of class Key and
 	// values are sets of transitions.
-	private Map<Key, Set<Transition>> transitions;
+	private Map<Key, Set<Transition<L>>> transitions;
 
-	// Allows acces to transitions of this automaton
+	// Allows access to transitions of this automaton
 	// arriving to a given state and labelled by
 	// a given object. The keys of this map are instances
 	// of class Key and
 	// values are sets of transitions.
-	private Map<Key, Set<Transition>> reverse;
+	private Map<Key, Set<Transition<L>>> reverse;
 
 	// bonte
 	private StateFactory stateFactory = new DefaultStateFactory(this);
@@ -125,8 +125,8 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 	 * 
 	 * @return an automaton which recognizes <em>@</em>
 	 */
-	public static Automaton epsilonAutomaton() {
-		Automaton v = new Automaton();
+	public static Automaton<?, ?, ?> epsilonAutomaton() {
+		Automaton<?, ?, ?> v = new Automaton<>();
 		v.addState(true, true);
 		return v;
 	}
@@ -140,12 +140,12 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 	 *            any object that will be used as a label.
 	 * @return an automaton which recognizes <em>label</em>
 	 */
-	public static Automaton labelAutomaton(Object label) {
-		Automaton v = new Automaton();
+	public static <L> Automaton<L, ?, ?> labelAutomaton(L label) {
+		Automaton<L, ?, ?> v = new Automaton<>();
 		State start = v.addState(true, false);
 		State end = v.addState(false, true);
 		try {
-			v.addTransition(new Transition(start, label, end));
+			v.addTransition(new Transition<L>(start, label, end));
 		} catch (NoSuchStateException x) {
 		}
 		return v;
@@ -159,8 +159,8 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 	 *            a List of Object interpreted as a word
 	 * @return an automaton which recognizes <em>label</em>
 	 */
-	public static Automaton labelAutomaton(List word) {
-		Automaton v = new Automaton();
+	public static <L> Automaton<L, ?, ?> labelAutomaton(List<L> word) {
+		Automaton<L, ?, ?> v = new Automaton<>();
 		State start = null;
 		if (word.isEmpty()) {
 			v.addState(true, true);
@@ -169,10 +169,10 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 			start = v.addState(true, false);
 		State end = null;
 		try {
-			for (Iterator i = word.iterator(); i.hasNext();) {
-				Object o = i.next();
+			for (Iterator<L> i = word.iterator(); i.hasNext();) {
+				L o = i.next();
 				end = v.addState(false, !i.hasNext());
-				v.addTransition(new Transition(start, o, end));
+				v.addTransition(new Transition<L>(start, o, end));
 				start = end;
 			}
 		} catch (NoSuchStateException x) {
@@ -197,12 +197,12 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 	 */
 	public Automaton(StateFactory sf) {
 		this.stateFactory = sf == null ? new DefaultStateFactory(this) : sf;
-		alphabet = new HashSet<Object>();
+		alphabet = new HashSet<>();
 		states = stateFactory.stateSet();
 		initials = stateFactory.stateSet();
 		terminals = stateFactory.stateSet();
-		transitions = new HashMap<Key, Set<Transition>>();
-		reverse = new HashMap<Key, Set<Transition>>();
+		transitions = new HashMap<>();
+		reverse = new HashMap<>();
 	}
 
 	/**
@@ -236,7 +236,8 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 	 * 
 	 * @return the alphabet <em>X</em> associated with this automaton.
 	 */
-	public Set<Object> alphabet() {
+	@Override
+	public Set<L> alphabet() {
 		return alphabet;
 	}
 
@@ -281,21 +282,21 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 	// Computes and return the set of all accessible states, starting
 	// from a given set of states and using transitions
 	// contained in a given Map
-	protected Set<State> access(Set<State> start, Map<Key, Set<Transition>> map) {
+	protected Set<State> access(Set<State> start, Map<Key, Set<Transition<L>>> map) {
 		Set<State> current = start;
 		Set<State> old;
 		do {
 			old = current;
 			current = stateFactory.stateSet();
-			Iterator i = old.iterator();
+			Iterator<State> i = old.iterator();
 			while (i.hasNext()) {
-				State e = (State) i.next();
+				State e = i.next();
 				current.add(e);
-				Iterator j = alphabet.iterator();
+				Iterator<L> j = alphabet.iterator();
 				while (j.hasNext()) {
-					Iterator k = find(map, e, j.next()).iterator();
+					Iterator<Transition<L>> k = find(map, e, j.next()).iterator();
 					while (k.hasNext()) {
-						current.add(((Transition) k.next()).end());
+						current.add(k.next().end());
 					}
 				}
 			}
@@ -386,20 +387,19 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 	// Computes and return the set of all transitions, starting
 	// from a given state and labelled by a given label
 	// contained in a given Map
-	protected Set<Transition> find(Map<Key, Set<Transition>> m, State e,
-			Object l) {
+	protected Set<Transition<L>> find(Map<Key, Set<Transition<L>>> m, State e, L l) {
 		Key n = new Key(e, l);
 		if (!m.containsKey(n))
-			return new HashSet<Transition>();
+			return new HashSet<Transition<L>>();
 		return m.get(n);
 	}
 
 	// add a given transition in a given Map
-	protected void add(Map<Key, Set<Transition>> m, Transition t) {
+	protected void add(Map<Key, Set<Transition<L>>> m, Transition<L> t) {
 		Key n = new Key(t.start(), t.label());
-		Set<Transition> s;
+		Set<Transition<L>> s;
 		if (!m.containsKey(n)) {
-			s = new HashSet<Transition>();
+			s = new HashSet<>();
 			m.put(n, s);
 		} else
 			s = m.get(n);
@@ -413,9 +413,9 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 	 *         contained in this set are instances of class <tt>Transition</tt>.
 	 * @see Transition
 	 */
-	public Set<Transition> delta() {
-		Set<Transition> s = new HashSet<Transition>();
-		for (Set<Transition> tr : transitions.values())
+	public Set<Transition<L>> delta() {
+		Set<Transition<L>> s = new HashSet<>();
+		for (Set<Transition<L>> tr : transitions.values())
 			s.addAll(tr);
 		return s;
 	}
@@ -433,7 +433,7 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 	 *         contained in this set are instances of class <tt>Transition</tt>.
 	 * @see Transition
 	 */
-	public Set<Transition> delta(State state, Object label) {
+	public Set<Transition<L>> delta(State state, L label) {
 		return find(transitions, state, label);
 	}
 
@@ -447,10 +447,11 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 	 *            ending state
 	 * @return a Set of Transition objects
 	 */
-	public Set<Transition> deltaFrom(State from, State to) {
-		Set<Transition> t = delta(from);
-		for (Iterator i = t.iterator(); i.hasNext();) {
-			Transition tr = (Transition) i.next();
+	@Override
+	public Set<Transition<L>> deltaFrom(State from, State to) {
+		Set<Transition<L>> t = delta(from);
+		for (Iterator<Transition<L>> i = t.iterator(); i.hasNext();) {
+			Transition<L> tr = i.next();
 			if (!to.equals(tr.end()))
 				i.remove();
 		}
@@ -464,9 +465,9 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 	 *            start state
 	 * @return a new Set of transitions (maybe empty)
 	 */
-	public Set<Transition> delta(State state) {
-		Set<Transition> s = new HashSet<Transition>();
-		for (Object lt : alphabet)
+	public Set<Transition<L>> delta(State state) {
+		Set<Transition<L>> s = new HashSet<>();
+		for (L lt : alphabet)
 			s.addAll(delta(state, lt));
 		return s;
 	}
@@ -478,8 +479,8 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 	 *            a Set of State objects
 	 * @return a Set of Transition objects
 	 */
-	public Set<Transition> delta(Set<State> s) {
-		Set<Transition> ds = new HashSet<Transition>();
+	public Set<Transition<L>> delta(Set<State> s) {
+		Set<Transition<L>> ds = new HashSet<>();
 		for (State st : s)
 			ds.addAll(delta(st));
 		return ds;
@@ -491,23 +492,22 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 	 * 
 	 * @return a Map
 	 */
-	public Map couples() {
+	public Map<Couple, Set<Transition<L>>> couples() {
 		// loop on transition map keys
-		Iterator<Map.Entry<Key, Set<Transition>>> it = transitions.entrySet()
-				.iterator();
-		Map<Couple, Set<Transition>> ret = new HashMap<Couple, Set<Transition>>();
+		Iterator<Map.Entry<Key, Set<Transition<L>>>> it = transitions.entrySet().iterator();
+		Map<Couple, Set<Transition<L>>> ret = new HashMap<>();
 		while (it.hasNext()) {
-			Map.Entry<Key, Set<Transition>> e = it.next();
+			Map.Entry<Key, Set<Transition<L>>> e = it.next();
 			// get start and end state
 			State st = e.getKey().s;
-			Iterator<Transition> trans = e.getValue().iterator();
+			Iterator<Transition<L>> trans = e.getValue().iterator();
 			while (trans.hasNext()) {
-				Transition tr = trans.next();
+				Transition<L> tr = trans.next();
 				State nd = tr.end();
 				Couple cpl = new Couple(st, nd);
-				Set<Transition> s = (Set<Transition>) ret.get(cpl);
+				Set<Transition<L>> s = ret.get(cpl);
 				if (s == null)
-					s = new HashSet<Transition>();
+					s = new HashSet<>();
 				s.add(tr);
 				ret.put(cpl, s);
 			}
@@ -525,7 +525,8 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 	 *         <tt>Transition</tt>.
 	 * @see Transition
 	 */
-	public Set<Transition> deltaMinusOne(State state, Object label) {
+	@Override
+	public Set<Transition<L>> deltaMinusOne(State state, L label) {
 		return find(reverse, state, label);
 	}
 
@@ -543,8 +544,7 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 	 *             not belong to <em>Q</em> the set of the states of this
 	 *             automaton.
 	 */
-	public void addTransition(Transition transition)
-			throws NoSuchStateException {
+	public void addTransition(Transition<L> transition) throws NoSuchStateException {
 		if (!states.contains(transition.start())
 				|| !states.contains(transition.end()))
 			throw new NoSuchStateException();
@@ -552,8 +552,7 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 			alphabet.add(transition.label());
 		}
 		add(transitions, transition);
-		add(reverse, new Transition(transition.end(), transition.label(),
-				transition.start()));
+		add(reverse, new Transition<>(transition.end(), transition.label(), transition.start()));
 	}
 
 	/**
@@ -564,30 +563,29 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 	 * @param alph
 	 *            the alphabet to project on
 	 */
-	public void projectOn(Set alph) {
+	public void projectOn(Set<?> alph) {
 		// remove unwanted transitions from ret
-		Iterator<Map.Entry<Key, Set<Transition>>> trans = transitions
-				.entrySet().iterator();
-		Set<Transition> newtrans = new HashSet<Transition>();
+		Iterator<Map.Entry<Key, Set<Transition<L>>>> trans = transitions.entrySet().iterator();
+		Set<Transition<L>> newtrans = new HashSet<>();
 		while (trans.hasNext()) {
-			Map.Entry<Key, Set<Transition>> entry = trans.next();
+			Map.Entry<Key, Set<Transition<L>>> entry = trans.next();
 			Key k = entry.getKey();
-			Iterator<Transition> tit = entry.getValue().iterator();
+			Iterator<Transition<L>> tit = entry.getValue().iterator();
 			while (tit.hasNext()) {
-				Transition tr = tit.next();
+				Transition<?> tr = tit.next();
 				if (!alph.contains(k.l)) {
 					// create epsilon transition
-					newtrans.add(new Transition(k.s, null, tr.end()));
-					// remove transtion
+					newtrans.add(new Transition<L>(k.s, null, tr.end()));
+					// remove transition
 					tit.remove();
 				}
 			}
 		}
 		// add newly created transitions
 		if (!newtrans.isEmpty()) {
-			for (Transition tr : newtrans) {
+			for (Transition<L> tr : newtrans) {
 				add(transitions, tr);
-				add(reverse, new Transition(tr.end(), tr.label(), tr.start()));
+				add(reverse, new Transition<>(tr.end(), tr.label(), tr.start()));
 			}
 		}
 		// remove alphabet
@@ -612,14 +610,14 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 	 *         transitions.
 	 */
 	@Override
-	public Automaton<Tr, T> clone() {
-		Automaton<Tr, T> b = new Automaton<Tr, T>();
-		Map<State, State> map = new HashMap<State, State>();
+	public Automaton<L, Tr, T> clone() {
+		Automaton<L, Tr, T> b = new Automaton<L, Tr, T>();
+		Map<State, State> map = new HashMap<>();
 		for (State e : states)
 			map.put(e, b.addState(e.isInitial(), e.isTerminal()));
-		for (Transition t : delta()) {
+		for (Transition<L> t : delta()) {
 			try {
-				b.addTransition(new Transition(map.get(t.start()), t.label(), map.get(t.end())));
+				b.addTransition(new Transition<>(map.get(t.start()), t.label(), map.get(t.end())));
 			} catch (NoSuchStateException x) {
 			}
 		}
@@ -653,24 +651,19 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
     private class Key {
 		private State s;
 
-		private Object l;
+		private L l;
 
-		protected Key(State s, Object l) {
+		protected Key(State s, L l) {
 			this.s = s;
 			this.l = l;
 		}
 
 		public boolean equals(Object o) {
-			if (o == null)
+			if (o == null || !(o instanceof Automaton.Key))
 				return false;
-			try {
-				Key t = (Key) o;
-				boolean ret = (l == null ? t.l == null : l.equals(t.l))
-						&& (s == null ? t.s == null : s.equals(t.s));
-				return ret;
-			} catch (ClassCastException x) {
-				return false;
-			}
+			Key t = (Key) o;
+			boolean ret = (l == null ? t.l == null : l.equals(t.l))	&& (s == null ? t.s == null : s.equals(t.s));
+			return ret;
 		}
 
 		public int hashCode() {
@@ -699,8 +692,8 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 	 * @param word
 	 * @return
 	 */
-	public boolean prefixProjection(List word) {
-		Set s = stepsProject(word);
+	public boolean prefixProjection(List<L> word) {
+		Set<?> s = stepsProject(word);
 		return !s.isEmpty();
 	}
 
@@ -711,11 +704,11 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 	 * @param l
 	 * @return
 	 */
-	public Set<State> stepsProject(List word) {
+	public Set<State> stepsProject(List<L> word) {
 		Set<State> s = initials();
-		Iterator it = word.iterator();
+		Iterator<L> it = word.iterator();
 		while (it.hasNext()) {
-			Object o = it.next();
+			L o = it.next();
 			if (!alphabet.contains(o))
 				continue;
 			s = step(s, o);
@@ -730,7 +723,8 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 	 * 
 	 * @see rationals.Acceptor#accept(java.util.List)
 	 */
-	public boolean accept(List<Object> word) {
+	@Override
+	public boolean accept(List<L> word) {
 		Set<State> s = TransformationsToolBox.epsilonClosure(steps(word), this);
 		s.retainAll(terminals());
 		return !s.isEmpty();
@@ -748,7 +742,7 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 	 * @return true if there exists a path labelled by word from s to at least
 	 *         one other state in this automaton.
 	 */
-	public boolean accept(State state, List<Object> word) {
+	public boolean accept(State state, List<L> word) {
 		Set<State> s = stateFactory.stateSet();
 		s.add(state);
 		return !steps(s, word).isEmpty();
@@ -759,7 +753,8 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 	 * 
 	 * @see rationals.Acceptor#steps(java.util.List)
 	 */
-	public Set<State> steps(List<Object> word) {
+	@Override
+	public Set<State> steps(List<L> word) {
 		Set<State> s = TransformationsToolBox.epsilonClosure(initials(), this);
 		return steps(s, word);
 	}
@@ -774,10 +769,11 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 	 *            the word to read.
 	 * @return the set of reached states.
 	 */
-	public Set<State> steps(Set<State> s, List<Object> word) {
-		Iterator it = word.iterator();
+	@Override
+	public Set<State> steps(Set<State> s, List<L> word) {
+		Iterator<L> it = word.iterator();
 		while (it.hasNext()) {
-			Object o = it.next();
+			L o = it.next();
 			s = step(s, o);
 			if (s.isEmpty())
 				return s;
@@ -787,7 +783,7 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 
 	/**
 	 * Return the set of states this automaton will be in after reading the word
-	 * from singler start state s.
+	 * from single start state s.
 	 * 
 	 * @param st
 	 *            the starting state
@@ -795,12 +791,13 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 	 *            the word to read.
 	 * @return the set of reached states.
 	 */
-	public Set<State> steps(State st, List<Object> word) {
+	@Override
+	public Set<State> steps(State st, List<L> word) {
 		Set<State> s = stateFactory.stateSet();
 		s.add(st);
-		Iterator it = word.iterator();
+		Iterator<L> it = word.iterator();
 		while (it.hasNext()) {
-			Object o = it.next();
+			L o = it.next();
 			s = step(s, o);
 			if (s.isEmpty())
 				return s;
@@ -816,7 +813,8 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 	 * @param word
 	 * @param start
 	 */
-	public List<Set<State>> traceStates(List<Object> word, State start) {
+	@Override
+	public List<Set<State>> traceStates(List<L> word, State start) {
 		List<Set<State>> ret = new ArrayList<Set<State>>();
 		Set<State> s = null;
 		if (start != null) {
@@ -825,9 +823,9 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 		} else {
 			s = initials();
 		}
-		Iterator it = word.iterator();
+		Iterator<L> it = word.iterator();
 		while (it.hasNext()) {
-			Object o = it.next();
+			L o = it.next();
 			if (!alphabet.contains(o))
 				continue;
 			s = step(s, o);
@@ -846,12 +844,12 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 	 * @param word
 	 * @return
 	 */
-	public int longestPrefixWithProjection(List word) {
+	public int longestPrefixWithProjection(List<L> word) {
 		int lret = 0;
 		Set<State> s = initials();
-		Iterator it = word.iterator();
+		Iterator<L> it = word.iterator();
 		while (it.hasNext()) {
-			Object o = it.next();
+			L o = it.next();
 			if ((o == null) || !alphabet.contains(o)) {
 				lret++;
 				continue;
@@ -872,15 +870,15 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 	 * @param o
 	 * @return
 	 */
-	public Set<State> step(Set<State> s, Object o) {
+	public Set<State> step(Set<State> s, L o) {
 		Set<State> ns = stateFactory.stateSet();
 		Set<State> ec = TransformationsToolBox.epsilonClosure(s, this);
-		Iterator it = ec.iterator();
+		Iterator<State> it = ec.iterator();
 		while (it.hasNext()) {
-			State st = (State) it.next();
-			Iterator it2 = delta(st).iterator();
+			State st = it.next();
+			Iterator<?> it2 = delta(st).iterator();
 			while (it2.hasNext()) {
-				Transition tr = (Transition) it2.next();
+				Transition<?> tr = (Transition<?>) it2.next();
 				if (tr.label() != null && tr.label().equals(o))
 					ns.add(tr.end());
 			}
@@ -892,18 +890,18 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 	 * @param tr
 	 * @param msg
 	 */
-	public void updateTransitionWith(Transition tr, Object msg) {
-		Object lbl = tr.label();
+	public void updateTransitionWith(Transition<L> tr, L msg) {
+		L lbl = tr.label();
 		alphabet.remove(lbl);
 		alphabet.add(msg);
 		/* update transition map */
 		Key k = new Key(tr.start(), lbl);
-		Set<Transition> s = transitions.remove(k);
+		Set<Transition<L>> s = transitions.remove(k);
 		if (s != null)
 			transitions.put(new Key(tr.start(), msg), s);
 		/* update reverse map */
 		k = new Key(tr.end(), lbl);
-		s = (Set<Transition>) reverse.remove(k);
+		s = reverse.remove(k);
 		if (s != null)
 			reverse.put(new Key(tr.end(), msg), s);
 		tr.setLabel(msg);
@@ -913,9 +911,10 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 	 * @param st
 	 * @return
 	 */
-	public Set<Transition> deltaMinusOne(State st) {
-		Set<Transition> s = new HashSet<Transition>();
-		Iterator alphit = alphabet().iterator();
+	@Override
+	public Set<Transition<L>> deltaMinusOne(State st) {
+		Set<Transition<L>> s = new HashSet<>();
+		Iterator<L> alphit = alphabet().iterator();
 		while (alphit.hasNext()) {
 			s.addAll(deltaMinusOne(st, alphit.next()));
 		}
@@ -932,38 +931,38 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 	 *            maximal length of words.
 	 * @return a Set of List of Object
 	 */
-	public Set enumerate(int ln) {
-		Set<List> ret = new HashSet<List>();
+	public Set<List<L>> enumerate(int ln) {
+		Set<List<L>> ret = new HashSet<>();
 		class EnumState {
 			/**
 			 * @param s
 			 * @param list
 			 */
-			public EnumState(State s, List<Object> list) {
+			public EnumState(State s, List<L> list) {
 				st = s;
-				word = new ArrayList<Object>(list);
+				word = new ArrayList<L>(list);
 			}
 
 			State st;
 
-			List<Object> word;
+			List<L> word;
 		}
 		;
 		LinkedList<EnumState> ll = new LinkedList<EnumState>();
-		List<Object> cur = new ArrayList<Object>();
-		for (Iterator i = initials.iterator(); i.hasNext();) {
-			State s = (State) i.next();
+		List<L> cur = new ArrayList<>();
+		for (Iterator<State> i = initials.iterator(); i.hasNext();) {
+			State s = i.next();
 			if (s.isTerminal())
-				ret.add(new ArrayList());
+				ret.add(new ArrayList<L>());
 			ll.add(new EnumState(s, cur));
 		}
 
 		do {
-			EnumState st = (EnumState) ll.removeFirst();
-			Set trs = delta(st.st);
-			List<Object> word = st.word;
-			for (Iterator k = trs.iterator(); k.hasNext();) {
-				Transition tr = (Transition) k.next();
+			EnumState st = ll.removeFirst();
+			Set<Transition<L>> trs = delta(st.st);
+			List<L> word = st.word;
+			for (Iterator<Transition<L>> k = trs.iterator(); k.hasNext();) {
+				Transition<L> tr = k.next();
 				word.add(tr.label());
 				if (word.size() <= ln) {
 					EnumState en = new EnumState(tr.end(), word);
@@ -984,7 +983,7 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 	 *            the state's label. May not be null.
 	 * @return the newly created state.
 	 */
-	public State state(Object label) {
+	public State state(L label) {
 		State s = stateLabels.state(label);
 		if (s == null) {
 			s = stateFactory.create(false, false, label);
@@ -1002,16 +1001,16 @@ public class Automaton<Tr extends Transition, T extends Builder<Tr, T>>
 	 *            the label of state to create transition from. may not be null.
 	 * @return a TransitionBuilder that can be used to create a new transition.
 	 */
-	public T from(Object o) {
+	public T from(L o) {
 		return builder.build(state(o), this);
 	}
 
-	public void setBuilder(T t) {
+	public void setBuilder(Builder<L, Tr, T> t) {
 		this.builder = t;
 		this.builder.setAutomaton(this);
 	}
 
-	public void build(State from, Object l, State to)
+	public void build(State from, L l, State to)
 			throws NoSuchStateException {
 		addTransition(this.builder.build(from, l, to));
 	}

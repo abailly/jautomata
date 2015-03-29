@@ -37,9 +37,9 @@ import java.util.*;
  * @author Arnaud Bailly
  * @version 22032002
  */
-public class Mix implements BinaryTransformation {
+public class Mix<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> implements BinaryTransformation<L, Tr, T> {
 
-	private Synchronization synchronization;
+	private Synchronization<L> synchronization;
 
 	/**
 	 * Compute mix of two automata using default synchronization scheme which is
@@ -69,9 +69,10 @@ public class Mix implements BinaryTransformation {
 	 * rationals.transformations.BinaryTransformation#transform(rationals.Automaton
 	 * , rationals.Automaton)
 	 */
-	public Automaton transform(Automaton a, Automaton b) {
-		Automaton ret = new Automaton();
-		ret.setBuilder(new TransitionBuilder());
+	public Automaton<L, Tr, T> transform(Automaton<L, Tr, T> a, Automaton<L, Tr, T> b) {
+		Automaton<L, Tr, T> ret = new Automaton();
+		// FIXME: Potentially unsafe cast, but adding generics reveals an inconsistency in the APIs 
+		ret.setBuilder((T) new TransitionBuilder<L>());
 		return transformTo(a, b, ret);
 	}
 
@@ -84,15 +85,15 @@ public class Mix implements BinaryTransformation {
 	 * @return the automaton {@code ret} containing the result of the
 	 *         transformation.
 	 */
-	public Automaton transformTo(Automaton a, Automaton b, Automaton ret) {
+	public Automaton<L, Tr, T> transformTo(Automaton<L, Tr, T> a, Automaton<L, Tr, T> b, Automaton<L, Tr, T> ret) {
 		Set alph = synchronization.synchronizable(a.alphabet(), b.alphabet());
 		/* check alphabets */
-		Map amap = new HashMap();
-		Map bmap = new HashMap();
-		List /* < StatesCouple > */todo = new ArrayList();
-		Set /* < StatesCouple > */done = new HashSet();
-		Set as = TransformationsToolBox.epsilonClosure(a.initials(), a);
-		Set bs = TransformationsToolBox.epsilonClosure(b.initials(), b);
+		Map<StatesCouple, State> amap = new HashMap();
+		Map<StatesCouple, State> bmap = new HashMap();
+		List<StatesCouple> todo = new ArrayList();
+		Set<StatesCouple> done = new HashSet();
+		Set<State> as = TransformationsToolBox.epsilonClosure(a.initials(), a);
+		Set<State> bs = TransformationsToolBox.epsilonClosure(b.initials(), b);
 		State from = ret.addState(true, TransformationsToolBox
 				.containsATerminalState(as)
 				&& TransformationsToolBox.containsATerminalState(bs));
@@ -106,17 +107,17 @@ public class Mix implements BinaryTransformation {
 				continue;
 			done.add(couple);
 			/* get transition sets */
-			Map tam = TransformationsToolBox.mapAlphabet(a.delta(couple.sa), a);
-			Map tbm = TransformationsToolBox.mapAlphabet(b.delta(couple.sb), b);
+			Map<L, Set<State>> tam = TransformationsToolBox.mapAlphabet(a.delta(couple.sa), a);
+			Map<L, Set<State>> tbm = TransformationsToolBox.mapAlphabet(b.delta(couple.sb), b);
 			/* create label map for synchronized trans */
-			Map /* < Object, StatesCouple > */tcm = new HashMap();
+			Map<L, StatesCouple> tcm = new HashMap();
 			/* unsynchronizable transitions in A */
-			for (Iterator i = tam.entrySet().iterator(); i.hasNext();) {
-				Map.Entry me = (Map.Entry) i.next();
-				Object l = me.getKey();
-				as = (Set) me.getValue();
+			for (Iterator<Map.Entry<L, Set<State>>> i = tam.entrySet().iterator(); i.hasNext();) {
+				Map.Entry<L, Set<State>> me = i.next();
+				L l = me.getKey();
+				as = me.getValue();
 				if (!alph.contains(l)) {
-					Set asc = TransformationsToolBox.epsilonClosure(as, a);
+					Set<State> asc = TransformationsToolBox.epsilonClosure(as, a);
 					tcm.put(l, sc = new StatesCouple(asc, couple.sb));
 					State to = (State) amap.get(sc);
 					makeNewState(ret, amap, sc, to);
@@ -125,14 +126,14 @@ public class Mix implements BinaryTransformation {
 				}
 			}
 			/* unsynchronizable transition(s) in B */
-			for (Iterator i = tbm.entrySet().iterator(); i.hasNext();) {
-				Map.Entry me = (Map.Entry) i.next();
-				Object l = me.getKey();
-				bs = (Set) me.getValue();
+			for (Iterator<Map.Entry<L, Set<State>>> i = tbm.entrySet().iterator(); i.hasNext();) {
+				Map.Entry<L, Set<State>> me =  i.next();
+				L l = me.getKey();
+				bs = me.getValue();
 				if (!alph.contains(l)) {
-					Set bsc = TransformationsToolBox.epsilonClosure(bs, b);
+					Set<State> bsc = TransformationsToolBox.epsilonClosure(bs, b);
 					tcm.put(l, sc = new StatesCouple(couple.sa, bsc));
-					State to = (State) amap.get(sc);
+					State to = amap.get(sc);
 					makeNewState(ret, amap, sc, to);
 					todo.add(sc);
 					i.remove();
@@ -142,20 +143,20 @@ public class Mix implements BinaryTransformation {
 			 * there remains in tam and tbm only possibly synchronizing
 			 * transitions
 			 */
-			for (Iterator i = tam.entrySet().iterator(); i.hasNext();) {
-				Map.Entry me = (Map.Entry) i.next();
-				Object l = me.getKey();
-				as = (Set) me.getValue();
-				for (Iterator j = tbm.entrySet().iterator(); j.hasNext();) {
-					Map.Entry mbe = (Map.Entry) j.next();
-					Object k = mbe.getKey();
-					bs = (Set) mbe.getValue();
-					Object sy = synchronization.synchronize(l, k);
+			for (Iterator<Map.Entry<L, Set<State>>> i = tam.entrySet().iterator(); i.hasNext();) {
+				Map.Entry<L, Set<State>> me = i.next();
+				L l = me.getKey();
+				as = me.getValue();
+				for (Iterator<Map.Entry<L, Set<State>>> j = tbm.entrySet().iterator(); j.hasNext();) {
+					Map.Entry<L, Set<State>> mbe = j.next();
+					L k = mbe.getKey();
+					bs = mbe.getValue();
+					L sy = synchronization.synchronize(l, k);
 					if (sy != null) {
-						Set asc = TransformationsToolBox.epsilonClosure(as, a);
-						Set bsc = TransformationsToolBox.epsilonClosure(bs, b);
+						Set<State> asc = TransformationsToolBox.epsilonClosure(as, a);
+						Set<State> bsc = TransformationsToolBox.epsilonClosure(bs, b);
 						tcm.put(sy, sc = new StatesCouple(asc, bsc));
-						State to = (State) amap.get(sc);
+						State to = amap.get(sc);
 						makeNewState(ret, amap, sc, to);
 						todo.add(sc);
 					}
@@ -165,11 +166,11 @@ public class Mix implements BinaryTransformation {
 			 * 
 			 * create new transitions in return automaton, update maps
 			 */
-			for (Iterator i = tcm.entrySet().iterator(); i.hasNext();) {
-				Map.Entry me = (Map.Entry) i.next();
-				Object l = me.getKey();
-				sc = (StatesCouple) me.getValue();
-				State to = (State) amap.get(sc);
+			for (Iterator<Map.Entry<L, StatesCouple>> i = tcm.entrySet().iterator(); i.hasNext();) {
+				Map.Entry<L, StatesCouple> me =  i.next();
+				L l = me.getKey();
+				sc = me.getValue();
+				State to = amap.get(sc);
 				makeNewState(ret, amap, sc, to);
 				try {
 					ret.build(from, l, to);

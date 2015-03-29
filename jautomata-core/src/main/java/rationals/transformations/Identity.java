@@ -17,20 +17,21 @@
 package rationals.transformations;
 
 import rationals.Automaton;
+import rationals.Builder;
+import rationals.Transition;
 
 /**
  * A transformation that simply returns a clone of its argument.
  * 
- * @author nono
  * @version $Id: Identity.java 2 2006-08-24 14:41:48Z oqube $
  */
-public class Identity implements UnaryTransformation {
+public class Identity<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> implements UnaryTransformation<L, Tr, T> {
 
     /* (non-Javadoc)
      * @see rationals.transformations.UnaryTransformation#transform(rationals.Automaton)
      */
-    public Automaton transform(Automaton a) {
-        return (Automaton)a.clone();
+    public Automaton<L, Tr, T> transform(Automaton<L, Tr, T> a) {
+        return a.clone();
     }
 
 }

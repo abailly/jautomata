@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import rationals.Automaton;
+import rationals.Builder;
 import rationals.NoSuchStateException;
 import rationals.State;
 import rationals.Transition;
@@ -39,39 +40,39 @@ import rationals.Transition;
  * @author nono
  * @see J.Berstel, "Transductions and context-free languages"
  */
-public class Substitution implements UnaryTransformation {
+public class Substitution<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> implements UnaryTransformation<L, Tr, T> {
 
-	private Map morph;
+	private Map<?, ?> morph;
 
-	public Substitution(Map m) {
+	public Substitution(Map<?, ?> m) {
 		this.morph = m;
 	}
 
 	/* (non-Javadoc)
 	 * @see rationals.transformations.UnaryTransformation#transform(rationals.Automaton)
 	 */
-	public Automaton transform(Automaton a) {
-		Automaton b = new Automaton();
+	public Automaton<L, Tr, T> transform(Automaton<L, Tr, T> a) {
+		Automaton<L, Tr, T> b = new Automaton<>();
 		/* state map */
-		Map stm = new HashMap();
-		for (Iterator i = a.delta().iterator(); i.hasNext();) {
-			Transition tr = (Transition) i.next();
+		Map<State, State> stm = new HashMap<>();
+		for (Iterator<Transition<L>> i = a.delta().iterator(); i.hasNext();) {
+			Transition<L> tr = i.next();
 			State ns = tr.start();
-			State nss = (State) stm.get(ns);
+			State nss = stm.get(ns);
 			if (nss == null) {
 				nss = b.addState(ns.isInitial(), ns.isTerminal());
 				stm.put(ns, nss);
 			}
 			State ne = tr.end();
-			State nse = (State) stm.get(ne);
+			State nse = stm.get(ne);
 			if (nse == null) {
 				nse = b.addState(ne.isInitial(), ne.isTerminal());
 				stm.put(ne, nse);
 			}
-			Object lbl = tr.label();
+			L lbl = tr.label();
 			if (!morph.containsKey(lbl))
 				try {
-					b.addTransition(new Transition(nss, lbl, nse));
+					b.addTransition(new Transition<L>(nss, lbl, nse));
 				} catch (NoSuchStateException e) {
 				}
 			else
@@ -79,11 +80,9 @@ public class Substitution implements UnaryTransformation {
 					/* is value an automaton ? */
 					Object o = morph.get(lbl);
 					if (o instanceof Automaton)
-						insert(nss, nse, b, (Automaton) o);
+						insert(nss, nse, b, (Automaton<L, Tr, T>) o);
 					else
-						b
-								.addTransition(new Transition(nss, morph
-										.get(lbl), nse));
+						b.addTransition(new Transition<L>(nss, (L) morph.get(lbl), nse));
 				} catch (NoSuchStateException e1) {
 				}
 		}
@@ -102,30 +101,29 @@ public class Substitution implements UnaryTransformation {
 	 * @param automaton
 	 */
 
-	private void insert(State nss, State nse, Automaton b, Automaton automaton) {
+	private void insert(State nss, State nse, Automaton<L, Tr, T> b, Automaton<L, Tr, T> automaton) {
 		/* map states */
-		Map map = new HashMap();
-		for (Iterator i = automaton.states().iterator(); i.hasNext();) {
-			State e = (State) i.next();
+		Map<State, State> map = new HashMap<State, State>();
+		for (Iterator<State> i = automaton.states().iterator(); i.hasNext();) {
+			State e = i.next();
 			State n = b.addState(false, false);
 			map.put(e, n);
 			if (e.isInitial())
 				try {
-					b.addTransition(new Transition(nss, null, n));
+					b.addTransition(new Transition<L>(nss, null, n));
 				} catch (NoSuchStateException e1) {
 				}
 			if (e.isTerminal())
 				try {
-					b.addTransition(new Transition(n, null, nse));
+					b.addTransition(new Transition<L>(n, null, nse));
 				} catch (NoSuchStateException e1) {
 				}
 
 		}
-		for (Iterator i = automaton.delta().iterator(); i.hasNext();) {
-			Transition t = (Transition) i.next();
+		for (Iterator<Transition<L>> i = automaton.delta().iterator(); i.hasNext();) {
+			Transition<L> t = i.next();
 			try {
-				b.addTransition(new Transition((State) map.get(t.start()), t
-						.label(), (State) map.get(t.end())));
+				b.addTransition(new Transition<L>(map.get(t.start()), t.label(), map.get(t.end())));
 			} catch (NoSuchStateException x) {
 			}
 		}

@@ -25,13 +25,13 @@ import java.util.Set;
  * @author nono
  * @version $Id: HashValue.java 2 2006-08-24 14:41:48Z oqube $
  */
-public class HashValue {
+public class HashValue<T> {
     
     public final int hash;
 
-    public final Set s;
+    public final Set<T> s;
 
-    public HashValue(Set s) {
+    public HashValue(Set<T> s) {
         this.s = s;
         this.hash = s.hashCode();
     }
@@ -42,7 +42,8 @@ public class HashValue {
      * @see java.lang.Object#equals(java.lang.Object)
      */
     public boolean equals(Object obj) {
-        return ((HashValue) obj).hash == hash;
+    	if (!(obj instanceof HashValue)) return false;
+        return ((HashValue<?>) obj).hash == hash;
     }
 
     /*

@@ -23,10 +23,10 @@ import java.util.Collections;
 
 public class AutomatonBuilderTest extends TestCase {
 
-	private Automaton<Transition, TransitionBuilder> a;
+	private Automaton<String, Transition<String>, TransitionBuilder<String>> a;
 
 	public void testStateLabellingYieldUniqueStates() {
-		Automaton a = new Automaton();
+		Automaton<String, Transition<String>, TransitionBuilder<String>> a = new Automaton<>();
 		State s = a.state("init");
 		State s2 = a.state("init");
 		assertSame("should be same object", s, s2);
@@ -38,8 +38,7 @@ public class AutomatonBuilderTest extends TestCase {
 		a.from("init").on("a").go("next");
 		a.state("next").setTerminal(true);
 		System.err.println(a);
-		assertTrue("automaton should accept word 'a'", a.accept(Collections
-				.<Object> singletonList("a")));
+		assertTrue("automaton should accept word 'a'", a.accept(Collections.singletonList("a")));
 	}
 
 	public void testAddSeveralTransitions() {
@@ -48,10 +47,8 @@ public class AutomatonBuilderTest extends TestCase {
 		a.from("other").on("c").go("next");
 		a.state("next").setTerminal(true);
 		a.state("init").setInitial(true);
-		assertTrue("automaton should accept word 'abcbc'", a.accept(Arrays
-				.<Object> asList(new Object[] { "a", "b", "c", "b", "c" })));
-		assertTrue("automaton should not accept word 'ab'", !a.accept(Arrays
-				.<Object> asList(new Object[] { "a", "b" })));
+		assertTrue("automaton should accept word 'abcbc'", a.accept(Arrays.asList(new String[] { "a", "b", "c", "b", "c" })));
+		assertTrue("automaton should not accept word 'ab'", !a.accept(Arrays.asList(new String[] { "a", "b" })));
 	}
 
 	public void testAddSeveralTransitionsFromSameStateAndLoops() {
@@ -59,10 +56,8 @@ public class AutomatonBuilderTest extends TestCase {
 		a.from("next").on("c").loop().on("b").go("other");
 		a.state("init").setInitial(true);
 		a.state("other").setTerminal(true);
-		assertTrue("automaton should accept word 'accb'", a.accept(Arrays
-				.<Object> asList(new Object[] { "a", "c", "c", "b" })));
-		assertTrue("automaton should not accept word 'a'", !a.accept(Arrays
-				.<Object> asList(new Object[] { "a" })));
+		assertTrue("automaton should accept word 'accb'", a.accept(Arrays.asList(new String[] { "a", "c", "c", "b" })));
+		assertTrue("automaton should not accept word 'a'", !a.accept(Arrays.asList(new String[] { "a" })));
 	}
 
 	public void testRestartBuilderFromOtherState() {
@@ -70,15 +65,13 @@ public class AutomatonBuilderTest extends TestCase {
 				"c").loop().on("b").go("other");
 		a.state("init").setInitial(true);
 		a.state("other").setTerminal(true);
-		assertTrue("automaton should accept word 'accb'", a.accept(Arrays
-				.<Object> asList(new Object[] { "a", "c", "c", "b" })));
-		assertTrue("automaton should not accept word 'a'", !a.accept(Arrays
-				.<Object> asList(new Object[] { "a" })));
+		assertTrue("automaton should accept word 'accb'", a.accept(Arrays.asList(new String[] { "a", "c", "c", "b" })));
+		assertTrue("automaton should not accept word 'a'", !a.accept(Arrays.asList(new String[] { "a" })));
 	}
 
 	public void setUp() {
-		a = new Automaton<Transition, TransitionBuilder>();
-		a.setBuilder(new TransitionBuilder());
+		a = new Automaton<String, Transition<String>, TransitionBuilder<String>>();
+		a.setBuilder(new TransitionBuilder<String>());
 	}
 
 }

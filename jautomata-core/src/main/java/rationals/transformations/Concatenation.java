@@ -17,6 +17,7 @@
 package rationals.transformations;
 
 import rationals.Automaton;
+import rationals.Builder;
 import rationals.NoSuchStateException;
 import rationals.State;
 import rationals.Transition;
@@ -47,15 +48,14 @@ import java.util.Map;
  * T(A) } - {(s,a,s2) in D(B), s in S0(B) }</li>
  * </ul>
  * 
- * @author nono
  * @version $Id: Concatenation.java 2 2006-08-24 14:41:48Z oqube $
  */
-public class Concatenation implements BinaryTransformation {
+public class Concatenation<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> implements BinaryTransformation<L, Tr, T> {
 
-    public Automaton transform(Automaton a, Automaton b) {
-        Automaton ap = new Normalizer().transform(a);
-        Automaton bp = new Normalizer().transform(b);
-        ContainsEpsilon ce = new ContainsEpsilon();
+    public Automaton<L, Tr, T> transform(Automaton<L, Tr, T> a, Automaton<L, Tr, T> b) {
+        Automaton<L, Tr, T> ap = new Normalizer<L, Tr, T>().transform(a);
+        Automaton<L, Tr, T> bp = new Normalizer<L, Tr, T>().transform(b);
+        ContainsEpsilon<L, Tr, T> ce = new ContainsEpsilon<L, Tr, T>();
         boolean ace = ce.test(a);
         boolean bce = ce.test(b);
         if (ap.states().size() == 0 && ace)
@@ -63,12 +63,12 @@ public class Concatenation implements BinaryTransformation {
         if (bp.states().size() == 0 && bce)
             return a;
         State junc = null; /* junction state */
-        Automaton c = new Automaton();
-        Map map = new HashMap();
+        Automaton<L, Tr, T> c = new Automaton<>();
+        Map<State, State> map = new HashMap<>();
         /* add all states from ap */
-        Iterator i = ap.states().iterator();
-        while (i.hasNext()) {
-            State e = (State) i.next();
+        Iterator<State> i1 = ap.states().iterator();
+        while (i1.hasNext()) {
+            State e = i1.next();
             State n;
             if (e.isInitial()) {
                 n = c.addState(true, ace && bce);
@@ -79,9 +79,9 @@ public class Concatenation implements BinaryTransformation {
             map.put(e, n);
         }
         /* add states from bp */
-        i = bp.states().iterator();
-        while (i.hasNext()) {
-            State e = (State) i.next();
+        Iterator<State> i2 = bp.states().iterator();
+        while (i2.hasNext()) {
+            State e = i2.next();
             State n;
             if (!e.isInitial())  {
                 n = c.addState(false, e.isTerminal());
@@ -90,30 +90,26 @@ public class Concatenation implements BinaryTransformation {
         }
         /* create junction state */
         junc = c.addState(ace,bce);
-        i = ap.delta().iterator();
-        while (i.hasNext()) {
-            Transition t = (Transition) i.next();
+        Iterator<Transition<L>> i3 = ap.delta().iterator();
+        while (i3.hasNext()) {
+        	Transition<L> t = i3.next();
             try {
                 if (t.end().isTerminal())
-                    c.addTransition(new Transition((State) map.get(t.start()),
-                            t.label(), junc));
+                    c.addTransition(new Transition<>(map.get(t.start()), t.label(), junc));
                 else
-                    c.addTransition(new Transition((State) map.get(t.start()),
-                            t.label(), (State) map.get(t.end())));
+                    c.addTransition(new Transition<>(map.get(t.start()), t.label(), map.get(t.end())));
             } catch (NoSuchStateException x) {
             }
 
         }
-        i = bp.delta().iterator();
-        while (i.hasNext()) {
-            Transition t = (Transition) i.next();
+        Iterator<Transition<L>> i4 = bp.delta().iterator();
+        while (i4.hasNext()) {
+            Transition<L> t = i4.next();
             try {
                 if (t.start().isInitial())
-                    c.addTransition(new Transition(junc, t.label(), (State) map
-                            .get(t.end())));
+                    c.addTransition(new Transition<>(junc, t.label(), map.get(t.end())));
                 else
-                    c.addTransition(new Transition((State) map.get(t.start()),
-                            t.label(), (State) map.get(t.end())));
+                    c.addTransition(new Transition<>(map.get(t.start()), t.label(), map.get(t.end())));
             } catch (NoSuchStateException x) {
             }
         }
