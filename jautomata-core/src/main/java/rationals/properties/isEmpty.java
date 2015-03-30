@@ -17,17 +17,21 @@
 package rationals.properties;
 
 import rationals.Automaton;
+import rationals.Builder;
 import rationals.State;
+import rationals.Transition;
 
 import java.util.Iterator;
 
 
-public class isEmpty implements UnaryTest {
-  public boolean test(Automaton a) {
-    Iterator i = a.accessibleStates().iterator() ;
+public class isEmpty<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> implements UnaryTest<L, Tr, T> {
+	
+  public boolean test(Automaton<L, Tr, T> a) {
+    Iterator<State> i = a.accessibleStates().iterator() ;
     while (i.hasNext()) {
-      if (((State) i.next()).isTerminal()) return false ;
+      if (i.next().isTerminal()) return false ;
     }
     return true ;
   }
+  
 }

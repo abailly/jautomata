@@ -138,8 +138,7 @@ public class Simulation implements Relation {
      * @see rationals.properties.Relation#getErrorTrace()
      */
     public List getErrorTrace() {
-        // TODO Auto-generated method stub
-        return null;
+    	throw new UnsupportedOperationException();
     }
 
 }

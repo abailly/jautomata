@@ -17,14 +17,15 @@
 package rationals.properties;
 
 import rationals.Automaton;
+import rationals.Builder;
+import rationals.Transition;
 
 /**
  * Interface describing binary tests (ie. tests between two automata).
  * 
- * @author nono
  * @version $Id: BinaryTest.java 2 2006-08-24 14:41:48Z oqube $
  */
-public interface BinaryTest {
+public interface BinaryTest<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> {
 
   /**
    * Tests that some predicate is true for two given automata.
@@ -33,7 +34,7 @@ public interface BinaryTest {
    * @param b
    * @return
    */
-  public boolean test(Automaton a, Automaton b);
+  public boolean test(Automaton<L, Tr, T> a, Automaton<L, Tr, T> b);
   
 }
 

@@ -41,7 +41,7 @@ public class Bisimulation<L, Tr extends Transition<L>, T extends Builder<L, Tr, 
     private Set<Couple> exp;
 
     /**
-     * Constructor with two automataon.
+     * Constructor with two automaton.
      * This constructor effectively calls {@link setAutomata(Automaton,Automaton)}.
      * 
      * @param automaton
@@ -133,8 +133,7 @@ public class Bisimulation<L, Tr extends Transition<L>, T extends Builder<L, Tr, 
     /* (non-Javadoc)
      * @see rationals.properties.Relation#getErrorTrace()
      */
-    public List getErrorTrace() {
-        // TODO Auto-generated method stub
-        return null;
+    public List<L> getErrorTrace() {
+        throw new UnsupportedOperationException();
     }
 }

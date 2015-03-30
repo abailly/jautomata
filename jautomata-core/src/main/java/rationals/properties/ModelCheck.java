@@ -29,7 +29,7 @@ import rationals.transformations.Pruner;
  * the second automaton using the {@see rationals.transformations.Mix}
  * operation.
  * <p>
- * If the langage produced is empty, then the test returns true which means that
+ * If the language produced is empty, then the test returns true which means that
  * automaton <code>b</code> contains the language of <code>a</code>. Else,
  * the language produced represents counterexamples of the property modelled by
  * <code>a</code> in <code>b</code>: the test returns false.
@@ -37,7 +37,6 @@ import rationals.transformations.Pruner;
  * The resulting automaton can be retrieved using the method
  * {@see #counterExamples()}.
  * 
- * @author nono
  * @version $Id: ModelCheck.java 2 2006-08-24 14:41:48Z oqube $
  */
 public class ModelCheck implements BinaryTest {

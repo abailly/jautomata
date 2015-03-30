@@ -68,8 +68,10 @@ public interface Relation<L, Tr extends Transition<L>, T extends Builder<L, Tr, 
     /**
      * Returns the trace of labels that lead to an error.
      * 
+     * This is an optional operation, and subclasses may throw {@link UnsupportedOperationException}/
+     * 
      * @return a List of objects or null.
      */
-    public List getErrorTrace();
+    public List<L> getErrorTrace() throws UnsupportedOperationException;
 
 }
