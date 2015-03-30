@@ -18,15 +18,17 @@ package rationals.transformations;
 
 import java.util.Set;
 
+import rationals.State;
+
 
 public class StatesCouple {
-    public final Set sa;
+    public final Set<State> sa;
 
-    public final Set sb;
+    public final Set<State> sb;
 
     final int hash;
 
-    public StatesCouple(Set sa, Set sb) {
+    public StatesCouple(Set<State> sa, Set<State> sb) {
         this.sa = sa;
         this.sb = sb;
         this.hash = sa.hashCode() + sb.hashCode();

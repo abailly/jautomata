@@ -17,6 +17,8 @@
 package rationals.properties;
 
 import rationals.Automaton;
+import rationals.Builder;
+import rationals.Transition;
 import rationals.transformations.Complement;
 import rationals.transformations.Mix;
 import rationals.transformations.Pruner;
@@ -39,9 +41,9 @@ import rationals.transformations.Pruner;
  * 
  * @version $Id: ModelCheck.java 2 2006-08-24 14:41:48Z oqube $
  */
-public class ModelCheck implements BinaryTest {
+public class ModelCheck<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> implements BinaryTest<L, Tr, T> {
 
-    private Automaton cex;
+    private Automaton<L, Tr, T> cex;
 
     /*
      * (non-Javadoc)
@@ -49,10 +51,10 @@ public class ModelCheck implements BinaryTest {
      * @see rationals.properties.BinaryTest#test(rationals.Automaton,
      *      rationals.Automaton)
      */
-    public boolean test(Automaton a, Automaton b) {
-        Automaton ca = new Complement().transform(a);
-        cex = new Pruner().transform(new Mix().transform(ca, b));
-        if (new isEmpty().test(ca))
+    public boolean test(Automaton<L, Tr, T> a, Automaton<L, Tr, T> b) {
+        Automaton<L, Tr, T> ca = new Complement<L, Tr, T>().transform(a);
+        cex = new Pruner<L, Tr, T>().transform(new Mix<L, Tr, T>().transform(ca, b));
+        if (new isEmpty<L, Tr, T>().test(ca))
             return true;
         else
             return false;
@@ -65,7 +67,7 @@ public class ModelCheck implements BinaryTest {
      *         {@see #test(rationals.Automaton,rationals.Automaton)}has not
      *         been called yet.
      */
-    public Automaton counterExamples() {
+    public Automaton<L, Tr, T> counterExamples() {
         return cex;
     }
 }
