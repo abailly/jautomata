@@ -55,9 +55,9 @@ public class TraceEquivalentTest extends TestCase {
     	a2.addTransition(new Transition<>(s23, "S", s21));
     	a2.addTransition(new Transition<>(s24, "R", s21));
     	
-    	// Note that a1 and a2 do not recognise the same languages, but are trace equivalent
+
     	TraceEquivalent<String, Transition<String>, TransitionBuilder<String>> equiv = new TraceEquivalent<>();
-        assertTrue(equiv.test(a1, a2));
+        assertFalse(equiv.test(a1, a2));
     }
     
 }
