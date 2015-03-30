@@ -16,10 +16,9 @@
  */
 package rationals.properties;
 
-import rationals.Automaton;
-
-import java.util.HashMap;
-import java.util.Map;
+//import rationals.Automaton;
+//import java.util.HashMap;
+//import java.util.Map;
 
 /**
  * Test if two automaton are isomorphic.
@@ -30,18 +29,18 @@ import java.util.Map;
  * @author nono
  * @version $Id: AreIsomorph.java 2 2006-08-24 14:41:48Z oqube $
  */
-public class AreIsomorph implements BinaryTest {
-
-    /* (non-Javadoc)
-     * @see rationals.properties.BinaryTest#test(rationals.Automaton, rationals.Automaton)
-     */
-    public boolean test(Automaton a, Automaton b) {
-        /* basic test */
-        if(a.states().size() != b.states().size() || a.initials().size() != b.initials().size() || a.terminals().size() != b.terminals().size())
-            return false;
-        Map /* < State , State > */ atob = new HashMap();
-        // TODO        
-        return false;
-    }
-
-}
+//public class AreIsomorph implements BinaryTest {
+//
+//    /* (non-Javadoc)
+//     * @see rationals.properties.BinaryTest#test(rationals.Automaton, rationals.Automaton)
+//     */
+//    public boolean test(Automaton a, Automaton b) {
+//        /* basic test */
+//        if(a.states().size() != b.states().size() || a.initials().size() != b.initials().size() || a.terminals().size() != b.terminals().size())
+//            return false;
+//        Map /* < State , State > */ atob = new HashMap();
+//        // TODO        
+//        return false;
+//    }
+//
+//}
