@@ -26,7 +26,7 @@ import java.util.Set;
  * @author Arnaud.Bailly - bailly@lifl.fr
  * @version $Id: StateFactory.java 10 2007-05-30 17:25:00Z oqube $
  */
-public interface StateFactory {
+public interface StateFactory<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> {
 
     /**
      * @param initial
@@ -65,7 +65,7 @@ public interface StateFactory {
     /**
      * @param automaton
      */
-    void setAutomaton(Automaton automaton);
+    void setAutomaton(Automaton<L, Tr, T> automaton);
 
     State create(boolean initial, boolean terminal, Object label);
 }
