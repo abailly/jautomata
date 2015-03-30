@@ -125,8 +125,8 @@ public class Automaton<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>>
 	 * 
 	 * @return an automaton which recognizes <em>@</em>
 	 */
-	public static Automaton<?, ?, ?> epsilonAutomaton() {
-		Automaton<?, ?, ?> v = new Automaton<>();
+	public static <L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> Automaton<L, Tr, T> epsilonAutomaton() {
+		Automaton<L, Tr, T> v = new Automaton<>();
 		v.addState(true, true);
 		return v;
 	}
@@ -140,8 +140,8 @@ public class Automaton<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>>
 	 *            any object that will be used as a label.
 	 * @return an automaton which recognizes <em>label</em>
 	 */
-	public static <L> Automaton<L, ?, ?> labelAutomaton(L label) {
-		Automaton<L, ?, ?> v = new Automaton<>();
+	public static <L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> Automaton<L, Tr, T> labelAutomaton(L label) {
+		Automaton<L, Tr, T> v = new Automaton<>();
 		State start = v.addState(true, false);
 		State end = v.addState(false, true);
 		try {

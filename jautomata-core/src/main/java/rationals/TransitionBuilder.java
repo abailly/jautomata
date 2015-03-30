@@ -19,9 +19,6 @@ package rationals;
 /**
  * A class for step-by-step creation of transitions. A TransitionBuilder can be
  * used to add expesiveness to transition creation withing automaton.
- * 
- * @author nono
- * 
  */
 public class TransitionBuilder<L> implements
 		Builder<L, Transition<L>, TransitionBuilder<L>> {

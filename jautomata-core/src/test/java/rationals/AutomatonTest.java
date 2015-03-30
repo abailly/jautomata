@@ -24,12 +24,11 @@ import java.util.Set;
 import junit.framework.TestCase;
 
 /**
- * @author nono
  * @version $Id: AutomatonTest.java 2 2006-08-24 14:41:48Z oqube $
  */
 public class AutomatonTest extends TestCase {
 
-    private Automaton automaton;
+    private Automaton<String, Transition<String>, TransitionBuilder<String>> automaton;
     private State[] ss;
 
     /**
@@ -42,7 +41,7 @@ public class AutomatonTest extends TestCase {
 
     protected void setUp() throws Exception {
         super.setUp();
-        automaton = new Automaton();
+        automaton = new Automaton<>();
         /* states */
         ss = new State[5];
         ss[0] = automaton.addState(true,false);
@@ -51,16 +50,16 @@ public class AutomatonTest extends TestCase {
         ss[3] = automaton.addState(false,false);
         ss[4] = automaton.addState(false,true);
         /* transition */
-        automaton.addTransition(new Transition(ss[0],"a",ss[0]));
-        automaton.addTransition(new Transition(ss[0],"b",ss[1]));
-        automaton.addTransition(new Transition(ss[1],"b",ss[0]));
-        automaton.addTransition(new Transition(ss[1],"a",ss[2]));
-        automaton.addTransition(new Transition(ss[2],"b",ss[3]));
-        automaton.addTransition(new Transition(ss[2],"a",ss[1]));
-        automaton.addTransition(new Transition(ss[3],"a",ss[2]));
-        automaton.addTransition(new Transition(ss[3],"b",ss[4]));
-        automaton.addTransition(new Transition(ss[4],"b",ss[0]));
-        automaton.addTransition(new Transition(ss[4],"a",ss[4]));
+        automaton.addTransition(new Transition<>(ss[0],"a",ss[0]));
+        automaton.addTransition(new Transition<>(ss[0],"b",ss[1]));
+        automaton.addTransition(new Transition<>(ss[1],"b",ss[0]));
+        automaton.addTransition(new Transition<>(ss[1],"a",ss[2]));
+        automaton.addTransition(new Transition<>(ss[2],"b",ss[3]));
+        automaton.addTransition(new Transition<>(ss[2],"a",ss[1]));
+        automaton.addTransition(new Transition<>(ss[3],"a",ss[2]));
+        automaton.addTransition(new Transition<>(ss[3],"b",ss[4]));
+        automaton.addTransition(new Transition<>(ss[4],"b",ss[0]));
+        automaton.addTransition(new Transition<>(ss[4],"a",ss[4]));
     }
     
     public void testAddState() {
@@ -71,11 +70,11 @@ public class AutomatonTest extends TestCase {
     }
 
     public void testAlphabet() throws NoSuchStateException {
-        Set alph = new HashSet();
+        Set<String> alph = new HashSet<>();
         alph.add("a");
         alph.add("b");
         alph.add("c");
-        automaton.addTransition(new Transition(ss[0],"c",ss[3]));
+        automaton.addTransition(new Transition<>(ss[0],"c",ss[3]));
         assertTrue(automaton.alphabet().equals(alph));        
     }
 
@@ -104,10 +103,10 @@ public class AutomatonTest extends TestCase {
     public void testAccessibleStates() throws NoSuchStateException {
         State s5 = automaton.addState(false,false);
         State s6 = automaton.addState(false,false);
-        automaton.addTransition(new Transition(ss[0],"c",s5));
-        automaton.addTransition(new Transition(s5,"c",s6));
-        automaton.addTransition(new Transition(s6,"a",s5));
-        Set acc = automaton.accessibleStates();
+        automaton.addTransition(new Transition<>(ss[0],"c",s5));
+        automaton.addTransition(new Transition<>(s5,"c",s6));
+        automaton.addTransition(new Transition<>(s6,"a",s5));
+        Set<State> acc = automaton.accessibleStates();
         assertTrue(acc.contains(s5) && acc.contains(s6));
     }
 
@@ -117,20 +116,20 @@ public class AutomatonTest extends TestCase {
     public void testCoAccessibleStates() throws NoSuchStateException {
         State s5 = automaton.addState(false,false);
         State s6 = automaton.addState(false,false);
-        automaton.addTransition(new Transition(s5,"c",ss[4]));
-        automaton.addTransition(new Transition(s6,"c",s5));
-        automaton.addTransition(new Transition(s5,"a",s6));
-        Set acc = automaton.coAccessibleStates();
+        automaton.addTransition(new Transition<>(s5,"c",ss[4]));
+        automaton.addTransition(new Transition<>(s6,"c",s5));
+        automaton.addTransition(new Transition<>(s5,"a",s6));
+        Set<State> acc = automaton.coAccessibleStates();
         assertTrue(acc.contains(s5) && acc.contains(s6));
     }
 
     public void testAccessibleAndCoAccessibleStates() throws NoSuchStateException {
-        Set acc = automaton.accessibleAndCoAccessibleStates();
+        Set<State> acc = automaton.accessibleAndCoAccessibleStates();
         State s5 = automaton.addState(false,false);
         State s6 = automaton.addState(false,false);
-        automaton.addTransition(new Transition(ss[0],"c",s5));
-        automaton.addTransition(new Transition(s5,"c",s6));
-        automaton.addTransition(new Transition(s6,"a",s5));
+        automaton.addTransition(new Transition<>(ss[0],"c",s5));
+        automaton.addTransition(new Transition<>(s5,"c",s6));
+        automaton.addTransition(new Transition<>(s6,"a",s5));
         assertTrue(automaton.states().containsAll(acc));
         assertTrue(!acc.contains(s5) && !acc.contains(s6));
     }
@@ -147,32 +146,32 @@ public class AutomatonTest extends TestCase {
     }
 
     public void testAcceptDFA() throws NoSuchStateException {
-		Automaton t = new Automaton();
+		Automaton<String, Transition<String>, TransitionBuilder<String>> t = new Automaton<>();
 		State s1 = t.addState(true, true);
 		State s2 = t.addState(false, false);
 		State s3 = t.addState(false, false);
-		t.addTransition(new Transition(s1, "a", s2));
-		t.addTransition(new Transition(s2, "b", s3));
-		t.addTransition(new Transition(s3, "c", s1));
+		t.addTransition(new Transition<>(s1, "a", s2));
+		t.addTransition(new Transition<>(s2, "b", s3));
+		t.addTransition(new Transition<>(s3, "c", s1));
 		// check accept words
-		List exp = Arrays.asList(new String[] {  "a", "b","c", "a", "b", "c" });
+		List<String> exp = Arrays.asList(new String[] {  "a", "b","c", "a", "b", "c" });
 		assertTrue("Automaton does not accept 'abcabc'",t.accept(exp));
 		exp = Arrays.asList(new String[] {  "a", "b","c", "b", "c" });
 		assertTrue("Automaton does accept 'abcbc'",!t.accept(exp));
     }
 
     public void testAcceptNFA1() throws NoSuchStateException {
-		Automaton t = new Automaton();
+		Automaton<String, Transition<String>, TransitionBuilder<String>> t = new Automaton<>();
 		State s1 = t.addState(true, true);
 		State s2 = t.addState(false, false);
 		State s3 = t.addState(false, false);
 		State s4 = t.addState(false, false);
-		t.addTransition(new Transition(s1, "a", s2));
-		t.addTransition(new Transition(s2, "b", s3));
-		t.addTransition(new Transition(s3, "c", s4));
-		t.addTransition(new Transition(s4, null, s1));
+		t.addTransition(new Transition<>(s1, "a", s2));
+		t.addTransition(new Transition<>(s2, "b", s3));
+		t.addTransition(new Transition<>(s3, "c", s4));
+		t.addTransition(new Transition<String>(s4, null, s1));
 		// check accept words
-		List exp = Arrays.asList(new String[] {  "a", "b","c", "a", "b", "c" });
+		List<String> exp = Arrays.asList(new String[] {  "a", "b","c", "a", "b", "c" });
 		assertTrue("Automaton does not accept 'abcabc'",t.accept(exp));
 		exp = Arrays.asList(new String[] {  "a", "b","c", "b", "c" });
 		assertTrue("Automaton does accept 'abcbc'",!t.accept(exp));
