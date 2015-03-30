@@ -21,12 +21,10 @@ import java.util.Set;
 import rationals.State;
 
 
-public class StatesCouple {
+public final class StatesCouple {
     public final Set<State> sa;
-
     public final Set<State> sb;
-
-    final int hash;
+    private final int hash;
 
     public StatesCouple(Set<State> sa, Set<State> sb) {
         this.sa = sa;
@@ -39,7 +37,9 @@ public class StatesCouple {
      * 
      * @see java.lang.Object#equals(java.lang.Object)
      */
+    @Override
     public boolean equals(Object obj) {
+    	if (!(obj instanceof StatesCouple)) return false;
         StatesCouple sc = (StatesCouple) obj;
         return sc.sa.equals(sa) && sc.sb.equals(sb);
     }
@@ -49,6 +49,7 @@ public class StatesCouple {
      * 
      * @see java.lang.Object#hashCode()
      */
+    @Override
     public int hashCode() {
         return hash;
     }
@@ -58,6 +59,7 @@ public class StatesCouple {
      * 
      * @see java.lang.Object#toString()
      */
+    @Override
     public String toString() {
         return " < " + sa.toString() + "," + sb.toString() + " >";
     }

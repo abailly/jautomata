@@ -81,7 +81,7 @@ public class TraceEquivalence<L, Tr extends Transition<L>, T extends Builder<L, 
         Stack<StatesCouple> todo = new Stack<>();
         /* current traces for failure */
         Stack<L> labels = new Stack<>();
-        List<L> trace = new ArrayList<>();
+        Stack<L> trace = new Stack<>();
         Set<StatesCouple> done = new HashSet<>();
         todo.push(new StatesCouple(nsa, nsb));
         labels.push(null); // Needed to avoid empty stack
@@ -91,10 +91,12 @@ public class TraceEquivalence<L, Tr extends Transition<L>, T extends Builder<L, 
             Set<State> sa = TransformationsToolBox.epsilonClosure(cpl.sa, a1);
             Set<State> sb = TransformationsToolBox.epsilonClosure(cpl.sb, a2);
             if (done.contains(cpl)) {
-                trace.remove(trace.size() - 1);
+            	L top = trace.peek();
+            	// Bug fix: two different transitions to the same state can cause the trace to become empty
+                if (top == null ? lbl == null : top.equals(lbl)) trace.pop();
                 continue;
             } else {
-            	trace.add(lbl);
+            	trace.push(lbl);
             }
             done.add(cpl);
             /* compute set of transitions */
@@ -130,8 +132,9 @@ public class TraceEquivalence<L, Tr extends Transition<L>, T extends Builder<L, 
         return true;
     }
 
-    /*
-     * @param tas @param am
+    /**
+     * @param tas
+     * @param am
      */
     public void mapAlphabet(List<Transition<L>> tas, Map<L, Set<State>> am, Automaton<L, Tr, T> a) {
         /* compute set of states for each letter */
