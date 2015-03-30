@@ -20,7 +20,9 @@ import java.util.List;
 import java.util.Set;
 
 import rationals.Automaton;
+import rationals.Builder;
 import rationals.State;
+import rationals.Transition;
 
 /**
  * An interface for computing equivalences between automata.
@@ -28,10 +30,9 @@ import rationals.State;
  * This interface allows definition of various relation between 
  * states.
  * 
- * @author nono
  * @version $Id: Relation.java 2 2006-08-24 14:41:48Z oqube $
  */
-public interface Relation {
+public interface Relation<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> {
 
     /**
      * Sets the context for computing the relation.
@@ -40,7 +41,7 @@ public interface Relation {
      * @param a1
      * @param a2
      */
-    void setAutomata(Automaton a1,Automaton a2);
+    void setAutomata(Automaton<L, Tr, T> a1, Automaton<L, Tr, T> a2);
     
     /**
      * Assert the equivalence between two states.
@@ -51,8 +52,7 @@ public interface Relation {
      * @param s2
      * @return true is s1 ~ s2, false otherwise 
      */
-    boolean equivalence(State s1,State s2);
-
+    boolean equivalence(State s1, State s2);
 
     /**
      * Asset the equivalence between two set of states.
@@ -63,7 +63,7 @@ public interface Relation {
      * @param nsb a Set of State objects from b
      * @return true if nsa is equivalent to nsb
      */
-    public boolean equivalence(Set nsa, Set nsb);
+    public boolean equivalence(Set<State> nsa, Set<State> nsb);
     
     /**
      * Returns the trace of labels that lead to an error.
