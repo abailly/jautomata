@@ -27,7 +27,7 @@ import rationals.ioautomata.IOAutomaton;
 import rationals.ioautomata.IOTransition;
 
 /**
- * This class constructs the mirror of an IOAutomaton: Input and Ouput
+ * This class constructs the mirror of an IOAutomaton: Input and Output
  * transitions are reversed, internal transitions are preserved.
  * 
  * @author nono
