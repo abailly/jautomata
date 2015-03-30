@@ -35,14 +35,17 @@ public abstract class RationalExpr implements SemiRing {
             return s1;
         }
         
+        @Override
         public boolean equals(Object o) {
             return this == o;
         }
         
-        public int hashcode() {
+        @Override
+        public int hashCode() {
             return -1;
         }
         
+        @Override
         public String toString() {
             return "0";
         }
