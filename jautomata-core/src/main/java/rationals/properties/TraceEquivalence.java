@@ -84,6 +84,7 @@ public class TraceEquivalence<L, Tr extends Transition<L>, T extends Builder<L, 
         List<L> trace = new ArrayList<>();
         Set<StatesCouple> done = new HashSet<>();
         todo.push(new StatesCouple(nsa, nsb));
+        labels.push(null); // Needed to avoid empty stack
         do {
             StatesCouple cpl = todo.pop();
             L lbl = labels.pop();
