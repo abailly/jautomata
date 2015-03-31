@@ -17,6 +17,7 @@
 package rationals.transformations;
 
 import rationals.Automaton;
+import rationals.Builder;
 import rationals.NoSuchStateException;
 import rationals.State;
 import rationals.Transition;
@@ -28,49 +29,43 @@ import java.util.Map;
 /**
  * Compute the kleene-star closure of an automaton.
  * 
- * @author nono
  * @version $Id: Star.java 2 2006-08-24 14:41:48Z oqube $
  */
-public class Star implements UnaryTransformation {
-    public Automaton transform(Automaton a) {
+public class Star<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> implements UnaryTransformation<L, Tr, T> {
+    public Automaton<L, Tr, T> transform(Automaton<L, Tr, T> a) {
         if (a.delta().size() == 0)
             return Automaton.epsilonAutomaton();
-        Automaton b = new Automaton();
+        Automaton<L, Tr, T> b = new Automaton<>();
         State ni = b.addState(true, true);
         State nt = b.addState(true, true);
-        Map map = new HashMap();
-        Iterator i = a.states().iterator();
-        while (i.hasNext()) {
-            map.put(i.next(), b.addState(false, false));
+        Map<State, State> map = new HashMap<>();
+        Iterator<State> i1 = a.states().iterator();
+        while (i1.hasNext()) {
+            map.put(i1.next(), b.addState(false, false));
         }
-        i = a.delta().iterator();
-        while (i.hasNext()) {
-            Transition t = (Transition) i.next();
+        Iterator<Transition<L>> i2 = a.delta().iterator();
+        while (i2.hasNext()) {
+            Transition<L> t = i2.next();
             try {
-                b.addTransition(new Transition((State) map.get(t.start()), t
-                        .label(), (State) map.get(t.end())));
+                b.addTransition(new Transition<>(map.get(t.start()), t.label(), map.get(t.end())));
             } catch (NoSuchStateException x) {
             }
             if (t.start().isInitial() && t.end().isTerminal()) {
                 try {
-                    b.addTransition(new Transition(ni, t.label(), nt));
-                    b.addTransition(new Transition(nt, t.label(), ni));
+                    b.addTransition(new Transition<>(ni, t.label(), nt));
+                    b.addTransition(new Transition<>(nt, t.label(), ni));
                 } catch (NoSuchStateException x) {
                 }
             } else if (t.start().isInitial()) {
                 try {
-                    b.addTransition(new Transition(ni, t.label(), (State) map
-                            .get(t.end())));
-                    b.addTransition(new Transition(nt, t.label(), (State) map
-                            .get(t.end())));
+                    b.addTransition(new Transition<>(ni, t.label(), map.get(t.end())));
+                    b.addTransition(new Transition<>(nt, t.label(), map.get(t.end())));
                 } catch (NoSuchStateException x) {
                 }
             } else if (t.end().isTerminal()) {
                 try {
-                    b.addTransition(new Transition((State) map.get(t.start()),
-                            t.label(), nt));
-                    b.addTransition(new Transition((State) map.get(t.start()),
-                            t.label(), ni));
+                    b.addTransition(new Transition<>(map.get(t.start()), t.label(), nt));
+                    b.addTransition(new Transition<>(map.get(t.start()), t.label(), ni));
                 } catch (NoSuchStateException x) {
                 }
             }
