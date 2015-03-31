@@ -17,7 +17,9 @@
 package rationals.properties;
 
 import rationals.Automaton;
+import rationals.Builder;
 import rationals.State;
+import rationals.Transition;
 import rationals.transformations.TransformationsToolBox;
 
 import java.util.Iterator;
@@ -28,21 +30,20 @@ import java.util.Set;
  * the tested automaton does not contain epsilon (ie. <code>null</code>)
  * transitions.
  * 
- * @author nono
  * @version $Id: ContainsEpsilon.java 2 2006-08-24 14:41:48Z oqube $
  */
-public class ContainsEpsilon implements UnaryTest {
+public class ContainsEpsilon<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> implements UnaryTest<L, Tr, T> {
 
-    public boolean test(Automaton a) {
-        Iterator i = a.initials().iterator();
-        Set s = a.getStateFactory().stateSet();
+    public boolean test(Automaton<L, Tr, T> a) {
+        Iterator<State> i = a.initials().iterator();
+        Set<State> s = a.getStateFactory().stateSet();
         while (i.hasNext()) {
-            State st = (State) i.next();
+            State st = i.next();
             if (st.isTerminal())
                 return true;
             s.add(st);
             /* compute epsilon closure */
-            Set cl = TransformationsToolBox.epsilonClosure(s,a);
+            Set<State> cl = TransformationsToolBox.epsilonClosure(s,a);
             if(TransformationsToolBox.containsATerminalState(cl))
                 return true;
         }

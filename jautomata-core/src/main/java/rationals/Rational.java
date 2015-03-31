@@ -19,10 +19,9 @@ package rationals;
 import java.util.Set;
 
 /**
- * @author nono
  * @version $Id: Rational.java 10 2007-05-30 17:25:00Z oqube $
  */
-public interface Rational {
+public interface Rational<L> {
   /**
    * Returns a new instance of state which will be initial and terminal or not
    * depending of parameters.
@@ -45,7 +44,7 @@ public interface Rational {
    * 
    * @return the alphabet <em>X</em> associated with this automaton.
    */
-  Set<Object> alphabet();
+  Set<L> alphabet();
 
   /**
    * Returns the set of states <em>Q</em> associated with this automaton.
@@ -143,7 +142,7 @@ public interface Rational {
    *         contained in this set are instances of class <tt>Transition</tt>.
    * @see Transition
    */
-  Set<Transition> delta();
+  Set<Transition<L>> delta();
 
   /**
    * Returns the set of all transitions of this automaton starting from a given
@@ -159,7 +158,7 @@ public interface Rational {
    *         <tt>Transition</tt>.
    * @see Transition
    */
-  Set<Transition> delta(State state, Object label);
+  Set<Transition<L>> delta(State state, L label);
 
   /**
    * Return all transitions from a State
@@ -168,9 +167,9 @@ public interface Rational {
    *          start state
    * @return a new Set of transitions (maybe empty)
    */
-  Set<Transition> delta(State state);
+  Set<Transition<L>> delta(State state);
 
-  Set<Transition> deltaFrom(State from, State to);
+  Set<Transition<L>> deltaFrom(State from, State to);
 
   /**
    * Returns the set of all transitions of the reverse of this automaton
@@ -183,7 +182,7 @@ public interface Rational {
    *         <tt>Transition</tt>.
    * @see Transition
    */
-  Set<Transition> deltaMinusOne(State state, Object label);
+  Set<Transition<L>> deltaMinusOne(State state, L label);
 
   /**
    * Adds a new transition in this automaton if it is a new transition for this
@@ -199,13 +198,13 @@ public interface Rational {
    * <em>q'</em> does not belong to <em>Q</em> the set of the states
    * of this automaton.
    */
-  void addTransition(Transition transition) throws NoSuchStateException;
+  void addTransition(Transition<L> transition) throws NoSuchStateException;
 
   /**
    * @param st
    * @return
    */
-  Set<Transition> deltaMinusOne(State st);
+  Set<Transition<L>> deltaMinusOne(State st);
 
   /**
    * @param st

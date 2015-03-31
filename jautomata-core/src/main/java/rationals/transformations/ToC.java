@@ -17,15 +17,16 @@
 package rationals.transformations;
 
 import rationals.Automaton;
+import rationals.Builder;
 import rationals.NoSuchStateException;
 import rationals.State;
 import rationals.Transition;
 
 import java.util.*;
 
-public class ToC implements UnaryTransformation {
+public class ToC<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> implements UnaryTransformation<L, Tr, T> {
 
-    public Automaton transform(Automaton a) {
+    public Automaton<L, Tr, T> transform(Automaton<L, Tr, T> a) {
         Automaton b = new EpsilonTransitionRemover().transform(a);
         Set Ib = b.initials();
         Set Tb = b.terminals();

@@ -43,10 +43,9 @@ import java.util.Random;
  * random transitions following a normal distribution according to preceding
  * parameters over the alphabet.
  * 
- * @author nono
  * @version $Id: RandomAutomaton.java 2 2006-08-24 14:41:48Z oqube $
  */
-public class RandomAutomaton extends Automaton {
+public class RandomAutomaton<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> extends Automaton<L, Tr, T> {
 
     private static final Random rand = new Random();
 
@@ -54,7 +53,7 @@ public class RandomAutomaton extends Automaton {
 
     private int fstate;
 
-    private Object[] alph;
+    private L[] alph;
 
     private double density;
 
@@ -76,8 +75,7 @@ public class RandomAutomaton extends Automaton {
      * @param det
      *            is the result deterministic
      */
-    public RandomAutomaton(int nstate, int fstate, Object[] alph,
-            double density, double deviation, boolean det) {
+    public RandomAutomaton(int nstate, int fstate, L[] alph, double density, double deviation, boolean det) {
         this.nstate = nstate;
         this.fstate = fstate;
         this.alph = alph;
@@ -94,25 +92,25 @@ public class RandomAutomaton extends Automaton {
      */
     private void makeNFA() {
         /* create initial state and other states */
-        State init = addState(true, false);
+    	addState(true, false);
         for (int i = 0; i < fstate; i++)
             addState(false, true);
         for (int i = fstate; i < nstate; i++)
             addState(false, false);
-        State[] sts = (State[]) states().toArray(new State[nstate + 1]);
+        State[] sts = states().toArray(new State[nstate + 1]);
         /* create transitions */
-        Iterator it = states().iterator();
+        Iterator<State> it = states().iterator();
         while (it.hasNext()) {
-            State from = (State) it.next();
+            State from = it.next();
             int c = alph.length * sts.length * sts.length;
             /* number of transitions from this state to other state */
             int nt = (int) (c * (deviation * rand.nextGaussian() + density));
             for (int i = 0; i < nt; i++) {
                 State to = sts[rand.nextInt(sts.length)];
-                Object lbl = alph[rand.nextInt(alph.length)];
+                L lbl = alph[rand.nextInt(alph.length)];
                 try {
                     /* create transition */
-                    addTransition(new Transition(from, lbl, to));
+                    addTransition(new Transition<L>(from, lbl, to));
                 } catch (NoSuchStateException e1) {
                 }
             }
@@ -125,8 +123,8 @@ public class RandomAutomaton extends Automaton {
     private void makeDFA() {
         /* create initial state and other states */
         State init = addState(true, false);
-        List todo = new ArrayList();
-        List done = new ArrayList();
+        List<State> todo = new ArrayList<>();
+        List<State> done = new ArrayList<>();
         int fs = fstate;
         int ns = nstate;
         todo.add(init);
@@ -135,8 +133,7 @@ public class RandomAutomaton extends Automaton {
             State from = (State) todo.remove(0);
             done.add(from);
             /* list for alph */
-            List l = new ArrayList(Arrays.asList(alph));
-            int c = alph.length * nstate;
+            List<L> l = new ArrayList<>(Arrays.asList(alph));
             /* number of transitions from this state to other state */
             int nt = (int) (deviation * rand.nextGaussian() + density);
             for (int i = 0; i < nt && !l.isEmpty(); i++) {
@@ -147,7 +144,7 @@ public class RandomAutomaton extends Automaton {
                 State to = null;
                 double r = rand.nextDouble() * (nstate - 1);
                 if ((int) r < done.size()) {
-                    to = (State) done.get((int) r);
+                    to = done.get((int) r);
                 } else {
                     /*
                      * state is final with probability fs / ns
@@ -159,10 +156,10 @@ public class RandomAutomaton extends Automaton {
                     if (r < fs)
                         fs--;
                 }
-                Object lbl = l.remove(rand.nextInt(l.size()));
+                L lbl = l.remove(rand.nextInt(l.size()));
                 try {
                     /* create transition */
-                    addTransition(new Transition(from, lbl, to));
+                    addTransition(new Transition<>(from, lbl, to));
                 } catch (NoSuchStateException e1) {
                 }
             }

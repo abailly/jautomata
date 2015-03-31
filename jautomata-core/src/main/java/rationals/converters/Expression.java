@@ -16,11 +16,13 @@
  */
 package rationals.converters;
 import rationals.Automaton;
+import rationals.Builder;
+import rationals.Transition;
 import rationals.converters.analyzers.Parser;
 
-public class Expression implements FromString {
-  public Automaton fromString(String s) throws ConverterException {
-    return new Parser(s).analyze() ;
+public class Expression<Tr extends Transition<String>, T extends Builder<String, Tr, T>> implements FromString<Tr, T> {
+  public Automaton<String, Tr, T> fromString(String s) throws ConverterException {
+    return new Parser<String, Tr, T>(s).analyze() ;
   }
     
 }

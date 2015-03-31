@@ -16,6 +16,7 @@
  */
 package rationals.transformations;
 import rationals.Automaton;
+import rationals.Builder;
 import rationals.NoSuchStateException;
 import rationals.State;
 import rationals.Transition;
@@ -37,25 +38,22 @@ import java.util.Map;
  * @author nono
  * @version $Id: Union.java 2 2006-08-24 14:41:48Z oqube $
  */
-public class Union implements BinaryTransformation {
+public class Union<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> implements BinaryTransformation<L, Tr, T> {
 
 
-  public Automaton transform(Automaton a , Automaton b) {
-    Automaton ap = (Automaton) a.clone() ;
-    Map map = new HashMap() ;
-    Iterator i = b.states().iterator() ;
-    while(i.hasNext()) {
-      State e = (State) i.next() ;
+  public Automaton<L, Tr, T> transform(Automaton<L, Tr, T> a , Automaton<L, Tr, T> b) {
+    Automaton<L, Tr, T> ap = a.clone() ;
+    Map<State, State> map = new HashMap<State, State>() ;
+    Iterator<State> i1 = b.states().iterator() ;
+    while(i1.hasNext()) {
+      State e = i1.next() ;
       map.put(e , ap.addState(e.isInitial() , e.isTerminal())) ;
     }
-    i = b.delta().iterator() ;
-    while(i.hasNext()) {
-      Transition t = (Transition) i.next() ;
+    Iterator<Transition<L>> i2 = b.delta().iterator() ;
+    while(i2.hasNext()) {
+      Transition<L> t = i2.next();
       try {
-        ap.addTransition(new Transition(
-          (State) map.get(t.start()) ,
-          t.label() ,
-          (State) map.get(t.end()))) ;
+        ap.addTransition(new Transition<>(map.get(t.start()), t.label(), map.get(t.end()))) ;
       } catch(NoSuchStateException x) {}
     }
     return ap ;

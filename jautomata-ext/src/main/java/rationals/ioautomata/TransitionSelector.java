@@ -43,7 +43,7 @@ public class TransitionSelector {
 
   public IOLetter selectFrom(IOAutomaton<IOTransition,IOTransitionBuilder> automaton,
       Set<State> state) {
-    Set<Transition> trs = automaton.delta(state);
+    Set<Transition<Object>> trs = automaton.delta(state);
     for (Iterator i = trs.iterator(); i.hasNext();)
       if (((IOTransition) i.next()).getType() != type)
         i.remove();
@@ -65,7 +65,7 @@ public class TransitionSelector {
    */
   public Set<IOLetter> selectAllFrom(IOAutomaton<IOTransition,IOTransitionBuilder> automaton,
       Set<State> state) {
-    Set<Transition> trs = automaton.delta(state);
+    Set<Transition<Object>> trs = automaton.delta(state);
     Set<IOTransition.IOLetter> letters = new HashSet<IOLetter>();
     for (Iterator i = trs.iterator(); i.hasNext();) {
       IOTransition iot = (IOTransition) i.next();

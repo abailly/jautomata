@@ -25,7 +25,6 @@ import rationals.converters.Expression;
 import rationals.converters.ToRExpression;
 
 /**
- * @author nono
  * @version $Id: ToReTest.java 2 2006-08-24 14:41:48Z oqube $
  */
 public class ToReTest extends TestCase {
@@ -36,32 +35,29 @@ public class ToReTest extends TestCase {
   
   public void testRE1() throws ConverterException {
       String re = "ab*c";
-      Automaton a = new Expression().fromString(re);
-      String er = new ToRExpression().toString(a);
-      System.err.println(er);
-      a = new Expression().fromString(er);
-      assertTrue(a.accept(Arrays.asList(new Object[]{"a","b","b","c"})));    
-      assertTrue(!a.accept(Arrays.asList(new Object[]{"a","b","b"})));  
+      Automaton<String, Transition<String>, TransitionBuilder<String>> a = new Expression<Transition<String>, TransitionBuilder<String>>().fromString(re);
+      String er = new ToRExpression<Transition<String>, TransitionBuilder<String>>().toString(a);
+      a = new Expression<Transition<String>, TransitionBuilder<String>>().fromString(er);
+      assertTrue(a.accept(Arrays.asList(new String[]{"a","b","b","c"})));    
+      assertTrue(!a.accept(Arrays.asList(new String[]{"a","b","b"})));  
     }
     
   public void testRESingleton() throws ConverterException {
       String re = "a";
-      Automaton a = new Expression().fromString(re);
-      String er = new ToRExpression().toString(a);
-      System.err.println(er);
-      a = new Expression().fromString(er);
-      assertTrue(a.accept(Arrays.asList(new Object[]{"a"})));   
+      Automaton<String, Transition<String>, TransitionBuilder<String>> a = new Expression<Transition<String>, TransitionBuilder<String>>().fromString(re);
+      String er = new ToRExpression<Transition<String>, TransitionBuilder<String>>().toString(a);
+      a = new Expression<Transition<String>, TransitionBuilder<String>>().fromString(er);
+      assertTrue(a.accept(Arrays.asList(new String[]{"a"})));   
     }
     
   public void testREEpsilon() throws ConverterException {
     String re = "(ab*c)*";
-    Automaton a = new Expression().fromString(re);
-    String er = new ToRExpression().toString(a);
-    System.err.println(er);
-    a = new Expression().fromString(er);
-    assertTrue(a.accept(new ArrayList()));    
-    assertTrue(a.accept(Arrays.asList(new Object[]{"a","b","b","c"})));    
-    assertTrue(!a.accept(Arrays.asList(new Object[]{"a","b","b"})));  
+    Automaton<String, Transition<String>, TransitionBuilder<String>> a = new Expression<Transition<String>, TransitionBuilder<String>>().fromString(re);
+    String er = new ToRExpression<Transition<String>, TransitionBuilder<String>>().toString(a);
+    a = new Expression<Transition<String>, TransitionBuilder<String>>().fromString(er);
+    assertTrue(a.accept(new ArrayList<String>()));    
+    assertTrue(a.accept(Arrays.asList(new String[]{"a","b","b","c"})));    
+    assertTrue(!a.accept(Arrays.asList(new String[]{"a","b","b"})));  
   }
   
   

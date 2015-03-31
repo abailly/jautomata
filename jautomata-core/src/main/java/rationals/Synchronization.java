@@ -28,7 +28,7 @@ import java.util.Set;
  * @author nono
  * @version $Id: Synchronization.java 2 2006-08-24 14:41:48Z oqube $
  */
-public interface Synchronization {
+public interface Synchronization<L> {
 
     /**
      * Synchronize two transitions.
@@ -40,7 +40,7 @@ public interface Synchronization {
      * @param t2 second label to synchronize
      * @return a non null Object if the two transitions can be synchronized.
      */
-    Object synchronize(Object t1, Object t2);
+    L synchronize(L t1, L t2);
     
     /**
      * Compute the synchronizing letters from two alphabets.
@@ -53,7 +53,7 @@ public interface Synchronization {
      * @param b another alphabet
      * @return a new Set of letters (may be empty) from a and b that can be synchronized.
      */
-    Set synchronizable(Set a,Set b);
+    Set<L> synchronizable(Set<L> a, Set<L> b);
 
     /**
      * Construct the synchronization alphabet from a collection of
@@ -65,7 +65,7 @@ public interface Synchronization {
      * @return a Set implementation containing all letters of all alphabets 
      * in <code>alphabets</code> that could be synchronized.
      */
-    Set synchronizing(Collection<Set> alphabets);
+    Set<L> synchronizing(Collection<Set<L>> alphabets);
 
     /**
      * Checks whether or not the given letter is synchronizing in the
@@ -78,6 +78,6 @@ public interface Synchronization {
      * @return true if object is synchronizing with some letter in <code>alph</code>, 
      * false otherwise.
      */
-    boolean synchronizeWith(Object object, Set alph);
+    boolean synchronizeWith(L object, Set<L> alph);
     
 }

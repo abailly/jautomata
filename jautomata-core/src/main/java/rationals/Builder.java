@@ -18,11 +18,8 @@ package rationals;
 
 /**
  * An interface for easier creation of automata.
- * 
- * @author nono
- * 
  */
-public interface Builder<Tr extends Transition, T extends Builder<Tr, T>> {
+public interface Builder<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> {
 
 	/**
 	 * Factory method.
@@ -31,7 +28,7 @@ public interface Builder<Tr extends Transition, T extends Builder<Tr, T>> {
 	 * @param auto
 	 * @return
 	 */
-	T build(State label, Automaton<Tr, T> auto);
+	T build(State label, Automaton<L, Tr, T> auto);
 
 	/**
 	 * Sets the label of the transition.
@@ -39,7 +36,7 @@ public interface Builder<Tr extends Transition, T extends Builder<Tr, T>> {
 	 * @param label
 	 * @return this transition builder.
 	 */
-	T on(Object label);
+	T on(L label);
 
 	/**
 	 * Sets the end state and terminates transition construction. This method
@@ -48,7 +45,7 @@ public interface Builder<Tr extends Transition, T extends Builder<Tr, T>> {
 	 * @param o
 	 *            the label of the end state.
 	 */
-	T go(Object o);
+	T go(L o);
 
 	/**
 	 * Adds a new transition in the automaton that loops on current label and
@@ -66,7 +63,7 @@ public interface Builder<Tr extends Transition, T extends Builder<Tr, T>> {
 	 *            the state to start from.
 	 * @return this builder.
 	 */
-	T from(Object label);
+	T from(L label);
 
 	/**
 	 * Build a transition according to the specific logic of this builder.
@@ -76,7 +73,7 @@ public interface Builder<Tr extends Transition, T extends Builder<Tr, T>> {
 	 * @param to
 	 * @return
 	 */
-	Tr build(State from, Object label, State to);
+	Tr build(State from, L label, State to);
 
-	void setAutomaton(Automaton<Tr, T> a);
+	void setAutomaton(Automaton<L, Tr, T> a);
 }

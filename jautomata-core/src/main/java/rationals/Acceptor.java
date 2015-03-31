@@ -23,7 +23,7 @@ import java.util.Set;
  * @author nono
  * @version $Id: Acceptor.java 10 2007-05-30 17:25:00Z oqube $
  */
-public interface Acceptor {
+public interface Acceptor<L> {
     /**
      * Checks this automaton accepts the given "word".
      * A word is a list of objects. This method checks that reading <code>word</code>
@@ -32,7 +32,7 @@ public interface Acceptor {
      * @param word
      * @return
      */
-    boolean accept(List<Object> word);
+    boolean accept(List<L> word);
 
     /**
      * Return a trace of states reading word from start state. 
@@ -45,12 +45,12 @@ public interface Acceptor {
      * @param start a starting State. Maybe null
      * @return a List of Set of State objects
      */
-    List<Set<State>> traceStates(List<Object> word, State start);
+    List<Set<State>> traceStates(List<L> word, State start);
     
     /*
      *  (non-Javadoc)
      * @see rationals.Acceptor#steps(java.util.List)
      */
-    Set<State> steps(List<Object> word);
+    Set<State> steps(List<L> word);
 
 }

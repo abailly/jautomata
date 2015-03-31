@@ -17,13 +17,14 @@
 package rationals.transformations;
 
 import rationals.Automaton;
+import rationals.Builder;
+import rationals.Transition;
 
 /**
  * A generic interface for binary operations between two automata.
  * 
- * @author nono
  * @version $Id: BinaryTransformation.java 2 2006-08-24 14:41:48Z oqube $
  */
-public interface BinaryTransformation {
-  public Automaton transform(Automaton a , Automaton b) ;
+public interface BinaryTransformation<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> {
+  public Automaton<L, Tr, T> transform(Automaton<L, Tr, T> a , Automaton<L, Tr, T> b) ;
 }

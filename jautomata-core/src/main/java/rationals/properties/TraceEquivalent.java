@@ -16,17 +16,19 @@
  */
 package rationals.properties;
 
+import rationals.Builder;
+import rationals.Transition;
+
 /**
- * @author nono
  * @version $Id: TraceEquivalent.java 2 2006-08-24 14:41:48Z oqube $
  */
-public class TraceEquivalent extends AreEquivalent {
+public class TraceEquivalent<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> extends AreEquivalent<L, Tr, T> {
 
     /**
      * @param r
      */
     public TraceEquivalent() {
-        super(new TraceEquivalence());
+        super(new TraceEquivalence<L, Tr, T>());
     }
 
 }

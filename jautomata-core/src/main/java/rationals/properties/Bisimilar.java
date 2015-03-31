@@ -16,17 +16,19 @@
  */
 package rationals.properties;
 
+import rationals.Builder;
+import rationals.Transition;
+
 /**
- * @author nono
  * @version $Id: Bisimilar.java 2 2006-08-24 14:41:48Z oqube $
  */
-public class Bisimilar extends AreEquivalent {
+public class Bisimilar<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> extends AreEquivalent<L, Tr, T> {
 
     /**
      * @param r
      */
     public Bisimilar() {
-        super(new Bisimulation());
+        super(new Bisimulation<L, Tr, T>());
     }
 
 }

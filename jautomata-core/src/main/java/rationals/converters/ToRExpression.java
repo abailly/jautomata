@@ -34,33 +34,31 @@ import java.util.Set;
  * cf. Algorithm BMC (Brozowski et  al.) from J.sakarovitch "El&eacute;ments de th&eacute;orie
  * des automates", sec. 2
  * 
- * @author nono
  * @version $Id: ToRExpression.java 2 2006-08-24 14:41:48Z oqube $
  */
-public class ToRExpression implements ToString {
+public class ToRExpression<Tr extends Transition<String>, T extends Builder<String, Tr, T>> implements ToString<String, Tr, T> {
 
-    private Map /* < Key, String > */keys = new HashMap();
+    private Map<Couple, String> keys = new HashMap<>();
 
     /*
      * (non-Javadoc)
      * 
      * @see rationals.converters.ToString#toString(rationals.Automaton)
      */
-    public String toString(Automaton a) {
-        if(a == null)
-            return "0";
-        Automaton ret = (Automaton)a.clone();
+    public String toString(Automaton<String, Tr, T> a) {
+        if(a == null) return "0";
+        Automaton<String, Tr, T> ret = a.clone();
         if (!new isNormalized().test(a))
-            ret = new Normalizer().transform(a);
+            ret = new Normalizer<String, Tr, T>().transform(a);
         /* special case for empty automaton */
         if (ret.initials().isEmpty())
             return "0";        
         /* add all transitions from start to end state */
-        State init  = (State)ret.initials().iterator().next();
-        State fini  = (State)ret.terminals().iterator().next();
+        State init = ret.initials().iterator().next();
+        State fini = ret.terminals().iterator().next();
         String re = "";
-        for(Iterator i = ret.deltaFrom(init,fini).iterator();i.hasNext();) {
-            Transition tr = (Transition)i.next();
+        for(Iterator<Transition<String>> i = ret.deltaFrom(init,fini).iterator();i.hasNext();) {
+        	Transition<String> tr = i.next();
             if("".equals(re)) {
                 re = (tr.label() == null) ? "1" : tr.label().toString();
             }else
@@ -68,17 +66,17 @@ public class ToRExpression implements ToString {
         }
         if(!"".equals(re))
             keys.put(new Couple(init,fini), re);
-        Iterator it = ret.states().iterator();
+        Iterator<State> it = ret.states().iterator();
         while (it.hasNext()) {
-            State st = (State) it.next();
+            State st = it.next();
             if (st.isInitial() || st.isTerminal())
                 continue;
           
             re = "";
             /* first handle self transitions */
-            Iterator it2 = ret.delta(st).iterator();
+            Iterator<Transition<String>> it2 = ret.delta(st).iterator();
             while (it2.hasNext()) {
-                Transition t1 = (Transition) it2.next();
+            	Transition<String> t1 = it2.next();
                 if (!t1.end().equals(st))
                     continue;
                 re += "+" + t1.label();
@@ -91,17 +89,17 @@ public class ToRExpression implements ToString {
                 else
                     re = re + "*";
             }
-            Set to = ret.delta(st); /* outgoing */
-            Set from = ret.deltaMinusOne(st); /* incoming */
+            Set<Transition<String>> to = ret.delta(st); /* outgoing */
+            Set<Transition<String>> from = ret.deltaMinusOne(st); /* incoming */
             it2 = from.iterator();
             while (it2.hasNext()) {
                 /* beware : this is reverse transition */
-                Transition t1 = (Transition) it2.next();
+            	Transition<String> t1 = it2.next();
                 if (t1.end().equals(st)) /* skip self transitions */
                     continue;
-                Iterator it3 = to.iterator();
+                Iterator<Transition<String>> it3 = to.iterator();
                 while (it3.hasNext()) {
-                    Transition t2 = (Transition) it3.next();
+                	Transition<String> t2 = it3.next();
                     if (t2.end().equals(st))
                         continue;
                     /* find completed expression from start to end */
@@ -117,7 +115,7 @@ public class ToRExpression implements ToString {
                     }
                     try {
                         keys.put(k, oldre);
-                        ret.addTransition(new Transition(s1, oldre, s2));
+                        ret.addTransition(new Transition<String>(s1, oldre, s2));
                     } catch (NoSuchStateException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();

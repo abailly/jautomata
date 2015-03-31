@@ -16,17 +16,19 @@
  */
 package rationals.properties;
 
+import rationals.Builder;
+import rationals.Transition;
+
 /**
- * @author nono
  * @version $Id: Similar.java 2 2006-08-24 14:41:48Z oqube $
  */
-public class Similar extends AreEquivalent {
+public class Similar<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> extends AreEquivalent<L, Tr, T> {
 
     /**
      * @param r
      */
     public Similar() {
-        super(new Simulation());
+        super(new Simulation<L, Tr, T>());
     }
 
 }

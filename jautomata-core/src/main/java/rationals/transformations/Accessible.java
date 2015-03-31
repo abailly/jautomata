@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Set;
 
 import rationals.Automaton;
+import rationals.Builder;
 import rationals.NoSuchStateException;
 import rationals.State;
 import rationals.Transition;
@@ -31,7 +32,7 @@ import rationals.Transition;
  * @author bailly
  * @version $Id: Accessible.java 2 2006-08-24 14:41:48Z oqube $
  */
-public class Accessible implements UnaryTransformation {
+public class Accessible<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> implements UnaryTransformation<L, Tr, T> {
 
 	private State state;
 
@@ -46,23 +47,23 @@ public class Accessible implements UnaryTransformation {
 	/* (non-Javadoc)
 	 * @see rationals.transformations.UnaryTransformation#transform(rationals.Automaton)
 	 */
-	public Automaton transform(Automaton a) {
-		Set trs = a.delta();
-		Automaton b = new Automaton();
-		Map stmap = new HashMap();
+	public Automaton<L, Tr, T> transform(Automaton<L, Tr, T> a) {
+		Set<Transition<L>> trs = a.delta();
+		Automaton<L, Tr, T> b = new Automaton<>();
+		Map<State, State> stmap = new HashMap<>();
 		/* initial state = state */
-		State ns = b.addState(true,state.isTerminal());
-		stmap.put(state,ns);
-		explore(state,stmap,a,b);
-		/* eplore a and remove transitions from trs */
-		Iterator it = trs.iterator();
+		State ns = b.addState(true, state.isTerminal());
+		stmap.put(state, ns);
+		explore(state, stmap, a, b);
+		/* explore a and remove transitions from trs */
+		Iterator<Transition<L>> it = trs.iterator();
 		while(it.hasNext()) {
-			Transition tr = (Transition)it.next();
-			State nstart = (State)stmap.get(tr.start());
-			State nend = (State)stmap.get(tr.end());
-			if((nstart != null) && (nend != null))
+			Transition<L> tr = it.next();
+			State nstart = stmap.get(tr.start());
+			State nend = stmap.get(tr.end());
+			if(nstart != null && nend != null)
 				try {
-					b.addTransition(new Transition(nstart,tr.label(),nend));
+					b.addTransition(new Transition<>(nstart,tr.label(),nend));
 				} catch (NoSuchStateException e) {
 					System.err.println(e.getMessage());
 					return null;
@@ -77,12 +78,12 @@ public class Accessible implements UnaryTransformation {
 	 * @param stmap
 	 * @param b
 	 */
-	private void explore(State curstate, Map stmap, Automaton a,Automaton b) {
-		Iterator it = a.delta(curstate).iterator();
+	private void explore(State curstate, Map<State, State> stmap, Automaton<L, Tr, T> a, Automaton<L, Tr, T> b) {
+		Iterator<Transition<L>> it = a.delta(curstate).iterator();
 		while(it.hasNext()) {
-			Transition tr = (Transition)it.next();
-			State e= tr.end();
-			State ne = (State)stmap.get(e);
+			Transition<L> tr = it.next();
+			State e = tr.end();
+			State ne = stmap.get(e);
 			if(ne != null)
 				continue;
 			else {

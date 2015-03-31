@@ -17,7 +17,9 @@
 package rationals.properties;
 
 import rationals.Automaton;
+import rationals.Builder;
+import rationals.Transition;
 
-public interface UnaryTest {
-  public boolean test(Automaton a) ;
+public interface UnaryTest<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> {
+  public boolean test(Automaton<L, Tr, T> a) ;
 }

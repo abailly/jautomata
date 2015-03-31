@@ -29,13 +29,13 @@ package rationals;
  * @version 1.0
  * @see Automaton
  */
-public class Transition<E> {
+public class Transition<L> {
 
-  private int hash = Integer.MIN_VALUE;
+  private int hashCodeCache = Integer.MIN_VALUE;
 
   private State start;
 
-  private E label;
+  private L label;
 
   private State end;
 
@@ -49,7 +49,7 @@ public class Transition<E> {
    * @param end
    *          the state <em>q'</em> for this transition <em>(q , l , q')</em>.
    */
-  public Transition(State start, E label, State end) {
+  public Transition(State start, L label, State end) {
     this.start = start;
     this.label = label;
     this.end = end;
@@ -82,7 +82,7 @@ public class Transition<E> {
    * @return the label state of this transition, that is the object <em>l</em>
    *         for this transition <em>(q , l , q')</em>.
    */
-  public E label() {
+  public L label() {
     return label;
   }
 
@@ -101,9 +101,10 @@ public class Transition<E> {
    * 
    * @return a textual representation of this transition based
    */
+  @Override
   public String toString() {
     if (label == null) {
-      return "(" + start + " , 1 , " + end + ")";
+      return "(" + start + " , epsilon , " + end + ")";
     } else {
       return "(" + start + " , " + label + " , " + end + ")";
     }
@@ -118,21 +119,18 @@ public class Transition<E> {
    *         <tt>o</tt> is a transition which is composed same states and
    *         label (in the sense of method <tt>equals</tt>).
    */
+  @Override
   public boolean equals(Object o) {
-    if (o == null)
-      return false;
-    try {
-      Transition t = (Transition) o;
-      if (label != t.label) {
-        if (label == null || t.label == null)
-          return false;
-        if (!t.label.equals(label))
-          return false;
-      }
-      return (start == t.start()) && (end == t.end());
-    } catch (ClassCastException x) {
-      return false;
+    if (!(o instanceof Transition)) return false;
+    @SuppressWarnings("unchecked")
+	Transition<L> t = (Transition<L>) o;
+    if (label != t.label) {
+      if (label == null || t.label == null)
+        return false;
+      if (!t.label.equals(label))
+        return false;
     }
+    return (start == t.start()) && (end == t.end());
   }
 
   /**
@@ -140,25 +138,20 @@ public class Transition<E> {
    * 
    * @return a hashcode value for this transition.
    */
+  @Override
   public int hashCode() {
     /* store computed value */
-    if (hash != Integer.MIN_VALUE)
-      return hash;
-    int x, y, z;
-    if (start == null)
-      x = 0;
-    else
-      x = start.hashCode();
-    if (end == null)
-      y = 0;
-    else
-      y = end.hashCode();
-    if (label == null)
-      z = 0;
-    else
-      z = label.hashCode();
-    int t = new java.awt.Point(x, y).hashCode();
-    return hash = new java.awt.Point(t, z).hashCode();
+    if (hashCodeCache != Integer.MIN_VALUE)
+      return hashCodeCache;
+    int x = start == null ? 0 : start.hashCode();
+    int y = end == null ? 0 : end.hashCode();  
+    int z = label == null ? 0 : label.hashCode();  
+    int hash = 17;
+    hash = hash * 31 + x;
+    hash = hash * 31 + y;
+    hash = hash * 31 + z;
+    hashCodeCache = hash;
+    return hash;
   }
 
   /**
@@ -170,7 +163,7 @@ public class Transition<E> {
    * 
    * @param msg
    */
-  void setLabel(E obj) {
+  void setLabel(L obj) {
     this.label = obj;
   }
 
