@@ -28,7 +28,7 @@ import rationals.converters.ConverterException;
  * @see DefaultLexer
  * @see Parser
  */
-public interface Lexer {
+public interface Lexer<L> {
     public static final int LABEL = 0;
 
     public static final int INT = 1;
@@ -83,7 +83,7 @@ public interface Lexer {
      * 
      * @return an Object which is a label for a transition.
      */
-    public abstract Object label();
+    public abstract L label();
 
     /**
      * Return the value of a number.

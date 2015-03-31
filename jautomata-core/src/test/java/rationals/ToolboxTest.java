@@ -36,18 +36,18 @@ public class ToolboxTest extends TestCase {
     }
 
     public void testClosure1() throws NoSuchStateException{
-        Automaton a = new Automaton();
+        Automaton<String, Transition<String>, TransitionBuilder<String>> a = new Automaton<>();
         State s1 = a.addState(true,false);
         State s2 = a.addState(false,false);
         State s3 = a.addState(false,true);
-        a.addTransition(new Transition(s1,null,s1));
-        a.addTransition(new Transition(s1,"a",s2));
-        a.addTransition(new Transition(s2,null,s3));
-        a.addTransition(new Transition(s3,null,s1));
-        a.addTransition(new Transition(s3,"b",s3));
-        Set st = a.getStateFactory().stateSet();
+        a.addTransition(new Transition<String>(s1,null,s1));
+        a.addTransition(new Transition<String>(s1,"a",s2));
+        a.addTransition(new Transition<String>(s2,null,s3));
+        a.addTransition(new Transition<String>(s3,null,s1));
+        a.addTransition(new Transition<String>(s3,"b",s3));
+        Set<State> st = a.getStateFactory().stateSet();
         st.add(s2);
-        Set r = TransformationsToolBox.epsilonClosure(st,a);
+        Set<State> r = TransformationsToolBox.epsilonClosure(st,a);
         assertTrue(r.contains(s1));
         assertTrue(r.contains(s3));
         assertTrue(r.contains(s2));

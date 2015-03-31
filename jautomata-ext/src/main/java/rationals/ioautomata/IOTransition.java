@@ -35,7 +35,7 @@ A helper method {@see canSynchronizeWith(IOTransition)}is provided that synchron
 @author  nono
 @version $Id: IOTransition.java 2 2006-08-24 14:41:48Z oqube $
  */
-public class IOTransition extends Transition {
+public class IOTransition extends Transition<Object> {
 
   private IOAlphabetType type;
 

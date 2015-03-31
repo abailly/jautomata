@@ -31,8 +31,8 @@ import java.util.*;
  * @author nono
  * @version $Id: IOAutomaton.java 13 2007-06-01 16:11:03Z oqube $
  */
-public class IOAutomaton<I extends IOTransition, T extends Builder<I, T>> extends
-		Automaton<I, T> {
+public class IOAutomaton<I extends IOTransition, T extends Builder<Object, I, T>> extends
+		Automaton<Object, I, T> {
 
 	private Set input = new HashSet();
 

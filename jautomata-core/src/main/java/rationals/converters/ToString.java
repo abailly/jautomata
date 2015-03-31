@@ -16,8 +16,10 @@
  */
 package rationals.converters ;
 import rationals.Automaton;
+import rationals.Builder;
+import rationals.Transition;
 
 
-public interface ToString {
-  public String toString(Automaton a) ;
+public interface ToString<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> {
+  public String toString(Automaton<L, Tr, T> a) ;
 }

@@ -19,3 +19,4 @@ bin/
 *.zip
 ErrorLogs/
 testResults/
+*.eps

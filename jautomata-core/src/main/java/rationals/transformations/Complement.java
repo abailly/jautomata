@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Set;
 
 import rationals.Automaton;
+import rationals.Builder;
 import rationals.NoSuchStateException;
 import rationals.State;
 import rationals.Transition;
@@ -38,48 +39,47 @@ import rationals.Transition;
  * @author nono
  * @version $Id: Complement.java 2 2006-08-24 14:41:48Z oqube $
  */
-public class Complement implements UnaryTransformation {
+public class Complement<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> implements UnaryTransformation<L, Tr, T> {
 
     /*
      * (non-Javadoc)
      * 
      * @see rationals.transformations.UnaryTransformation#transform(rationals.Automaton)
      */
-    public Automaton transform(Automaton a) {
-        Automaton ret = new Automaton();
-        List todo = new ArrayList();
-        Map sm = new HashMap();
-        Set done = new HashSet();
-        Set s = a.initials();
+    public Automaton<L, Tr, T> transform(Automaton<L, Tr, T> a) {
+        Automaton<L, Tr, T> ret = new Automaton<>();
+        List<State> todo = new ArrayList<>();
+        Map<State, State> sm = new HashMap<>();
+        Set<State> done = new HashSet<>();
+        Set<State> s = a.initials();
         todo.addAll(s);
         while (!todo.isEmpty()) {
-            State st = (State) todo.remove(0);
-            State ns = (State) sm.get(st);
+            State st = todo.remove(0);
+            State ns = sm.get(st);
             if (ns == null) {
                 ns = ret.addState(st.isInitial(), !st.isTerminal());
                 sm.put(st, ns);
             }
             done.add(st);
-            for (Iterator it = a.alphabet().iterator(); it.hasNext();) {
-                Object l = it.next();
-                Set ends = a.delta(st, l);
+            for (Iterator<L> it = a.alphabet().iterator(); it.hasNext();) {
+                L l = it.next();
+                Set<Transition<L>> ends = a.delta(st, l);
                 if (ends.isEmpty())
                     try {
-                        ret.addTransition(new Transition(ns, l, ns));
+                        ret.addTransition(new Transition<>(ns, l, ns));
                     } catch (NoSuchStateException e) {
                     }
                 else {
-                    for (Iterator i = ends.iterator(); i.hasNext();) {
-                        State end = ((Transition) i.next()).end();
-                        State ne = (State) sm.get(end);
+                    for (Iterator<Transition<L>> i = ends.iterator(); i.hasNext();) {
+                        State end = i.next().end();
+                        State ne = sm.get(end);
                         if (ne == null) {
-                            ne = ret.addState(end.isInitial(), !end
-                                    .isTerminal());
+                            ne = ret.addState(end.isInitial(), !end.isTerminal());
                             sm.put(end, ne);
                             todo.add(end);
                         }
                         try {
-                            ret.addTransition(new Transition(ns, l, ne));
+                            ret.addTransition(new Transition<>(ns, l, ne));
                         } catch (NoSuchStateException e) {
                         }
                     }

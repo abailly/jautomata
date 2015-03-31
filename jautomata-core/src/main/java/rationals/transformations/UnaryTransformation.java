@@ -17,7 +17,9 @@
 package rationals.transformations ;
 
 import rationals.Automaton;
+import rationals.Builder;
+import rationals.Transition;
 
-public interface UnaryTransformation {
-  public Automaton transform(Automaton a) ;
+public interface UnaryTransformation<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> {
+  public Automaton<L, Tr, T> transform(Automaton<L, Tr, T> a) ;
 }

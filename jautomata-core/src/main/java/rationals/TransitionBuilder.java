@@ -19,18 +19,15 @@ package rationals;
 /**
  * A class for step-by-step creation of transitions. A TransitionBuilder can be
  * used to add expesiveness to transition creation withing automaton.
- * 
- * @author nono
- * 
  */
-public class TransitionBuilder implements
-		Builder<Transition, TransitionBuilder> {
+public class TransitionBuilder<L> implements
+		Builder<L, Transition<L>, TransitionBuilder<L>> {
 
 	private State start;
 
-	private Automaton<Transition, TransitionBuilder> automaton;
+	private Automaton<L, Transition<L>, TransitionBuilder<L>> automaton;
 
-	protected Object label;
+	protected L label;
 
 	/**
 	 * Creates a transition builder for given automaton.
@@ -40,8 +37,7 @@ public class TransitionBuilder implements
 	 * @param automaton
 	 *            the automaton where transition will be added.
 	 */
-	public TransitionBuilder(State state,
-			Automaton<Transition, TransitionBuilder> automaton) {
+	public TransitionBuilder(State state, Automaton<L, Transition<L>, TransitionBuilder<L>> automaton) {
 		this.start = state;
 		this.automaton = automaton;
 	}
@@ -55,7 +51,8 @@ public class TransitionBuilder implements
 	 * @param label
 	 * @return this transition builder.
 	 */
-	public TransitionBuilder on(Object label) {
+	@Override
+	public TransitionBuilder<L> on(L label) {
 		this.label = label;
 		return this;
 	}
@@ -67,10 +64,11 @@ public class TransitionBuilder implements
 	 * @param o
 	 *            the label of the end state.
 	 */
-	public TransitionBuilder go(Object o) {
+	@Override
+	public TransitionBuilder<L> go(L o) {
 		State s = automaton.state(o);
 		try {
-			automaton.addTransition(new Transition(start, label, s));
+			automaton.addTransition(new Transition<L>(start, label, s));
 		} catch (NoSuchStateException e) {
 			assert false;
 		}
@@ -83,9 +81,9 @@ public class TransitionBuilder implements
 	 * 
 	 * @return
 	 */
-	public TransitionBuilder loop() {
+	public TransitionBuilder<L> loop() {
 		try {
-			automaton.addTransition(new Transition(start, label, start));
+			automaton.addTransition(new Transition<L>(start, label, start));
 		} catch (NoSuchStateException e) {
 			assert false;
 		}
@@ -100,7 +98,7 @@ public class TransitionBuilder implements
 	 *            the state to start from.
 	 * @return this builder.
 	 */
-	public TransitionBuilder from(Object label) {
+	public TransitionBuilder<L> from(L label) {
 		this.start = automaton.state(label);
 		this.label = null;
 		return this;
@@ -111,19 +109,18 @@ public class TransitionBuilder implements
 	 * 
 	 * @see rationals.Builder#build(java.lang.Object, rationals.Automaton)
 	 */
-	public TransitionBuilder build(State state,
-			Automaton<Transition, TransitionBuilder> auto) {
+	public TransitionBuilder<L> build(State state, Automaton<L, Transition<L>, TransitionBuilder<L>> auto) {
 		this.start = state;
 		this.label = null;
 		this.automaton = auto;
 		return this;
 	}
 
-	public Transition build(State from, Object label, State to) {
-		return new Transition(from, label, to);
+	public Transition<L> build(State from, L label, State to) {
+		return new Transition<L>(from, label, to);
 	}
 
-	public void setAutomaton(Automaton<Transition, TransitionBuilder> a) {
+	public void setAutomaton(Automaton<L, Transition<L>, TransitionBuilder<L>> a) {
 		this.automaton = a;
 	}
 

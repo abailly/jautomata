@@ -17,7 +17,9 @@
 package rationals.transformations;
 
 import rationals.Automaton;
+import rationals.Builder;
 import rationals.Synchronization;
+import rationals.Transition;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -41,9 +43,9 @@ import java.util.Set;
  * @version $Id: Shuffle.java 2 2006-08-24 14:41:48Z oqube $
  * @see Mix
  */
-public class Shuffle implements BinaryTransformation {
+public class Shuffle<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> implements BinaryTransformation<L, Tr, T> {
 
-    public Automaton transform(Automaton a, Automaton b) {
+    public Automaton<L, Tr, T> transform(Automaton<L, Tr, T> a, Automaton<L, Tr, T> b) {
 
         Mix mix = new Mix(new Synchronization() {
             public Object synchronize(Object t1, Object t2) {

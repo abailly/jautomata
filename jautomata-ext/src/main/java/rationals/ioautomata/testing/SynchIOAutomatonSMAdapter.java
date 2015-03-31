@@ -137,7 +137,7 @@ public class SynchIOAutomatonSMAdapter implements IOStateMachine, Runnable {
 	}
 
 	private Object doOutput() {
-		Set<Transition> trs = auto.delta(state);
+		Set<Transition<Object>> trs = auto.delta(state);
 		selectOutputs(trs);
 		if (trs.size() == 0)
 			return null;

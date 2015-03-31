@@ -17,8 +17,10 @@
 package rationals.converters;
 
 import rationals.Automaton;
+import rationals.Builder;
+import rationals.Transition;
 
 
-public interface FromString {
-  public Automaton fromString(String s) throws ConverterException ;
+public interface FromString<Tr extends Transition<String>, T extends Builder<String, Tr, T>> {
+  public Automaton<String, Tr, T> fromString(String s) throws ConverterException ;
 }

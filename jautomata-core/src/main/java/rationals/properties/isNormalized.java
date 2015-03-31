@@ -17,7 +17,9 @@
 package rationals.properties;
 
 import rationals.Automaton;
+import rationals.Builder;
 import rationals.State;
+import rationals.Transition;
 
 /**
  * Tests if an automaton is normalized.
@@ -26,16 +28,16 @@ import rationals.State;
  * @author nono
  * @version $Id: isNormalized.java 2 2006-08-24 14:41:48Z oqube $
  */
-public class isNormalized implements UnaryTest {
-    public boolean test(Automaton a) {
+public class isNormalized<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> implements UnaryTest<L, Tr, T> {
+    public boolean test(Automaton<L, Tr, T> a) {
         if (a.initials().size() != 1)
             return false;
         if (a.terminals().size() != 1)
             return false;
-        State e = (State) a.initials().iterator().next();
+        State e = a.initials().iterator().next();
         if (a.deltaMinusOne(e).size() > 0)
             return false;
-        e = (State) a.terminals().iterator().next();
+        e = a.terminals().iterator().next();
         if (a.delta(e).size() > 0)
             return false;
         return true;

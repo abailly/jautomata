@@ -33,21 +33,20 @@ import java.util.Set;
  * This definition is slightly modified for this interface as the initials 
  * is defined as a {@see java.util.Set} instead of a single state. <code>null</code>
  * may be used to denote <em>silent transitions</em>, that is unobservable 
- * internal behavior of the machine, which can lead to non determinism.
+ * internal behaviour of the machine, which can lead to non determinism.
  * <p>
  * The {@see rationals.Automaton} is the main implementation for this interface.
  * 
- * @author nono
  * @version $Id: StateMachine.java 10 2007-05-30 17:25:00Z oqube $
  */
-public interface StateMachine {
+public interface StateMachine<L> {
     
     /**
      * Returns the alphabet - <code>S</code> - of this state machine.
      * 
      * @return a Set of Object.
      */
-    Set<Object> alphabet();
+    Set<L> alphabet();
     
     /**
      * @return Returns the id.
@@ -89,7 +88,7 @@ public interface StateMachine {
      *         <tt>Transition</tt>.
      * @see Transition
      */
-    Set<Transition> delta(State state, Object label);
+    Set<Transition<L>> delta(State state, L label);
 
     /**
      * Return all transitions from a State.
@@ -98,7 +97,7 @@ public interface StateMachine {
      *            start state
      * @return a new Set of transitions (maybe empty)
      */
-    Set<Transition> delta(State state);
+    Set<Transition<L>> delta(State state);
 
     /**
      * Returns all transitions from a given set of states.
@@ -106,7 +105,7 @@ public interface StateMachine {
      * @param s a Set of State objects
      * @return a Set of Transition objects 
      */
-    Set<Transition> delta(Set<State> s);
+    Set<Transition<L>> delta(Set<State> s);
 
     /**
      * Return the set of states this SM will be in
@@ -116,7 +115,7 @@ public interface StateMachine {
      * @param word the word to read.
      * @return the set of reached states. Maybe empty or <code>null</code>.
      */
-    Set<State> steps(Set<State> s, List<Object> word);
+    Set<State> steps(Set<State> s, List<L> word);
 
     /**
      * Return the set of states this SM will be in
@@ -126,7 +125,7 @@ public interface StateMachine {
      * @param word the word to read.
      * @return the set of reached states. Maybe empty or <code>null</code>
      */
-    Set<State> steps(State st, List<Object> word);
+    Set<State> steps(State st, List<L> word);
 
     /**
      * Return the set of states accessible in one transition from given set of
@@ -136,7 +135,7 @@ public interface StateMachine {
      * @param o the letter 
      * @return a set of reachable states. Maybe empty or <code>null</code>.
      */
-    Set<State> step(Set<State> s, Object o);
+    Set<State> step(Set<State> s, L o);
 
     /**
      * Returns the set of initial states for this machine.
@@ -152,5 +151,5 @@ public interface StateMachine {
      * @param st end states
      * @return a set of states that can reach <code>st</code>. May be empty or null.
      */
-    Set<Transition> deltaMinusOne(State st);
+    Set<Transition<L>> deltaMinusOne(State st);
 }

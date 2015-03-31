@@ -23,7 +23,7 @@ import rationals.State;
 
 
 /** Builds transitions containing explicit information about send and/or receive messages. */
-public class IOATransitionBuilder implements Builder<IOTransition, IOATransitionBuilder> {
+public class IOATransitionBuilder implements Builder<Object, IOTransition, IOATransitionBuilder> {
 
   /* unique id, used for completing messages sources/destination */
   private final String id;
@@ -35,7 +35,7 @@ public class IOATransitionBuilder implements Builder<IOTransition, IOATransition
 
   private State currentState;
   private IOTransition.IOLetter currentLabel;
-  private Automaton<IOTransition, IOATransitionBuilder> automaton;
+  private Automaton<Object, IOTransition, IOATransitionBuilder> automaton;
 
   public IOATransitionBuilder(String id) {
     this.id = id;
@@ -53,7 +53,7 @@ public class IOATransitionBuilder implements Builder<IOTransition, IOATransition
   }
 
   @Override
-  public IOATransitionBuilder build(State state, Automaton<IOTransition, IOATransitionBuilder> auto) {
+  public IOATransitionBuilder build(State state, Automaton<Object, IOTransition, IOATransitionBuilder> auto) {
     this.currentState = state;
     this.currentLabel = null;
     this.automaton = auto;
@@ -116,7 +116,7 @@ public class IOATransitionBuilder implements Builder<IOTransition, IOATransition
   }
 
   @Override
-  public void setAutomaton(Automaton<IOTransition, IOATransitionBuilder> a) {
+  public void setAutomaton(Automaton<Object, IOTransition, IOATransitionBuilder> a) {
     this.automaton = a;
   }
 

@@ -17,6 +17,8 @@
 package rationals.properties;
 
 import rationals.Automaton;
+import rationals.Builder;
+import rationals.Transition;
 
 /**
  * Tests that two automata are equivalent according to some equivalence relation
@@ -27,14 +29,13 @@ import rationals.Automaton;
  * A2=(Q2,q02,T2,S2,d2), we say that <code>A1 R A2</code> iff
  * <code>q01 R q02</code>.
  * 
- * @author nono
  * @version $Id: AreEquivalent.java 2 2006-08-24 14:41:48Z oqube $
  */
-public class AreEquivalent implements BinaryTest {
+public class AreEquivalent<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> implements BinaryTest<L, Tr, T> {
 
-    private Relation relation;
+    private Relation<L, Tr, T> relation;
 
-    public AreEquivalent(Relation r) {
+    public AreEquivalent(Relation<L, Tr, T> r) {
         this.setRelation(r);
     }
 
@@ -43,7 +44,7 @@ public class AreEquivalent implements BinaryTest {
      * 
      * @param r
      */
-    public void setRelation(Relation r) {
+    public void setRelation(Relation<L, Tr, T> r) {
         this.relation = r;
     }
 
@@ -53,7 +54,7 @@ public class AreEquivalent implements BinaryTest {
      * @see rationals.tests.BinaryTest#test(rationals.Automaton,
      *      rationals.Automaton)
      */
-    public boolean test(Automaton a, Automaton b) {
+    public boolean test(Automaton<L, Tr, T> a, Automaton<L, Tr, T> b) {
         relation.setAutomata(a, b);
         return relation.equivalence(a.initials(), b.initials());
     }

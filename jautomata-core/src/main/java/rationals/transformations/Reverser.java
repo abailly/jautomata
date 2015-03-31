@@ -18,6 +18,7 @@ package rationals.transformations;
 
 
 import rationals.Automaton;
+import rationals.Builder;
 import rationals.NoSuchStateException;
 import rationals.State;
 import rationals.Transition;
@@ -36,30 +37,26 @@ import java.util.Map;
  * <li>T(C) = S0(A)</li>
  * <li>D(C) = { (s1,a,s2) | exists (s2,a,s1) in D(A)  }</li>
  * </ul>
-
- * @author nono
+ *
  * @version $Id: Reverser.java 2 2006-08-24 14:41:48Z oqube $
  */
-public class Reverser implements UnaryTransformation {
+public class Reverser<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> implements UnaryTransformation<L, Tr, T> {
 
-  public Automaton transform(Automaton a) {
-    Automaton b = new Automaton() ;
-    Map map = new HashMap() ;
-    Iterator i = a.states().iterator() ;
-    while(i.hasNext()) {
-      State e = (State) i.next() ;
+  public Automaton<L, Tr, T> transform(Automaton<L, Tr, T> a) {
+    Automaton<L, Tr, T> b = new Automaton<>() ;
+    Map<State, State> map = new HashMap<>() ;
+    Iterator<State> i1 = a.states().iterator() ;
+    while(i1.hasNext()) {
+      State e = i1.next() ;
       map.put(e , b.addState(e.isTerminal() , e.isInitial())) ;
     }
-    i = a.delta().iterator() ;
-    while(i.hasNext()) {
-      Transition t = (Transition) i.next() ;
+    Iterator<Transition<L>> i2 = a.delta().iterator() ;
+    while(i2.hasNext()) {
+      Transition<L> t = i2.next() ;
       try {
-        b.addTransition(new Transition(
-          (State) map.get(t.end()) ,
-          t.label() ,
-          (State) map.get(t.start()))) ;
+        b.addTransition(new Transition<L>(map.get(t.end()), t.label(), map.get(t.start())));
       } catch(NoSuchStateException x) {}
     }
-    return b ;
+    return b;
   }
 }

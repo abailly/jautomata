@@ -18,15 +18,15 @@ package rationals.transformations;
 
 import java.util.Set;
 
+import rationals.State;
 
-public class StatesCouple {
-    public final Set sa;
 
-    public final Set sb;
+public final class StatesCouple {
+    public final Set<State> sa;
+    public final Set<State> sb;
+    private final int hash;
 
-    final int hash;
-
-    public StatesCouple(Set sa, Set sb) {
+    public StatesCouple(Set<State> sa, Set<State> sb) {
         this.sa = sa;
         this.sb = sb;
         this.hash = sa.hashCode() + sb.hashCode();
@@ -37,7 +37,9 @@ public class StatesCouple {
      * 
      * @see java.lang.Object#equals(java.lang.Object)
      */
+    @Override
     public boolean equals(Object obj) {
+    	if (!(obj instanceof StatesCouple)) return false;
         StatesCouple sc = (StatesCouple) obj;
         return sc.sa.equals(sa) && sc.sb.equals(sb);
     }
@@ -47,6 +49,7 @@ public class StatesCouple {
      * 
      * @see java.lang.Object#hashCode()
      */
+    @Override
     public int hashCode() {
         return hash;
     }
@@ -56,6 +59,7 @@ public class StatesCouple {
      * 
      * @see java.lang.Object#toString()
      */
+    @Override
     public String toString() {
         return " < " + sa.toString() + "," + sb.toString() + " >";
     }

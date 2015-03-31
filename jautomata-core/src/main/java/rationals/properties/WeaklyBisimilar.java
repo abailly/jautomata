@@ -16,17 +16,20 @@
  */
 package rationals.properties;
 
+import rationals.Builder;
+import rationals.Transition;
+
 /**
  * @author nono
  * @version $Id: WeaklyBisimilar.java 2 2006-08-24 14:41:48Z oqube $
  */
-public class WeaklyBisimilar extends AreEquivalent {
+public class WeaklyBisimilar<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> extends AreEquivalent<L, Tr, T> {
 
     /**
      * @param r
      */
     public WeaklyBisimilar() {
-        super(new WeakBisimulation());
+        super(new WeakBisimulation<L, Tr, T>());
     }
 
 }

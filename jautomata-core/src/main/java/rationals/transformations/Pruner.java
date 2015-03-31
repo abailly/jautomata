@@ -17,6 +17,7 @@
 package rationals.transformations;
 
 import rationals.Automaton;
+import rationals.Builder;
 import rationals.NoSuchStateException;
 import rationals.State;
 import rationals.Transition;
@@ -28,31 +29,26 @@ import java.util.Map;
 /**
  * Removes states that neither accessible nor coaccessible.
  * 
- * @author nono
  * @version $Id: Pruner.java 2 2006-08-24 14:41:48Z oqube $
  */
-public class Pruner implements UnaryTransformation {
+public class Pruner<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> implements UnaryTransformation<L, Tr, T> {
 
-  public Automaton transform(Automaton a) {
-    Map conversion = new HashMap() ;
-    Iterator i = a.accessibleAndCoAccessibleStates().iterator();
-    Automaton b = new Automaton() ;
-    while(i.hasNext()) {
-      State e = (State) i.next() ;
+  public Automaton<L, Tr, T> transform(Automaton<L, Tr, T> a) {
+    Map<State, State> conversion = new HashMap<>() ;
+    Iterator<State> i1 = a.accessibleAndCoAccessibleStates().iterator();
+    Automaton<L, Tr, T> b = new Automaton<>() ;
+    while(i1.hasNext()) {
+      State e = i1.next() ;
       conversion.put(e , b.addState(e.isInitial() , e.isTerminal())) ;
     }
-    i = a.delta().iterator();
-    while(i.hasNext()) {
-      Transition t = (Transition) i.next() ;
-      State bs = (State) conversion.get(t.start()) ;
-      State be = (State) conversion.get(t.end()) ;
-      if(bs == null || be == null)
-          continue;
+    Iterator<Transition<L>> i2 = a.delta().iterator();
+    while(i2.hasNext()) {
+      Transition<L> t = i2.next() ;
+      State bs = conversion.get(t.start()) ;
+      State be = conversion.get(t.end()) ;
+      if(bs == null || be == null) continue;
       try {
-        b.addTransition(new Transition(
-          bs,
-          t.label() ,
-          be)) ;
+        b.addTransition(new Transition<>(bs, t.label(), be));
       } catch (NoSuchStateException x) {}
     }
     return b ;

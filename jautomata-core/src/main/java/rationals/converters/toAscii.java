@@ -17,20 +17,28 @@
 package rationals.converters;
 
 import rationals.Automaton;
+import rationals.Builder;
+import rationals.Transition;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
-public class toAscii implements ToString {
-    public String toString(Automaton a) {
-        StringBuffer sb = new StringBuffer();
+public class toAscii<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> implements ToString<L, Tr, T> {
+    public String toString(Automaton<L, Tr, T> a) {
+    	StringBuilder sb = new StringBuilder();
         sb.append("A = ").append(a.alphabet().toString()).append("\n");
         sb.append("Q = ").append(a.states().toString()).append("\n");
         sb.append("I = ").append(a.initials().toString()).append("\n");
         sb.append("T = ").append(a.terminals().toString()).append("\n");
         sb.append("delta = [\n");
-        Iterator i = a.delta().iterator();
+        List<String> list = new ArrayList<>();
+        Iterator<Transition<L>> i = a.delta().iterator();
         while (i.hasNext())
-            sb.append(i.next()).append("\n");
+        	list.add(i.next().toString());
+        java.util.Collections.sort(list);
+        for (String s : list)
+        	sb.append(s).append("\n");
         sb.append("]\n");
         return sb.toString();
     }

@@ -24,7 +24,6 @@ import java.util.Set;
  * This interface should be implemented by objects interested in being notified
  * of run events, that is the firing of transitions during a run of an automaton.
  * 
- * @author nono
  * @version $Id: AutomatonRunListener.java 2 2006-08-24 14:41:48Z oqube $
  */
 public interface AutomatonRunListener {

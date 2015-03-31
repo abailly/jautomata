@@ -17,6 +17,7 @@
 package rationals.transformations;
 
 import rationals.Automaton;
+import rationals.Builder;
 import rationals.NoSuchStateException;
 import rationals.State;
 import rationals.Transition;
@@ -30,27 +31,27 @@ import java.util.*;
  * @author Yves Roos
  * @version 22032002
  */
-public class EpsilonTransitionRemover implements UnaryTransformation {
+public class EpsilonTransitionRemover<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> implements UnaryTransformation<L, Tr, T> {
 
     /*
      * (non-Javadoc)
      * 
      * @see rationals.transformations.UnaryTransformation#transform(rationals.Automaton)
      */
-    public Automaton transform(Automaton a) {
-        Automaton ret = new Automaton(); /* resulting automaton */
-        Map /* < HashValue, State > */ sm = new HashMap();
-        Set done = new HashSet();
-        List todo = new ArrayList(); /* set of states to explore */
-        Set cur = TransformationsToolBox.epsilonClosure(a.initials(), a);
+    public Automaton<L, Tr, T> transform(Automaton<L, Tr, T> a) {
+        Automaton<L, Tr, T> ret = new Automaton<>(); /* resulting automaton */
+        Map<HashValue<State>, State> sm = new HashMap<>();
+        Set<HashValue<State>> done = new HashSet<>();
+        List<HashValue<State>> todo = new ArrayList<>(); /* set of states to explore */
+        Set<State> cur = TransformationsToolBox.epsilonClosure(a.initials(), a);
         /* add cur as initial state of ret */
         State is = ret.addState(true,TransformationsToolBox.containsATerminalState(cur));
-        HashValue hv = new HashValue(cur);
+        HashValue<State> hv = new HashValue<>(cur);
         sm.put(hv,is);
         todo.add(hv);
         do {
-            HashValue s = (HashValue) todo.remove(0);
-            State ns =  (State)sm.get(s);
+            HashValue<State> s = todo.remove(0);
+            State ns =  sm.get(s);
             if(ns == null) {
                 ns = ret.addState(false,TransformationsToolBox.containsATerminalState(s.s));
                 sm.put(s,ns);
@@ -58,24 +59,24 @@ public class EpsilonTransitionRemover implements UnaryTransformation {
             /* set s as explored */
             done.add(s);
             /* look for all transitions in s */
-            Map /* < Object, Set > */trm = instructions(a.delta(s.s),a);
-            Iterator it = trm.entrySet().iterator();
+            Map<L, Set<State>> trm = instructions(a.delta(s.s),a);
+            Iterator<Map.Entry<L, Set<State>>> it = trm.entrySet().iterator();
             while (it.hasNext()) {
-                Map.Entry e = (Map.Entry) it.next();
-                Object o = e.getKey();
-                Set ar = (Set) e.getValue();
+                Map.Entry<L, Set<State>> e = it.next();
+                L o = e.getKey();
+                Set<State> ar = e.getValue();
                 /* compute closure of arrival set */
                 ar = TransformationsToolBox.epsilonClosure(ar, a);
-                hv = new HashValue(ar);
+                hv = new HashValue<>(ar);
                 /* retrieve state in new automaton from hashvalue */
-                State ne = (State)sm.get(hv);
+                State ne = sm.get(hv);
                 if(ne == null) {
                     ne = ret.addState(false,TransformationsToolBox.containsATerminalState(ar));
                     sm.put(hv,ne);
                 }
                 try {
                     /* create transition */
-                    ret.addTransition(new Transition(ns,o,ne));
+                    ret.addTransition(new Transition<L>(ns,o,ne));
                 } catch (NoSuchStateException e1) {
                 }
                 /* explore new state */
@@ -86,14 +87,14 @@ public class EpsilonTransitionRemover implements UnaryTransformation {
         return ret;
     }
 
-    private Map /* < Object, Set > */instructions(Set /* < Transition > */s,Automaton a) {
-        Map /* < Object, Set > */m = new HashMap();
-        Iterator it = s.iterator();
+    private Map<L, Set<State>> instructions(Set<Transition<L>> s, Automaton<L, Tr, T> a) {
+        Map<L, Set<State>> m = new HashMap<L, Set<State>>();
+        Iterator<Transition<L>> it = s.iterator();
         while (it.hasNext()) {
-            Transition tr = (Transition) it.next();
-            Object l = tr.label();
+            Transition<L> tr = it.next();
+            L l = tr.label();
             if (l != null) {
-                Set st = (Set) m.get(l);
+                Set<State> st = m.get(l);
                 if (st == null) {
                     st = a.getStateFactory().stateSet();
                     m.put(l,st);

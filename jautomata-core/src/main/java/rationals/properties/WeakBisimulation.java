@@ -17,7 +17,9 @@
 package rationals.properties;
 
 import rationals.Automaton;
+import rationals.Builder;
 import rationals.State;
+import rationals.Transition;
 import rationals.transformations.EpsilonTransitionRemover;
 
 import java.util.List;
@@ -28,18 +30,11 @@ import java.util.Set;
  * The weak bisimulation is computed as (strong) bisimulation between the two 
  * given automata where all epsilon transitions have been removed.
  * 
- * @author nono
  * @version $Id: WeakBisimulation.java 2 2006-08-24 14:41:48Z oqube $
  */
-public class WeakBisimulation implements Relation {
+public class WeakBisimulation<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> implements Relation<L, Tr, T> {
 
-    private Automaton a1;
-
-    private Automaton a2;
-
-    private Set exp;
-
-    private Bisimulation bisim;
+    private Bisimulation<L, Tr, T> bisim;
 
     /*
      * (non-Javadoc)
@@ -47,9 +42,9 @@ public class WeakBisimulation implements Relation {
      * @see rationals.tests.Relation#setAutomata(rationals.Automaton,
      *      rationals.Automaton)
      */
-    public void setAutomata(Automaton a1, Automaton a2) {
-        EpsilonTransitionRemover er = new EpsilonTransitionRemover();
-        this.bisim = new Bisimulation( er.transform(a1), er.transform(a2));
+    public void setAutomata(Automaton<L, Tr, T> a1, Automaton<L, Tr, T> a2) {
+        EpsilonTransitionRemover<L, Tr, T> er = new EpsilonTransitionRemover<>();
+        this.bisim = new Bisimulation<>(er.transform(a1), er.transform(a2));
     }
 
     /*
@@ -59,17 +54,17 @@ public class WeakBisimulation implements Relation {
      *      rationals.State)
      */
     public boolean equivalence(State q0a, State q0b) {
-        return bisim.equivalence(q0a,q0b);
+        return bisim.equivalence(q0a, q0b);
     }
 
-    public boolean equivalence(Set nsa, Set nsb) {
-        return bisim.equivalence(nsa,nsb);
+    public boolean equivalence(Set<State> nsa, Set<State> nsb) {
+        return bisim.equivalence(nsa, nsb);
     }
+    
     /* (non-Javadoc)
      * @see rationals.properties.Relation#getErrorTrace()
      */
-    public List getErrorTrace() {
-        // TODO Auto-generated method stub
-        return null;
+    public List<L> getErrorTrace() {
+        throw new UnsupportedOperationException();
     }
 }

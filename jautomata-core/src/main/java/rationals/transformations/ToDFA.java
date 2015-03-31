@@ -17,6 +17,7 @@
 package rationals.transformations;
 
 import rationals.Automaton;
+import rationals.Builder;
 import rationals.NoSuchStateException;
 import rationals.State;
 import rationals.Transition;
@@ -29,48 +30,47 @@ import java.util.*;
  * @author yroos
  * @version $Id: ToDFA.java 7 2006-08-31 23:01:30Z oqube $
  */
-public class ToDFA implements UnaryTransformation {
+public class ToDFA<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> implements UnaryTransformation<L, Tr, T> {
   
-  public Automaton transform(Automaton a) {
-    Automaton ret = new Automaton();
-    Map bmap = new HashMap();
-    List /* < Set > */todo = new ArrayList();
-    Set /* < Set > */done = new HashSet();
-    Set as = TransformationsToolBox.epsilonClosure(a.initials(), a);
-    State from = ret.addState(true, TransformationsToolBox
-			      .containsATerminalState(as));
-    bmap.put(as, from);
-    todo.add(as);
-    do {
-      Set sts = (Set) todo.remove(0);
-      from = (State) bmap.get(sts);
-      if (done.contains(sts))
-	continue;
-      done.add(sts);
-      /* get transition sets */
-      Map tam = TransformationsToolBox.mapAlphabet(a.delta(sts), a);
-      /* unsynchronizable transitions in A */
-      for (Iterator i = tam.entrySet().iterator(); i.hasNext();) {
-	Map.Entry me = (Map.Entry) i.next();
-	Object l = me.getKey();
-	as = (Set) me.getValue();
-	Set asc = TransformationsToolBox.epsilonClosure(as, a);
-	State to = (State) bmap.get(asc);
-	if (to == null) {
-	  to = ret.addState(false, TransformationsToolBox
-			    .containsATerminalState(asc));
-	  bmap.put(asc, to);
+	public Automaton<L, Tr, T> transform(Automaton<L, Tr, T> a) {
+		Automaton<L, Tr, T> ret = new Automaton<>();
+		Map<Set<State>, State> bmap = new HashMap<>();
+		List<Set<State>>todo = new ArrayList<>();
+		Set<Set<State>>done = new HashSet<>();
+		Set<State> as = TransformationsToolBox.epsilonClosure(a.initials(), a);
+		State from = ret.addState(true, TransformationsToolBox.containsATerminalState(as));
+		bmap.put(as, from);
+		todo.add(as);
+		do {
+			Set<State> sts = todo.remove(0);
+			from = bmap.get(sts);
+			if (done.contains(sts))
+				continue;
+			done.add(sts);
+			/* get transition sets */
+			Map<L, Set<State>> tam = TransformationsToolBox.mapAlphabet(a.delta(sts), a);
+			/* unsynchronizable transitions in A */
+			for (Iterator<Map.Entry<L, Set<State>>> i = tam.entrySet().iterator(); i.hasNext();) {
+				Map.Entry<L, Set<State>> me = i.next();
+				L l = me.getKey();
+				as = (Set<State>) me.getValue();
+				Set<State> asc = TransformationsToolBox.epsilonClosure(as, a);
+				State to = (State) bmap.get(asc);
+				if (to == null) {
+					to = ret.addState(false, TransformationsToolBox
+							.containsATerminalState(asc));
+					bmap.put(asc, to);
+				}
+				todo.add(asc);
+				try {
+					ret.addTransition(new Transition<L>(from, l, to));
+				} catch (NoSuchStateException e) {
+					assert false;
+				}
+			}
+		} while (!todo.isEmpty());
+		return ret;
 	}
-	todo.add(asc);
-	try {
-	  ret.addTransition(new Transition(from, l, to));
-	} catch (NoSuchStateException e) {
-	  assert false;
-	}
-      }
-    } while (!todo.isEmpty());
-    return ret;
-  }
 
   /*
     public Automaton transform(Automaton a) {

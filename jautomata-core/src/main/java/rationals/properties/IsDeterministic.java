@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import rationals.Automaton;
+import rationals.Builder;
 import rationals.State;
 import rationals.Transition;
 
@@ -33,24 +34,24 @@ import rationals.Transition;
  * <li><code>D is a function from (Q x X) -> Q</code>
  * <li><code>X</code> does not contains the symbol <code>epsilon</code></li>
  * </ul>
- * @author nono
+ * 
  * @version $Id: IsDeterministic.java 2 2006-08-24 14:41:48Z oqube $
  */
-public class IsDeterministic implements UnaryTest {
+public class IsDeterministic<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> implements UnaryTest<L, Tr, T> {
 
     /* (non-Javadoc)
      * @see rationals.properties.UnaryTest#test(rationals.Automaton)
      */
-    public boolean test(Automaton a) {
+    public boolean test(Automaton<L, Tr, T> a) {
         if(a.alphabet().contains(null))
             return false;
         if(a.initials().size() > 1)
             return false;
-        for(Iterator it = a.states().iterator();it.hasNext();) {
-            State s = (State)it.next();
-            Set tra = new HashSet();
-            for(Iterator it2 = a.delta(s).iterator();it2.hasNext();) {
-                Transition tr =(Transition)it2.next();
+        for(Iterator<State> it = a.states().iterator();it.hasNext();) {
+            State s = it.next();
+            Set<L> tra = new HashSet<>();
+            for(Iterator<Transition<L>> it2 = a.delta(s).iterator();it2.hasNext();) {
+                Transition<L> tr = it2.next();
                 if(tra.contains(tr.label()))
                     return false;
                 else

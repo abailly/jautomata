@@ -19,11 +19,12 @@ package rationals;
 import java.util.Set;
 
 public class StatesTuple {
-    public final Set[] sets;
+    public final Set<State>[] sets;
 
     final int hash;
 
-    public StatesTuple(Set[] sets) {
+    @SuppressWarnings("unchecked")
+	public StatesTuple(Set<State>[] sets) {
         this.sets = new Set[sets.length];
         System.arraycopy(sets,0,this.sets,0,sets.length);
         int h = 0;
@@ -37,7 +38,9 @@ public class StatesTuple {
      * 
      * @see java.lang.Object#equals(java.lang.Object)
      */
+    @Override
     public boolean equals(Object obj) {
+    	if (!(obj instanceof StatesTuple)) return false;
         StatesTuple sc = (StatesTuple) obj;
         for (int i = 0; i < sc.sets.length; i++)
             if (!sets[i].equals(sc.sets[i]))
@@ -50,6 +53,7 @@ public class StatesTuple {
      * 
      * @see java.lang.Object#hashCode()
      */
+    @Override
     public int hashCode() {
         return hash;
     }
@@ -59,12 +63,13 @@ public class StatesTuple {
      * 
      * @see java.lang.Object#toString()
      */
+    @Override
     public String toString() {
-        StringBuffer sb = new StringBuffer();
+    	StringBuilder sb = new StringBuilder();
         sb.append("( ");
-        for(int i=0;i<sets.length;i++){
+        for(int i = 0; i < sets.length; i++){
             sb.append(sets[i]);
-            if(i != sets.length-1)
+            if(i != sets.length - 1)
                 sb.append(",");
         }
         sb.append(")");

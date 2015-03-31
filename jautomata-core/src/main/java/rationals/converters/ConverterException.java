@@ -18,5 +18,7 @@ package rationals.converters;
 
 
 public class ConverterException extends Exception {
-  public ConverterException(String message) {super(message) ;}
+	private static final long serialVersionUID = 1L;
+
+    public ConverterException(String message) {super(message) ;}
 }

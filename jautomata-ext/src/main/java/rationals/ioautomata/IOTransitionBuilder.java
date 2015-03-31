@@ -29,17 +29,15 @@ import rationals.State;
  * @author nono
  * 
  */
-public class IOTransitionBuilder implements
-		Builder<IOTransition, IOTransitionBuilder> {
+public class IOTransitionBuilder implements Builder<Object, IOTransition, IOTransitionBuilder> {
 
 	private State from;
 
-	private Automaton<IOTransition, IOTransitionBuilder> automaton;
+	private Automaton<Object, IOTransition, IOTransitionBuilder> automaton;
 
 	private Object label;
 
-	public IOTransitionBuilder(State state,
-			IOAutomaton<IOTransition, IOTransitionBuilder> automaton) {
+	public IOTransitionBuilder(State state, IOAutomaton<IOTransition, IOTransitionBuilder> automaton) {
 		this.from = state;
 		this.automaton = automaton;
 	}
@@ -102,8 +100,7 @@ public class IOTransitionBuilder implements
 		return this;
 	}
 
-	public IOTransitionBuilder build(State state,
-			Automaton<IOTransition, IOTransitionBuilder> auto) {
+	public IOTransitionBuilder build(State state, Automaton<Object, IOTransition, IOTransitionBuilder> auto) {
 		this.from = state;
 		this.label = null;
 		this.automaton = auto;
@@ -117,7 +114,7 @@ public class IOTransitionBuilder implements
 		return new IOTransition(from, label, to);
 	}
 
-	public void setAutomaton(Automaton<IOTransition, IOTransitionBuilder> a) {
+	public void setAutomaton(Automaton<Object, IOTransition, IOTransitionBuilder> a) {
 		automaton = a;
 	}
 
