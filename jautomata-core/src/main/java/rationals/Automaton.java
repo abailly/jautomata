@@ -159,8 +159,8 @@ public class Automaton<L, Tr extends Transition<L>, T extends Builder<L, Tr, T>>
 	 *            a List of Object interpreted as a word
 	 * @return an automaton which recognizes <em>label</em>
 	 */
-	public static <L> Automaton<L, ?, ?> labelAutomaton(List<L> word) {
-		Automaton<L, ?, ?> v = new Automaton<>();
+	public static <L, Tr extends Transition<L>, T extends Builder<L, Tr, T>> Automaton<L, Tr, T>  labelAutomaton(List<L> word) {
+		Automaton<L, Tr, T> v = new Automaton<>();
 		State start = null;
 		if (word.isEmpty()) {
 			v.addState(true, true);
